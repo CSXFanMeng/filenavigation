@@ -76,6 +76,42 @@
           <button id="search" class="primary" type="button" data-i18n="searchButton">
             Search
           </button>
+
+          <section class="update-panel" aria-live="polite">
+            <div class="update-heading">
+              <div>
+                <p class="eyebrow" data-i18n="updateEyebrow">Updates</p>
+                <h2 data-i18n="updateTitle">Software update</h2>
+              </div>
+              <button id="check-update" class="secondary" type="button" data-i18n="checkUpdateButton">
+                Check
+              </button>
+            </div>
+            <p id="update-status" class="update-status" data-i18n="updateIdle">
+              Check GitHub Releases for the newest version.
+            </p>
+            <div id="update-details" class="update-details" hidden>
+              <dl>
+                <div>
+                  <dt data-i18n="currentVersion">Current</dt>
+                  <dd id="current-version">-</dd>
+                </div>
+                <div>
+                  <dt data-i18n="latestVersion">Latest</dt>
+                  <dd id="latest-version">-</dd>
+                </div>
+                <div>
+                  <dt data-i18n="publishedAt">Published</dt>
+                  <dd id="published-at">-</dd>
+                </div>
+              </dl>
+              <h3 data-i18n="releaseNotes">Release notes</h3>
+              <pre id="release-notes"></pre>
+              <button id="open-release" class="secondary wide" type="button" data-i18n="openReleaseButton">
+                Open release
+              </button>
+            </div>
+          </section>
         </aside>
 
         <section class="results-panel">

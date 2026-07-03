@@ -729,6 +729,353 @@ const translations = {
   }
 };
 
+const updateTranslations = {
+  en: {
+    updateEyebrow: "Updates",
+    updateTitle: "Software update",
+    checkUpdateButton: "Check",
+    checkingUpdate: "Checking for updates...",
+    updateIdle: "Check GitHub Releases for the newest version.",
+    updateAvailable: (version) => `Version ${version} is available.`,
+    upToDate: "You are using the latest version.",
+    currentVersion: "Current",
+    latestVersion: "Latest",
+    publishedAt: "Published",
+    releaseNotes: "Release notes",
+    openReleaseButton: "Open release",
+    emptyReleaseNotes: "This release does not include release notes.",
+    updateCheckFailed: "Unable to check for updates.",
+    versionCompareFailed: "Unable to compare release versions."
+  },
+  "zh-CN": {
+    updateEyebrow: "更新",
+    updateTitle: "软件更新",
+    checkUpdateButton: "检查",
+    checkingUpdate: "正在检查更新...",
+    updateIdle: "检查 GitHub Releases 中的最新版本。",
+    updateAvailable: (version) => `发现新版本 ${version}。`,
+    upToDate: "当前已是最新版本。",
+    currentVersion: "当前版本",
+    latestVersion: "最新版本",
+    publishedAt: "发布时间",
+    releaseNotes: "更新日志",
+    openReleaseButton: "打开发布页",
+    emptyReleaseNotes: "此版本没有更新日志。",
+    updateCheckFailed: "无法检查更新。",
+    versionCompareFailed: "无法比较版本。"
+  },
+  "zh-TW": {
+    updateEyebrow: "更新",
+    updateTitle: "軟體更新",
+    checkUpdateButton: "檢查",
+    checkingUpdate: "正在檢查更新...",
+    updateIdle: "檢查 GitHub Releases 中的最新版本。",
+    updateAvailable: (version) => `發現新版本 ${version}。`,
+    upToDate: "目前已是最新版本。",
+    currentVersion: "目前版本",
+    latestVersion: "最新版本",
+    publishedAt: "發布時間",
+    releaseNotes: "更新日誌",
+    openReleaseButton: "開啟發布頁",
+    emptyReleaseNotes: "此版本沒有更新日誌。",
+    updateCheckFailed: "無法檢查更新。",
+    versionCompareFailed: "無法比較版本。"
+  },
+  es: {
+    updateEyebrow: "Actualizaciones",
+    updateTitle: "Actualización",
+    checkUpdateButton: "Comprobar",
+    checkingUpdate: "Buscando actualizaciones...",
+    updateIdle: "Consulta GitHub Releases para ver la versión más reciente.",
+    updateAvailable: (version) => `La versión ${version} está disponible.`,
+    upToDate: "Ya estás usando la versión más reciente.",
+    currentVersion: "Actual",
+    latestVersion: "Más reciente",
+    publishedAt: "Publicado",
+    releaseNotes: "Notas de la versión",
+    openReleaseButton: "Abrir release",
+    emptyReleaseNotes: "Esta versión no incluye notas.",
+    updateCheckFailed: "No se pudo comprobar actualizaciones.",
+    versionCompareFailed: "No se pudieron comparar las versiones."
+  },
+  fr: {
+    updateEyebrow: "Mises à jour",
+    updateTitle: "Mise à jour",
+    checkUpdateButton: "Vérifier",
+    checkingUpdate: "Recherche de mises à jour...",
+    updateIdle: "Consulte GitHub Releases pour trouver la dernière version.",
+    updateAvailable: (version) => `La version ${version} est disponible.`,
+    upToDate: "Vous utilisez la dernière version.",
+    currentVersion: "Actuelle",
+    latestVersion: "Dernière",
+    publishedAt: "Publié",
+    releaseNotes: "Notes de version",
+    openReleaseButton: "Ouvrir la release",
+    emptyReleaseNotes: "Cette version ne contient pas de notes.",
+    updateCheckFailed: "Impossible de vérifier les mises à jour.",
+    versionCompareFailed: "Impossible de comparer les versions."
+  },
+  de: {
+    updateEyebrow: "Updates",
+    updateTitle: "Softwareupdate",
+    checkUpdateButton: "Prüfen",
+    checkingUpdate: "Suche nach Updates...",
+    updateIdle: "GitHub Releases nach der neuesten Version prüfen.",
+    updateAvailable: (version) => `Version ${version} ist verfügbar.`,
+    upToDate: "Sie verwenden die neueste Version.",
+    currentVersion: "Aktuell",
+    latestVersion: "Neueste",
+    publishedAt: "Veröffentlicht",
+    releaseNotes: "Versionshinweise",
+    openReleaseButton: "Release öffnen",
+    emptyReleaseNotes: "Diese Version enthält keine Hinweise.",
+    updateCheckFailed: "Updates konnten nicht geprüft werden.",
+    versionCompareFailed: "Versionen konnten nicht verglichen werden."
+  },
+  ja: {
+    updateEyebrow: "更新",
+    updateTitle: "ソフトウェア更新",
+    checkUpdateButton: "確認",
+    checkingUpdate: "更新を確認しています...",
+    updateIdle: "GitHub Releases で最新バージョンを確認します。",
+    updateAvailable: (version) => `バージョン ${version} が利用できます。`,
+    upToDate: "最新バージョンを使用しています。",
+    currentVersion: "現在",
+    latestVersion: "最新",
+    publishedAt: "公開日",
+    releaseNotes: "更新ログ",
+    openReleaseButton: "リリースを開く",
+    emptyReleaseNotes: "このリリースには更新ログがありません。",
+    updateCheckFailed: "更新を確認できません。",
+    versionCompareFailed: "バージョンを比較できません。"
+  },
+  ko: {
+    updateEyebrow: "업데이트",
+    updateTitle: "소프트웨어 업데이트",
+    checkUpdateButton: "확인",
+    checkingUpdate: "업데이트 확인 중...",
+    updateIdle: "GitHub Releases에서 최신 버전을 확인합니다.",
+    updateAvailable: (version) => `${version} 버전을 사용할 수 있습니다.`,
+    upToDate: "최신 버전을 사용 중입니다.",
+    currentVersion: "현재",
+    latestVersion: "최신",
+    publishedAt: "게시일",
+    releaseNotes: "변경 사항",
+    openReleaseButton: "릴리스 열기",
+    emptyReleaseNotes: "이 릴리스에는 변경 사항이 없습니다.",
+    updateCheckFailed: "업데이트를 확인할 수 없습니다.",
+    versionCompareFailed: "버전을 비교할 수 없습니다."
+  },
+  "pt-BR": {
+    updateEyebrow: "Atualizações",
+    updateTitle: "Atualização",
+    checkUpdateButton: "Verificar",
+    checkingUpdate: "Verificando atualizações...",
+    updateIdle: "Verifica no GitHub Releases a versão mais recente.",
+    updateAvailable: (version) => `A versão ${version} está disponível.`,
+    upToDate: "Você está usando a versão mais recente.",
+    currentVersion: "Atual",
+    latestVersion: "Mais recente",
+    publishedAt: "Publicado",
+    releaseNotes: "Notas da versão",
+    openReleaseButton: "Abrir release",
+    emptyReleaseNotes: "Esta versão não inclui notas.",
+    updateCheckFailed: "Não foi possível verificar atualizações.",
+    versionCompareFailed: "Não foi possível comparar versões."
+  },
+  ru: {
+    updateEyebrow: "Обновления",
+    updateTitle: "Обновление ПО",
+    checkUpdateButton: "Проверить",
+    checkingUpdate: "Проверка обновлений...",
+    updateIdle: "Проверить последнюю версию в GitHub Releases.",
+    updateAvailable: (version) => `Доступна версия ${version}.`,
+    upToDate: "Установлена последняя версия.",
+    currentVersion: "Текущая",
+    latestVersion: "Последняя",
+    publishedAt: "Опубликовано",
+    releaseNotes: "Журнал изменений",
+    openReleaseButton: "Открыть релиз",
+    emptyReleaseNotes: "У этого релиза нет описания.",
+    updateCheckFailed: "Не удалось проверить обновления.",
+    versionCompareFailed: "Не удалось сравнить версии."
+  },
+  ar: {
+    updateEyebrow: "التحديثات",
+    updateTitle: "تحديث البرنامج",
+    checkUpdateButton: "تحقق",
+    checkingUpdate: "جار التحقق من التحديثات...",
+    updateIdle: "تحقق من أحدث إصدار في GitHub Releases.",
+    updateAvailable: (version) => `الإصدار ${version} متاح.`,
+    upToDate: "أنت تستخدم أحدث إصدار.",
+    currentVersion: "الحالي",
+    latestVersion: "الأحدث",
+    publishedAt: "نشر",
+    releaseNotes: "سجل التحديث",
+    openReleaseButton: "فتح الإصدار",
+    emptyReleaseNotes: "لا يحتوي هذا الإصدار على سجل تحديث.",
+    updateCheckFailed: "تعذر التحقق من التحديثات.",
+    versionCompareFailed: "تعذرت مقارنة الإصدارات."
+  },
+  hi: {
+    updateEyebrow: "अपडेट",
+    updateTitle: "सॉफ़्टवेयर अपडेट",
+    checkUpdateButton: "जाँचें",
+    checkingUpdate: "अपडेट जाँचा जा रहा है...",
+    updateIdle: "नवीनतम संस्करण के लिए GitHub Releases जाँचें।",
+    updateAvailable: (version) => `संस्करण ${version} उपलब्ध है।`,
+    upToDate: "आप नवीनतम संस्करण उपयोग कर रहे हैं।",
+    currentVersion: "वर्तमान",
+    latestVersion: "नवीनतम",
+    publishedAt: "प्रकाशित",
+    releaseNotes: "अपडेट लॉग",
+    openReleaseButton: "रिलीज़ खोलें",
+    emptyReleaseNotes: "इस रिलीज़ में नोट्स नहीं हैं।",
+    updateCheckFailed: "अपडेट जाँच नहीं हो सकी।",
+    versionCompareFailed: "संस्करणों की तुलना नहीं हो सकी।"
+  },
+  it: {
+    updateEyebrow: "Aggiornamenti",
+    updateTitle: "Aggiornamento",
+    checkUpdateButton: "Controlla",
+    checkingUpdate: "Controllo aggiornamenti...",
+    updateIdle: "Controlla GitHub Releases per la versione più recente.",
+    updateAvailable: (version) => `La versione ${version} è disponibile.`,
+    upToDate: "Stai usando la versione più recente.",
+    currentVersion: "Attuale",
+    latestVersion: "Ultima",
+    publishedAt: "Pubblicata",
+    releaseNotes: "Note di rilascio",
+    openReleaseButton: "Apri release",
+    emptyReleaseNotes: "Questa release non include note.",
+    updateCheckFailed: "Impossibile controllare gli aggiornamenti.",
+    versionCompareFailed: "Impossibile confrontare le versioni."
+  },
+  nl: {
+    updateEyebrow: "Updates",
+    updateTitle: "Software-update",
+    checkUpdateButton: "Controleren",
+    checkingUpdate: "Controleren op updates...",
+    updateIdle: "Controleer GitHub Releases voor de nieuwste versie.",
+    updateAvailable: (version) => `Versie ${version} is beschikbaar.`,
+    upToDate: "Je gebruikt de nieuwste versie.",
+    currentVersion: "Huidig",
+    latestVersion: "Nieuwste",
+    publishedAt: "Gepubliceerd",
+    releaseNotes: "Release-opmerkingen",
+    openReleaseButton: "Release openen",
+    emptyReleaseNotes: "Deze release bevat geen opmerkingen.",
+    updateCheckFailed: "Kan niet controleren op updates.",
+    versionCompareFailed: "Kan versies niet vergelijken."
+  },
+  tr: {
+    updateEyebrow: "Güncellemeler",
+    updateTitle: "Yazılım güncellemesi",
+    checkUpdateButton: "Kontrol et",
+    checkingUpdate: "Güncellemeler kontrol ediliyor...",
+    updateIdle: "En yeni sürüm için GitHub Releases'ı kontrol et.",
+    updateAvailable: (version) => `${version} sürümü mevcut.`,
+    upToDate: "En yeni sürümü kullanıyorsunuz.",
+    currentVersion: "Mevcut",
+    latestVersion: "En yeni",
+    publishedAt: "Yayınlandı",
+    releaseNotes: "Sürüm notları",
+    openReleaseButton: "Sürümü aç",
+    emptyReleaseNotes: "Bu sürüm not içermiyor.",
+    updateCheckFailed: "Güncellemeler kontrol edilemedi.",
+    versionCompareFailed: "Sürümler karşılaştırılamadı."
+  },
+  vi: {
+    updateEyebrow: "Cập nhật",
+    updateTitle: "Cập nhật phần mềm",
+    checkUpdateButton: "Kiểm tra",
+    checkingUpdate: "Đang kiểm tra cập nhật...",
+    updateIdle: "Kiểm tra phiên bản mới nhất trên GitHub Releases.",
+    updateAvailable: (version) => `Có phiên bản ${version}.`,
+    upToDate: "Bạn đang dùng phiên bản mới nhất.",
+    currentVersion: "Hiện tại",
+    latestVersion: "Mới nhất",
+    publishedAt: "Đã phát hành",
+    releaseNotes: "Nhật ký cập nhật",
+    openReleaseButton: "Mở release",
+    emptyReleaseNotes: "Bản phát hành này không có ghi chú.",
+    updateCheckFailed: "Không thể kiểm tra cập nhật.",
+    versionCompareFailed: "Không thể so sánh phiên bản."
+  },
+  id: {
+    updateEyebrow: "Pembaruan",
+    updateTitle: "Pembaruan perangkat lunak",
+    checkUpdateButton: "Periksa",
+    checkingUpdate: "Memeriksa pembaruan...",
+    updateIdle: "Periksa versi terbaru di GitHub Releases.",
+    updateAvailable: (version) => `Versi ${version} tersedia.`,
+    upToDate: "Anda memakai versi terbaru.",
+    currentVersion: "Saat ini",
+    latestVersion: "Terbaru",
+    publishedAt: "Diterbitkan",
+    releaseNotes: "Catatan rilis",
+    openReleaseButton: "Buka rilis",
+    emptyReleaseNotes: "Rilis ini tidak memiliki catatan.",
+    updateCheckFailed: "Tidak dapat memeriksa pembaruan.",
+    versionCompareFailed: "Tidak dapat membandingkan versi."
+  },
+  th: {
+    updateEyebrow: "อัปเดต",
+    updateTitle: "อัปเดตซอฟต์แวร์",
+    checkUpdateButton: "ตรวจสอบ",
+    checkingUpdate: "กำลังตรวจสอบอัปเดต...",
+    updateIdle: "ตรวจสอบเวอร์ชันล่าสุดจาก GitHub Releases",
+    updateAvailable: (version) => `มีเวอร์ชัน ${version}`,
+    upToDate: "คุณใช้เวอร์ชันล่าสุดแล้ว",
+    currentVersion: "ปัจจุบัน",
+    latestVersion: "ล่าสุด",
+    publishedAt: "เผยแพร่",
+    releaseNotes: "บันทึกการอัปเดต",
+    openReleaseButton: "เปิดรีลีส",
+    emptyReleaseNotes: "รีลีสนี้ไม่มีบันทึก",
+    updateCheckFailed: "ไม่สามารถตรวจสอบอัปเดตได้",
+    versionCompareFailed: "ไม่สามารถเปรียบเทียบเวอร์ชันได้"
+  },
+  pl: {
+    updateEyebrow: "Aktualizacje",
+    updateTitle: "Aktualizacja",
+    checkUpdateButton: "Sprawdź",
+    checkingUpdate: "Sprawdzanie aktualizacji...",
+    updateIdle: "Sprawdź najnowszą wersję w GitHub Releases.",
+    updateAvailable: (version) => `Dostępna jest wersja ${version}.`,
+    upToDate: "Używasz najnowszej wersji.",
+    currentVersion: "Obecna",
+    latestVersion: "Najnowsza",
+    publishedAt: "Opublikowano",
+    releaseNotes: "Informacje o wydaniu",
+    openReleaseButton: "Otwórz wydanie",
+    emptyReleaseNotes: "To wydanie nie zawiera notatek.",
+    updateCheckFailed: "Nie można sprawdzić aktualizacji.",
+    versionCompareFailed: "Nie można porównać wersji."
+  },
+  uk: {
+    updateEyebrow: "Оновлення",
+    updateTitle: "Оновлення ПЗ",
+    checkUpdateButton: "Перевірити",
+    checkingUpdate: "Перевірка оновлень...",
+    updateIdle: "Перевірити останню версію в GitHub Releases.",
+    updateAvailable: (version) => `Доступна версія ${version}.`,
+    upToDate: "Ви використовуєте останню версію.",
+    currentVersion: "Поточна",
+    latestVersion: "Остання",
+    publishedAt: "Опубліковано",
+    releaseNotes: "Журнал змін",
+    openReleaseButton: "Відкрити реліз",
+    emptyReleaseNotes: "Цей реліз не містить опису.",
+    updateCheckFailed: "Не вдалося перевірити оновлення.",
+    versionCompareFailed: "Не вдалося порівняти версії."
+  }
+};
+
+for (const [language, values] of Object.entries(updateTranslations)) {
+  Object.assign(translations[language], values);
+}
+
 const aliases = {
   zh: "zh-CN",
   "zh-Hans": "zh-CN",
@@ -746,12 +1093,20 @@ const elements = {
   maxResults: document.querySelector("#max-results"),
   language: document.querySelector("#language"),
   search: document.querySelector("#search"),
+  checkUpdate: document.querySelector("#check-update"),
   title: document.querySelector("#status-title"),
   statFiles: document.querySelector("#stat-files"),
   statDirs: document.querySelector("#stat-dirs"),
   statMs: document.querySelector("#stat-ms"),
   emptyState: document.querySelector("#empty-state"),
-  resultList: document.querySelector("#result-list")
+  resultList: document.querySelector("#result-list"),
+  updateStatus: document.querySelector("#update-status"),
+  updateDetails: document.querySelector("#update-details"),
+  currentVersion: document.querySelector("#current-version"),
+  latestVersion: document.querySelector("#latest-version"),
+  publishedAt: document.querySelector("#published-at"),
+  releaseNotes: document.querySelector("#release-notes"),
+  openRelease: document.querySelector("#open-release")
 };
 
 let debounceTimer = 0;
@@ -762,6 +1117,9 @@ let lastStats = { files: 0, dirs: 0, elapsedMs: 0 };
 let lastStatusKey = "waiting";
 let lastStatusCount = 0;
 let lastStatusTruncated = false;
+let lastUpdate = null;
+let lastUpdateStatus = "updateIdle";
+let lastUpdateError = "";
 
 initLanguageSelect();
 applyTranslations();
@@ -787,9 +1145,12 @@ elements.language.addEventListener("change", () => {
   if (lastResults.length > 0) {
     renderResults(lastResults);
   }
+  renderUpdate();
 });
 
 elements.search.addEventListener("click", () => runSearch());
+elements.checkUpdate.addEventListener("click", () => checkForUpdates());
+elements.openRelease.addEventListener("click", () => openReleasePage());
 elements.query.addEventListener("input", () => scheduleSearch());
 elements.rootPath.addEventListener("input", () => scheduleSearch());
 elements.caseSensitive.addEventListener("change", () => scheduleSearch());
@@ -919,6 +1280,25 @@ async function runSearch() {
   }
 }
 
+async function checkForUpdates() {
+  elements.checkUpdate.disabled = true;
+  lastUpdateStatus = "checkingUpdate";
+  lastUpdateError = "";
+  renderUpdate();
+
+  try {
+    lastUpdate = await invoke("check_for_updates");
+    lastUpdateStatus = lastUpdate.has_update ? "updateAvailable" : "upToDate";
+  } catch (error) {
+    lastUpdate = null;
+    lastUpdateStatus = "updateCheckFailed";
+    lastUpdateError = mapError(error);
+  } finally {
+    elements.checkUpdate.disabled = false;
+    renderUpdate();
+  }
+}
+
 function setStatus(statusKey, files, dirs, elapsedMs, count = 0, truncated = false) {
   lastStatusKey = statusKey;
   lastStatusCount = count;
@@ -982,6 +1362,38 @@ function renderResults(results) {
   elements.resultList.replaceChildren(fragment);
 }
 
+function renderUpdate() {
+  if (lastUpdateStatus === "updateAvailable" && lastUpdate) {
+    elements.updateStatus.textContent = translate("updateAvailable", `v${lastUpdate.latest_version}`);
+  } else if (lastUpdateStatus === "updateCheckFailed") {
+    elements.updateStatus.textContent = lastUpdateError || translate("updateCheckFailed");
+  } else {
+    elements.updateStatus.textContent = translate(lastUpdateStatus);
+  }
+
+  elements.updateDetails.hidden = !lastUpdate;
+  if (!lastUpdate) {
+    return;
+  }
+
+  elements.currentVersion.textContent = `v${lastUpdate.current_version}`;
+  elements.latestVersion.textContent = `v${lastUpdate.latest_version}`;
+  elements.publishedAt.textContent = formatDateTime(lastUpdate.published_at);
+  elements.releaseNotes.textContent = lastUpdate.release_notes.trim() || translate("emptyReleaseNotes");
+}
+
+async function openReleasePage() {
+  if (!lastUpdate?.release_url) {
+    return;
+  }
+
+  try {
+    await invoke("open_path", { path: lastUpdate.release_url });
+  } catch (error) {
+    elements.updateStatus.textContent = `${translate("openFailed")}: ${mapError(error)}`;
+  }
+}
+
 async function openPath(path) {
   try {
     await invoke("open_path", { path });
@@ -997,6 +1409,22 @@ function mapError(error) {
 
 function formatNumber(value) {
   return new Intl.NumberFormat(currentLanguage).format(value);
+}
+
+function formatDateTime(value) {
+  if (!value) {
+    return "-";
+  }
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat(currentLanguage, {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(date);
 }
 
 function formatBytes(bytes) {

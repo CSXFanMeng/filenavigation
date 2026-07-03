@@ -148,7 +148,8 @@ select:focus {
 }
 
 .icon-button,
-.primary {
+.primary,
+.secondary {
   border: 0;
   border-radius: 8px;
   cursor: pointer;
@@ -172,6 +173,114 @@ select:focus {
 .primary:disabled {
   cursor: progress;
   opacity: 0.62;
+}
+
+.secondary {
+  min-height: 38px;
+  background: #172026;
+  color: white;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0 12px;
+}
+
+.secondary.wide {
+  width: 100%;
+}
+
+.secondary:disabled {
+  cursor: progress;
+  opacity: 0.62;
+}
+
+.update-panel {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding-top: 6px;
+}
+
+.update-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.update-heading > div {
+  min-width: 0;
+}
+
+.update-heading h2 {
+  font-size: 17px;
+}
+
+.update-status {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.update-details {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.update-details[hidden] {
+  display: none;
+}
+
+.update-details dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.update-details dl div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+
+.update-details dt {
+  color: #64727d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.update-details dd {
+  min-width: 0;
+  margin: 0;
+  color: #172026;
+  font-size: 13px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  text-align: end;
+}
+
+.update-details h3 {
+  font-size: 13px;
+}
+
+.update-details pre {
+  max-height: 180px;
+  margin: 0;
+  overflow: auto;
+  border: 1px solid rgba(21, 32, 38, 0.1);
+  border-radius: 8px;
+  background: rgba(248, 250, 252, 0.9);
+  color: #172026;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .controls {
@@ -370,7 +479,8 @@ h2 {
 
   .brand,
   .controls,
-  .primary {
+  .primary,
+  .update-panel {
     grid-column: 1 / -1;
   }
 

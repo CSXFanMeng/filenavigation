@@ -7,7 +7,12 @@ use std::{
 };
 
 use chrono::{DateTime, Local};
+use semver::Version;
 use serde::{Deserialize, Serialize};
+
+const LATEST_RELEASE_URL: &str =
+    "https://api.github.com/repos/CSXFanMeng/filenavigation/releases/latest";
+const RELEASE_USER_AGENT: &str = "FileNavigation update checker";
 
 #[derive(Debug, Deserialize)]
 struct SearchRequest {
@@ -42,6 +47,26 @@ struct SearchResult {
     modified: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+struct GitHubRelease {
+    tag_name: String,
+    name: Option<String>,
+    body: Option<String>,
+    html_url: String,
+    published_at: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+struct UpdateResponse {
+    current_version: String,
+    latest_version: String,
+    has_update: bool,
+    release_name: String,
+    release_notes: String,
+    release_url: String,
+    published_at: Option<String>,
+}
+
 #[tauri::command]
 async fn search_files(request: SearchRequest) -> Result<SearchResponse, String> {
     tokio::task::spawn_blocking(move || perform_search(request))
@@ -54,6 +79,37 @@ async fn open_path(path: String) -> Result<(), String> {
     tokio::task::spawn_blocking(move || open_path_native(&path))
         .await
         .map_err(|_| "openTaskFailed".to_string())?
+}
+
+#[tauri::command]
+async fn check_for_updates() -> Result<UpdateResponse, String> {
+    let release = reqwest::Client::new()
+        .get(LATEST_RELEASE_URL)
+        .header(reqwest::header::USER_AGENT, RELEASE_USER_AGENT)
+        .send()
+        .await
+        .map_err(|_| "updateCheckFailed".to_string())?
+        .error_for_status()
+        .map_err(|_| "updateCheckFailed".to_string())?
+        .json::<GitHubRelease>()
+        .await
+        .map_err(|_| "updateCheckFailed".to_string())?;
+
+    let current_version = env!("CARGO_PKG_VERSION").to_string();
+    let latest_version = release.tag_name.trim_start_matches('v').to_string();
+    let current =
+        Version::parse(&current_version).map_err(|_| "versionCompareFailed".to_string())?;
+    let latest = Version::parse(&latest_version).map_err(|_| "versionCompareFailed".to_string())?;
+
+    Ok(UpdateResponse {
+        current_version,
+        latest_version: latest_version.clone(),
+        has_update: latest > current,
+        release_name: release.name.unwrap_or_else(|| release.tag_name.clone()),
+        release_notes: release.body.unwrap_or_default(),
+        release_url: release.html_url,
+        published_at: release.published_at,
+    })
 }
 
 fn perform_search(request: SearchRequest) -> Result<SearchResponse, String> {
@@ -198,7 +254,11 @@ fn open_path_native(path: &str) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
-        .invoke_handler(tauri::generate_handler![search_files, open_path])
+        .invoke_handler(tauri::generate_handler![
+            search_files,
+            open_path,
+            check_for_updates
+        ])
         .run(tauri::generate_context!())
         .expect("error while running FileNavigation");
 }

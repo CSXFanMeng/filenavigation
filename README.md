@@ -11,6 +11,8 @@ FileNavigation is a Rust + Tauri desktop app for searching files inside a select
 - Language switcher for mainstream languages and regions:
   English, Simplified Chinese, Traditional Chinese, Spanish, French, German, Japanese, Korean, Portuguese, Russian, Arabic, Hindi, Italian, Dutch, Turkish, Vietnamese, Indonesian, Thai, Polish, and Ukrainian
 - RTL layout support for Arabic
+- Update checker based on the latest GitHub Release
+- Release notes display for the detected latest version
 - Case-sensitive search, hidden-file search, and configurable result limit
 - Open matched paths from the result list
 - Tauri packaging for Windows `exe`/`msi`, macOS `dmg`/`app`, and Linux `deb`/`rpm`/`AppImage`
@@ -63,6 +65,10 @@ Platform packages:
 - Linux: `.deb`, `.rpm`, and `.AppImage`
 
 Desktop packages are normally built on their target operating systems. The included GitHub Actions workflow builds Windows, macOS, and Linux packages separately and publishes them to a GitHub Release when a `v*` tag is pushed.
+
+## Update Checking
+
+The app checks `https://api.github.com/repos/CSXFanMeng/filenavigation/releases/latest` when the user presses the update button. It compares the latest GitHub Release tag with the current app version and displays the release notes returned by GitHub.
 
 ## License and Non-Commercial Restriction
 
