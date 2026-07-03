@@ -46,20 +46,20 @@ struct SearchResult {
 async fn search_files(request: SearchRequest) -> Result<SearchResponse, String> {
     tokio::task::spawn_blocking(move || perform_search(request))
         .await
-        .map_err(|error| format!("搜索任务失败: {error}"))?
+        .map_err(|_| "searchTaskFailed".to_string())?
 }
 
 #[tauri::command]
 async fn open_path(path: String) -> Result<(), String> {
     tokio::task::spawn_blocking(move || open_path_native(&path))
         .await
-        .map_err(|error| format!("打开任务失败: {error}"))?
+        .map_err(|_| "openTaskFailed".to_string())?
 }
 
 fn perform_search(request: SearchRequest) -> Result<SearchResponse, String> {
     let root = PathBuf::from(request.root.trim());
     if !root.is_dir() {
-        return Err("搜索目录不存在或不是目录".to_string());
+        return Err("invalidDirectory".to_string());
     }
 
     let max_results = request.max_results.clamp(10, 5_000);
@@ -136,7 +136,7 @@ fn to_result(path: PathBuf, name: String, metadata: fs::Metadata, is_dir: bool) 
     SearchResult {
         name,
         path: path.to_string_lossy().to_string(),
-        kind: if is_dir { "目录" } else { "文件" }.to_string(),
+        kind: if is_dir { "directory" } else { "file" }.to_string(),
         is_dir,
         size: if is_dir { 0 } else { metadata.len() },
         modified: metadata.modified().ok().map(format_system_time),
@@ -173,7 +173,7 @@ fn open_path_native(path: &str) -> Result<(), String> {
         .arg(path)
         .spawn()
         .map(|_| ())
-        .map_err(|error| format!("无法打开路径: {error}"))
+        .map_err(|_| "openPathFailed".to_string())
 }
 
 #[cfg(target_os = "macos")]
@@ -182,7 +182,7 @@ fn open_path_native(path: &str) -> Result<(), String> {
         .arg(path)
         .spawn()
         .map(|_| ())
-        .map_err(|error| format!("无法打开路径: {error}"))
+        .map_err(|_| "openPathFailed".to_string())
 }
 
 #[cfg(all(target_family = "unix", not(target_os = "macos")))]
@@ -191,7 +191,7 @@ fn open_path_native(path: &str) -> Result<(), String> {
         .arg(path)
         .spawn()
         .map(|_| ())
-        .map_err(|error| format!("无法打开路径: {error}"))
+        .map_err(|_| "openPathFailed".to_string())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

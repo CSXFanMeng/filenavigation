@@ -1,80 +1,71 @@
 # FileNavigation
 
-FileNavigation 是一个使用 Rust + Tauri 编写的本地目录文件查找工具。它在本机扫描指定目录，按文件名关键字返回匹配项，不上传文件名、路径或文件内容。
+FileNavigation is a Rust + Tauri desktop app for searching files inside a selected local folder. Search runs on the local machine; file names, paths, and file content are not uploaded.
 
-## 功能
+## Features
 
-- 指定本地目录搜索文件和文件夹
-- Rust 异步命令封装文件系统扫描
-- 现代化桌面 UI，支持 Windows、Linux、macOS
-- 支持区分大小写、包含隐藏文件、结果数量上限
-- 一键打开匹配路径
-- Tauri 打包配置覆盖 Windows `exe`/`msi`、macOS `dmg`/`app`、Linux `deb`/`rpm`/`AppImage`
+- Search files and folders under a chosen local directory
+- Async Rust/Tauri commands with a non-blocking UI
+- Responsive desktop UI for compact, tablet, and wide layouts
+- Multilingual interface with automatic system-language detection
+- Language switcher for mainstream languages and regions:
+  English, Simplified Chinese, Traditional Chinese, Spanish, French, German, Japanese, Korean, Portuguese, Russian, Arabic, Hindi, Italian, Dutch, Turkish, Vietnamese, Indonesian, Thai, Polish, and Ukrainian
+- RTL layout support for Arabic
+- Case-sensitive search, hidden-file search, and configurable result limit
+- Open matched paths from the result list
+- Tauri packaging for Windows `exe`/`msi`, macOS `dmg`/`app`, and Linux `deb`/`rpm`/`AppImage`
 
-## 技术栈
+## Tech Stack
 
 - Rust 2024 Edition
 - Tauri 2
 - Tokio
 - Vanilla JavaScript + Vite
 
-## 开发环境
+## Development Requirements
 
-需要安装：
-
-- Rust 最新稳定版
-- Node.js 20 或更新版本
+- Latest stable Rust
+- Node.js 20 or newer
 - Windows: WebView2 Runtime
-- Linux: Tauri 所需系统依赖，例如 `webkit2gtk`、`libayatana-appindicator`、`librsvg`
+- Linux: Tauri system dependencies such as `webkit2gtk`, `libayatana-appindicator`, and `librsvg`
 - macOS: Xcode Command Line Tools
 
-## 本地运行
+## Local Development
 
 ```bash
 npm install
 npm run tauri:dev
 ```
 
-在 PowerShell 执行策略阻止 `npm.ps1` 时，可以使用：
+If PowerShell blocks `npm.ps1`, use:
 
 ```powershell
 npm.cmd install
 npm.cmd run tauri:dev
 ```
 
-## 构建安装包
+## Build Installers
 
 ```bash
 npm run tauri:build
 ```
 
-构建产物位于：
+Build output:
 
 ```text
 src-tauri/target/release/bundle/
 ```
 
-平台产物：
+Platform packages:
 
-- Windows: `nsis` 生成 `.exe` 安装器，`msi` 生成 `.msi`
-- macOS: `dmg` 和 `.app`
-- Linux: `deb`、`rpm`、`AppImage`
+- Windows: `.exe` installer from NSIS and `.msi`
+- macOS: `.dmg` and `.app`
+- Linux: `.deb`, `.rpm`, and `.AppImage`
 
-跨平台桌面应用通常需要在对应系统上构建对应平台安装包。CI 可以使用 GitHub Actions 分别在 `windows-latest`、`macos-latest`、`ubuntu-latest` 上构建。
+Desktop packages are normally built on their target operating systems. The included GitHub Actions workflow builds Windows, macOS, and Linux packages separately and publishes them to a GitHub Release when a `v*` tag is pushed.
 
-## 开源与非商业限制
+## License and Non-Commercial Restriction
 
-本项目使用 [FileNavigation Non-Commercial Source License](./LICENSE.md)。源码可阅读、学习、修改和非商业分发，但禁止商业化使用、销售、SaaS 化、收费托管、闭源集成或作为商业产品的一部分分发。
+This project uses the [FileNavigation Non-Commercial Source License](./LICENSE.md). You may read, study, modify, and redistribute the source for non-commercial purposes, but commercial use, resale, SaaS hosting, paid managed services, closed-source commercial integration, and commercial product bundling are prohibited.
 
-注意：限制商业用途的许可证通常不符合 OSI 对“开源许可证”的定义。本项目采用“源码开放 + 非商业限制”的授权方式，以防止软件被商业化。
-
-## 发布到 GitHub
-
-已安装 GitHub CLI 并完成登录后：
-
-```bash
-git init
-git add .
-git commit -m "Initial release"
-gh repo create filenavigation --public --source . --remote origin --push
-```
+Note: licenses that restrict commercial use generally do not satisfy the OSI definition of an open source license. This project is source-available with a non-commercial restriction to prevent commercialization.
