@@ -13,6 +13,10 @@ FileNavigation is a Rust + Tauri desktop app for searching files inside a select
 - RTL layout support for Arabic
 - Update checker based on the latest GitHub Release
 - Release notes display for the detected latest version
+- GitHub Release package digest display for installer integrity checks
+- Search cancellation with live progress events
+- Result filtering, type filtering, sorting, and progressive result rendering
+- Skipped-entry statistics for permission-denied or unreadable filesystem entries
 - Case-sensitive search, hidden-file search, and configurable result limit
 - Open matched paths from the result list
 - Tauri packaging for Windows `exe`/`msi`, macOS `dmg`/`app`, and Linux `deb`/`rpm`/`AppImage`
@@ -69,6 +73,8 @@ Desktop packages are normally built on their target operating systems. The inclu
 ## Update Checking
 
 The app checks `https://api.github.com/repos/CSXFanMeng/filenavigation/releases/latest` when the user presses the update button. It compares the latest GitHub Release tag with the current app version and displays the release notes returned by GitHub.
+
+When GitHub provides asset digest metadata, FileNavigation also displays package checksums beside the installer names. These values are intended for manual integrity checks after downloading installers.
 
 ## License and Non-Commercial Restriction
 

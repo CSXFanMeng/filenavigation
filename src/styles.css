@@ -175,6 +175,17 @@ select:focus {
   opacity: 0.62;
 }
 
+.action-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.action-row .primary {
+  margin-top: 0;
+}
+
 .secondary {
   min-height: 38px;
   background: #172026;
@@ -283,6 +294,35 @@ select:focus {
   word-break: break-word;
 }
 
+.release-assets {
+  display: grid;
+  gap: 8px;
+  max-height: 180px;
+  overflow: auto;
+}
+
+.asset-row {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(21, 32, 38, 0.1);
+  border-radius: 8px;
+  background: rgba(248, 250, 252, 0.9);
+}
+
+.asset-row strong,
+.asset-row span,
+.asset-empty {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.asset-row span,
+.asset-empty {
+  color: #64727d;
+}
+
 .controls {
   display: grid;
   gap: 10px;
@@ -326,6 +366,25 @@ select:focus {
   border-bottom: 1px solid rgba(21, 32, 38, 0.08);
 }
 
+.result-toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(120px, 150px) minmax(140px, 180px);
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid rgba(21, 32, 38, 0.08);
+  background: rgba(248, 250, 252, 0.5);
+}
+
+.progress-detail {
+  min-height: 32px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(21, 32, 38, 0.08);
+  color: #64727d;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
 .status-heading {
   min-width: 0;
 }
@@ -346,7 +405,7 @@ h2 {
 
 .stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(84px, auto));
+  grid-template-columns: repeat(4, minmax(76px, auto));
   gap: 10px;
   min-width: min(100%, 320px);
 }
@@ -479,7 +538,7 @@ h2 {
 
   .brand,
   .controls,
-  .primary,
+  .action-row,
   .update-panel {
     grid-column: 1 / -1;
   }
@@ -494,8 +553,16 @@ h2 {
   }
 
   .stats {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     min-width: 0;
+  }
+
+  .result-toolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .result-toolbar .field:first-child {
+    grid-column: 1 / -1;
   }
 }
 
@@ -519,7 +586,16 @@ h2 {
   }
 
   .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .result-toolbar {
     grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  .result-toolbar .field:first-child {
+    grid-column: auto;
   }
 
   .result-list {

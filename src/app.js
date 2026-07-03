@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { open } from "@tauri-apps/plugin-dialog";
 import "./styles.css";
 
@@ -746,6 +747,12 @@ const updateTranslations = {
     emptyReleaseNotes: "This release does not include release notes.",
     updateCheckFailed: "Unable to check for updates.",
     versionCompareFailed: "Unable to compare release versions."
+    ,
+    packageChecksums: "Package checksums",
+    noPackageChecksums: "No package checksum metadata was returned by GitHub.",
+    updateRateLimited: "GitHub rate limit reached. Try again later.",
+    updateNotFound: "No GitHub release was found.",
+    updateNetworkFailed: "Network request failed."
   },
   "zh-CN": {
     updateEyebrow: "更新",
@@ -762,7 +769,12 @@ const updateTranslations = {
     openReleaseButton: "打开发布页",
     emptyReleaseNotes: "此版本没有更新日志。",
     updateCheckFailed: "无法检查更新。",
-    versionCompareFailed: "无法比较版本。"
+    versionCompareFailed: "无法比较版本。",
+    packageChecksums: "安装包校验值",
+    noPackageChecksums: "GitHub 未返回安装包校验元数据。",
+    updateRateLimited: "GitHub 访问频率已达上限，请稍后再试。",
+    updateNotFound: "没有找到 GitHub Release。",
+    updateNetworkFailed: "网络请求失败。"
   },
   "zh-TW": {
     updateEyebrow: "更新",
@@ -779,7 +791,12 @@ const updateTranslations = {
     openReleaseButton: "開啟發布頁",
     emptyReleaseNotes: "此版本沒有更新日誌。",
     updateCheckFailed: "無法檢查更新。",
-    versionCompareFailed: "無法比較版本。"
+    versionCompareFailed: "無法比較版本。",
+    packageChecksums: "安裝包校驗值",
+    noPackageChecksums: "GitHub 未回傳安裝包校驗中繼資料。",
+    updateRateLimited: "GitHub 存取頻率已達上限，請稍後再試。",
+    updateNotFound: "找不到 GitHub Release。",
+    updateNetworkFailed: "網路請求失敗。"
   },
   es: {
     updateEyebrow: "Actualizaciones",
@@ -1076,6 +1093,82 @@ for (const [language, values] of Object.entries(updateTranslations)) {
   Object.assign(translations[language], values);
 }
 
+const improvementTranslations = {
+  en: {
+    cancelSearchButton: "Cancel",
+    statSkipped: "Skipped",
+    resultFilterLabel: "Filter results",
+    resultFilterPlaceholder: "Filter visible results",
+    typeFilterLabel: "Type",
+    typeAll: "All",
+    typeFiles: "Files",
+    typeFolders: "Folders",
+    sortLabel: "Sort",
+    sortNameAsc: "Name A-Z",
+    sortNameDesc: "Name Z-A",
+    sortModifiedDesc: "Newest",
+    sortModifiedAsc: "Oldest",
+    sortSizeDesc: "Largest",
+    sortSizeAsc: "Smallest",
+    progressIdle: "Progress details will appear while searching.",
+    scanningProgress: (matches, path) => `Scanning... ${matches} matches${path ? ` · ${path}` : ""}`,
+    searchCancelled: "Search cancelled",
+    noVisibleResultsTitle: "No visible results",
+    noVisibleResultsText: "Adjust result filters or sorting.",
+    visibleResultCount: (visible, total) => `Showing ${visible} of ${total} results`
+  },
+  "zh-CN": {
+    cancelSearchButton: "取消",
+    statSkipped: "跳过",
+    resultFilterLabel: "结果过滤",
+    resultFilterPlaceholder: "过滤当前结果",
+    typeFilterLabel: "类型",
+    typeAll: "全部",
+    typeFiles: "文件",
+    typeFolders: "目录",
+    sortLabel: "排序",
+    sortNameAsc: "名称 A-Z",
+    sortNameDesc: "名称 Z-A",
+    sortModifiedDesc: "最新修改",
+    sortModifiedAsc: "最早修改",
+    sortSizeDesc: "最大文件",
+    sortSizeAsc: "最小文件",
+    progressIdle: "搜索时会显示进度详情。",
+    scanningProgress: (matches, path) => `正在扫描... ${matches} 个匹配${path ? ` · ${path}` : ""}`,
+    searchCancelled: "搜索已取消",
+    noVisibleResultsTitle: "没有可见结果",
+    noVisibleResultsText: "调整结果过滤或排序条件。",
+    visibleResultCount: (visible, total) => `显示 ${visible} / ${total} 个结果`
+  },
+  "zh-TW": {
+    cancelSearchButton: "取消",
+    statSkipped: "跳過",
+    resultFilterLabel: "結果過濾",
+    resultFilterPlaceholder: "過濾目前結果",
+    typeFilterLabel: "類型",
+    typeAll: "全部",
+    typeFiles: "檔案",
+    typeFolders: "目錄",
+    sortLabel: "排序",
+    sortNameAsc: "名稱 A-Z",
+    sortNameDesc: "名稱 Z-A",
+    sortModifiedDesc: "最新修改",
+    sortModifiedAsc: "最早修改",
+    sortSizeDesc: "最大檔案",
+    sortSizeAsc: "最小檔案",
+    progressIdle: "搜尋時會顯示進度詳情。",
+    scanningProgress: (matches, path) => `正在掃描... ${matches} 個符合${path ? ` · ${path}` : ""}`,
+    searchCancelled: "搜尋已取消",
+    noVisibleResultsTitle: "沒有可見結果",
+    noVisibleResultsText: "調整結果過濾或排序條件。",
+    visibleResultCount: (visible, total) => `顯示 ${visible} / ${total} 個結果`
+  }
+};
+
+for (const [language, values] of Object.entries(improvementTranslations)) {
+  Object.assign(translations[language], values);
+}
+
 const aliases = {
   zh: "zh-CN",
   "zh-Hans": "zh-CN",
@@ -1093,11 +1186,17 @@ const elements = {
   maxResults: document.querySelector("#max-results"),
   language: document.querySelector("#language"),
   search: document.querySelector("#search"),
+  cancelSearch: document.querySelector("#cancel-search"),
+  resultFilter: document.querySelector("#result-filter"),
+  typeFilter: document.querySelector("#type-filter"),
+  sortResults: document.querySelector("#sort-results"),
   checkUpdate: document.querySelector("#check-update"),
   title: document.querySelector("#status-title"),
   statFiles: document.querySelector("#stat-files"),
   statDirs: document.querySelector("#stat-dirs"),
   statMs: document.querySelector("#stat-ms"),
+  statSkipped: document.querySelector("#stat-skipped"),
+  progressDetail: document.querySelector("#progress-detail"),
   emptyState: document.querySelector("#empty-state"),
   resultList: document.querySelector("#result-list"),
   updateStatus: document.querySelector("#update-status"),
@@ -1106,14 +1205,18 @@ const elements = {
   latestVersion: document.querySelector("#latest-version"),
   publishedAt: document.querySelector("#published-at"),
   releaseNotes: document.querySelector("#release-notes"),
+  releaseAssets: document.querySelector("#release-assets"),
   openRelease: document.querySelector("#open-release")
 };
 
 let debounceTimer = 0;
-let activeSearchId = 0;
+let activeSearchId = "";
+let isSearching = false;
+let renderToken = 0;
 let currentLanguage = resolveLanguage(localStorage.getItem("filenavigation.language") || "auto");
 let lastResults = [];
-let lastStats = { files: 0, dirs: 0, elapsedMs: 0 };
+let lastVisibleResults = [];
+let lastStats = { files: 0, dirs: 0, skipped: 0, elapsedMs: 0 };
 let lastStatusKey = "waiting";
 let lastStatusCount = 0;
 let lastStatusTruncated = false;
@@ -1123,6 +1226,7 @@ let lastUpdateError = "";
 
 initLanguageSelect();
 applyTranslations();
+initializeProgressListener();
 
 elements.pickDir.addEventListener("click", async () => {
   const selected = await open({
@@ -1141,14 +1245,21 @@ elements.language.addEventListener("change", () => {
   localStorage.setItem("filenavigation.language", elements.language.value);
   currentLanguage = resolveLanguage(elements.language.value);
   applyTranslations();
-  setStatus(lastStatusKey, lastStats.files, lastStats.dirs, lastStats.elapsedMs, lastStatusCount, lastStatusTruncated);
-  if (lastResults.length > 0) {
-    renderResults(lastResults);
-  }
+  setStatus(
+    lastStatusKey,
+    lastStats.files,
+    lastStats.dirs,
+    lastStats.elapsedMs,
+    lastStatusCount,
+    lastStatusTruncated,
+    lastStats.skipped
+  );
+  applyResultView();
   renderUpdate();
 });
 
 elements.search.addEventListener("click", () => runSearch());
+elements.cancelSearch.addEventListener("click", () => cancelActiveSearch());
 elements.checkUpdate.addEventListener("click", () => checkForUpdates());
 elements.openRelease.addEventListener("click", () => openReleasePage());
 elements.query.addEventListener("input", () => scheduleSearch());
@@ -1156,6 +1267,9 @@ elements.rootPath.addEventListener("input", () => scheduleSearch());
 elements.caseSensitive.addEventListener("change", () => scheduleSearch());
 elements.includeHidden.addEventListener("change", () => scheduleSearch());
 elements.maxResults.addEventListener("change", () => scheduleSearch());
+elements.resultFilter.addEventListener("input", () => applyResultView());
+elements.typeFilter.addEventListener("change", () => applyResultView());
+elements.sortResults.addEventListener("change", () => applyResultView());
 
 function initLanguageSelect() {
   const saved = localStorage.getItem("filenavigation.language") || "auto";
@@ -1215,6 +1329,30 @@ function applyTranslations() {
   });
 }
 
+async function initializeProgressListener() {
+  await listen("search-progress", (event) => {
+    const progress = event.payload;
+    if (!progress || progress.search_id !== activeSearchId || !isSearching) {
+      return;
+    }
+
+    setStatus(
+      "searching",
+      progress.files_scanned,
+      progress.directories_scanned,
+      progress.elapsed_ms,
+      progress.matches,
+      false,
+      progress.skipped_entries
+    );
+    elements.progressDetail.textContent = translate(
+      "scanningProgress",
+      formatNumber(progress.matches),
+      progress.current_path
+    );
+  });
+}
+
 function scheduleSearch() {
   window.clearTimeout(debounceTimer);
   debounceTimer = window.setTimeout(() => runSearch(), 280);
@@ -1226,20 +1364,27 @@ async function runSearch() {
 
   if (!root || !query) {
     lastResults = [];
+    lastVisibleResults = [];
     setStatus("waiting", 0, 0, 0);
+    elements.progressDetail.textContent = translate("progressIdle");
     renderEmpty("emptyTitle", "emptyText");
     return;
   }
 
-  const searchId = ++activeSearchId;
+  const searchId = createSearchId();
+  activeSearchId = searchId;
+  isSearching = true;
   elements.search.disabled = true;
+  elements.cancelSearch.disabled = false;
   elements.title.textContent = translate("searching");
+  elements.progressDetail.textContent = translate("scanningProgress", formatNumber(0), root);
   elements.emptyState.hidden = true;
   elements.resultList.innerHTML = "";
 
   try {
     const response = await invoke("search_files", {
       request: {
+        search_id: searchId,
         root,
         query,
         case_sensitive: elements.caseSensitive.checked,
@@ -1254,30 +1399,51 @@ async function runSearch() {
 
     lastResults = response.results;
     setStatus(
-      "found",
+      response.cancelled ? "searchCancelled" : "found",
       response.stats.files_scanned,
       response.stats.directories_scanned,
       response.stats.elapsed_ms,
       response.results.length,
-      response.truncated
+      response.truncated,
+      response.stats.skipped_entries
     );
+    elements.progressDetail.textContent = response.cancelled
+      ? translate("searchCancelled")
+      : translate("visibleResultCount", formatNumber(response.results.length), formatNumber(response.results.length));
 
     if (response.results.length === 0) {
       renderEmpty("noResultsTitle", "noResultsText");
     } else {
-      renderResults(response.results);
+      applyResultView();
     }
   } catch (error) {
     if (searchId === activeSearchId) {
       lastResults = [];
+      lastVisibleResults = [];
       setStatus("searchFailed", 0, 0, 0);
+      elements.progressDetail.textContent = mapError(error);
       renderEmpty("cannotComplete", mapError(error));
     }
   } finally {
     if (searchId === activeSearchId) {
+      isSearching = false;
       elements.search.disabled = false;
+      elements.cancelSearch.disabled = true;
     }
   }
+}
+
+function createSearchId() {
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+async function cancelActiveSearch() {
+  if (!activeSearchId || !isSearching) {
+    return;
+  }
+
+  elements.cancelSearch.disabled = true;
+  await invoke("cancel_search", { searchId: activeSearchId });
 }
 
 async function checkForUpdates() {
@@ -1299,11 +1465,11 @@ async function checkForUpdates() {
   }
 }
 
-function setStatus(statusKey, files, dirs, elapsedMs, count = 0, truncated = false) {
+function setStatus(statusKey, files, dirs, elapsedMs, count = 0, truncated = false, skipped = 0) {
   lastStatusKey = statusKey;
   lastStatusCount = count;
   lastStatusTruncated = truncated;
-  lastStats = { files, dirs, elapsedMs };
+  lastStats = { files, dirs, skipped, elapsedMs };
 
   if (statusKey === "found") {
     elements.title.textContent = translate(truncated ? "foundTruncated" : "found", count);
@@ -1314,20 +1480,103 @@ function setStatus(statusKey, files, dirs, elapsedMs, count = 0, truncated = fal
   elements.statFiles.textContent = formatNumber(files);
   elements.statDirs.textContent = formatNumber(dirs);
   elements.statMs.textContent = `${formatNumber(elapsedMs)} ms`;
+  elements.statSkipped.textContent = formatNumber(skipped);
 }
 
 function renderEmpty(titleKey, textKey) {
+  renderToken += 1;
   elements.emptyState.hidden = false;
   elements.emptyState.querySelector("h3").textContent = translate(titleKey);
   elements.emptyState.querySelector("p").textContent = translate(textKey);
   elements.resultList.innerHTML = "";
 }
 
-function renderResults(results) {
-  elements.emptyState.hidden = true;
-  const fragment = document.createDocumentFragment();
+function applyResultView() {
+  if (lastResults.length === 0) {
+    return;
+  }
 
-  for (const result of results) {
+  const query = elements.resultFilter.value.trim().toLocaleLowerCase();
+  const type = elements.typeFilter.value;
+  const sort = elements.sortResults.value;
+
+  lastVisibleResults = lastResults
+    .filter((result) => {
+      if (type !== "all" && result.kind !== type) {
+        return false;
+      }
+
+      if (!query) {
+        return true;
+      }
+
+      return `${result.name}\n${result.path}`.toLocaleLowerCase().includes(query);
+    })
+    .sort((left, right) => compareResults(left, right, sort));
+
+  if (lastResults.length > 0) {
+    elements.progressDetail.textContent = translate(
+      "visibleResultCount",
+      formatNumber(lastVisibleResults.length),
+      formatNumber(lastResults.length)
+    );
+  }
+
+  if (lastResults.length > 0 && lastVisibleResults.length === 0) {
+    renderEmpty("noVisibleResultsTitle", "noVisibleResultsText");
+    return;
+  }
+
+  renderResults(lastVisibleResults);
+}
+
+function compareResults(left, right, sort) {
+  if (sort === "name-desc") {
+    return right.name.localeCompare(left.name, currentLanguage);
+  }
+
+  if (sort === "modified-desc" || sort === "modified-asc") {
+    const leftTime = Date.parse(left.modified || "") || 0;
+    const rightTime = Date.parse(right.modified || "") || 0;
+    return sort === "modified-desc" ? rightTime - leftTime : leftTime - rightTime;
+  }
+
+  if (sort === "size-desc" || sort === "size-asc") {
+    return sort === "size-desc" ? right.size - left.size : left.size - right.size;
+  }
+
+  return left.name.localeCompare(right.name, currentLanguage);
+}
+
+function renderResults(results) {
+  renderToken += 1;
+  const token = renderToken;
+  elements.emptyState.hidden = true;
+  elements.resultList.innerHTML = "";
+
+  let index = 0;
+  const renderChunk = () => {
+    if (token !== renderToken) {
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    const end = Math.min(index + 120, results.length);
+    for (; index < end; index += 1) {
+      fragment.append(createResultRow(results[index]));
+    }
+
+    elements.resultList.append(fragment);
+
+    if (index < results.length) {
+      window.requestAnimationFrame(renderChunk);
+    }
+  };
+
+  renderChunk();
+}
+
+function createResultRow(result) {
     const row = document.createElement("article");
     row.className = "result-row";
 
@@ -1356,10 +1605,7 @@ function renderResults(results) {
 
     content.append(name, path, meta);
     row.append(icon, content);
-    fragment.append(row);
-  }
-
-  elements.resultList.replaceChildren(fragment);
+    return row;
 }
 
 function renderUpdate() {
@@ -1380,6 +1626,36 @@ function renderUpdate() {
   elements.latestVersion.textContent = `v${lastUpdate.latest_version}`;
   elements.publishedAt.textContent = formatDateTime(lastUpdate.published_at);
   elements.releaseNotes.textContent = lastUpdate.release_notes.trim() || translate("emptyReleaseNotes");
+  renderReleaseAssets(lastUpdate.assets || []);
+}
+
+function renderReleaseAssets(assets) {
+  elements.releaseAssets.innerHTML = "";
+
+  if (assets.length === 0) {
+    const empty = document.createElement("p");
+    empty.className = "asset-empty";
+    empty.textContent = translate("noPackageChecksums");
+    elements.releaseAssets.append(empty);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+  for (const asset of assets) {
+    const item = document.createElement("article");
+    item.className = "asset-row";
+
+    const name = document.createElement("strong");
+    name.textContent = asset.name;
+
+    const meta = document.createElement("span");
+    meta.textContent = `${formatBytes(asset.size)} · ${asset.digest || translate("noPackageChecksums")}`;
+
+    item.append(name, meta);
+    fragment.append(item);
+  }
+
+  elements.releaseAssets.append(fragment);
 }
 
 async function openReleasePage() {

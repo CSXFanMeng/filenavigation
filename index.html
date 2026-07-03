@@ -73,9 +73,14 @@
             <input id="max-results" type="number" min="10" max="5000" step="10" value="500" />
           </div>
 
-          <button id="search" class="primary" type="button" data-i18n="searchButton">
-            Search
-          </button>
+          <div class="action-row">
+            <button id="search" class="primary" type="button" data-i18n="searchButton">
+              Search
+            </button>
+            <button id="cancel-search" class="secondary" type="button" data-i18n="cancelSearchButton" disabled>
+              Cancel
+            </button>
+          </div>
 
           <section class="update-panel" aria-live="polite">
             <div class="update-heading">
@@ -107,6 +112,8 @@
               </dl>
               <h3 data-i18n="releaseNotes">Release notes</h3>
               <pre id="release-notes"></pre>
+              <h3 data-i18n="packageChecksums">Package checksums</h3>
+              <div id="release-assets" class="release-assets"></div>
               <button id="open-release" class="secondary wide" type="button" data-i18n="openReleaseButton">
                 Open release
               </button>
@@ -133,8 +140,48 @@
                 <span id="stat-ms">0 ms</span>
                 <small data-i18n="statTime">Time</small>
               </div>
+              <div>
+                <span id="stat-skipped">0</span>
+                <small data-i18n="statSkipped">Skipped</small>
+              </div>
             </div>
           </header>
+
+          <section class="result-toolbar">
+            <div class="field">
+              <label for="result-filter" data-i18n="resultFilterLabel">Filter results</label>
+              <input
+                id="result-filter"
+                type="search"
+                data-i18n-placeholder="resultFilterPlaceholder"
+                placeholder="Filter visible results"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field">
+              <label for="type-filter" data-i18n="typeFilterLabel">Type</label>
+              <select id="type-filter">
+                <option value="all" data-i18n="typeAll">All</option>
+                <option value="file" data-i18n="typeFiles">Files</option>
+                <option value="directory" data-i18n="typeFolders">Folders</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sort-results" data-i18n="sortLabel">Sort</label>
+              <select id="sort-results">
+                <option value="name-asc" data-i18n="sortNameAsc">Name A-Z</option>
+                <option value="name-desc" data-i18n="sortNameDesc">Name Z-A</option>
+                <option value="modified-desc" data-i18n="sortModifiedDesc">Newest</option>
+                <option value="modified-asc" data-i18n="sortModifiedAsc">Oldest</option>
+                <option value="size-desc" data-i18n="sortSizeDesc">Largest</option>
+                <option value="size-asc" data-i18n="sortSizeAsc">Smallest</option>
+              </select>
+            </div>
+          </section>
+
+          <p id="progress-detail" class="progress-detail" data-i18n="progressIdle">
+            Progress details will appear while searching.
+          </p>
 
           <div id="empty-state" class="empty-state">
             <div class="empty-symbol">⌕</div>
