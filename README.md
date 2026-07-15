@@ -12,6 +12,8 @@ FileNavigation is a Rust + Tauri desktop app for searching files inside a select
 - Async Rust/Tauri backend with cancellable searches and live progress events
 - Result filtering, file/folder type filtering, sorting, and progressive rendering for large result sets
 - Modern responsive workspace with Lucide icons, polished interaction states, and accessible focus feedback
+- Frameless app-drawn window border with draggable title bar and localized window controls
+- Fixed main viewport with an independently scrolling file results list
 - Multilingual UI with locale files under `src/i18n/locales`
 - Update checker based on the latest GitHub Release
 - Localized release notes: the app requests the current UI language and extracts that language block from the Release body
@@ -71,6 +73,8 @@ FileNavigation 是一个使用 Rust + Tauri 编写的桌面应用，用于在指
 - Rust/Tauri 异步后端，支持取消搜索和实时进度事件
 - 结果内过滤、文件/目录类型过滤、排序，以及大量结果的渐进式渲染
 - 现代化响应式工作区，使用 Lucide 图标，并完善悬停、加载和无障碍焦点状态
+- 应用自行绘制无边框窗口边缘，提供可拖拽标题栏和多语言窗口控制按钮
+- 主界面固定在窗口视口内，文件结果列表独立滚动
 - 多语言 UI，语言文件位于 `src/i18n/locales`
 - 基于 GitHub 最新 Release 的更新检查
 - 本地化更新日志：软件会传入当前 UI 语言，并从 Release 正文中截取对应语言块
@@ -130,6 +134,8 @@ FileNavigation 是一個使用 Rust + Tauri 編寫的桌面應用，用於在指
 - Rust/Tauri 非同步後端，支援取消搜尋和即時進度事件
 - 結果內過濾、檔案/目錄類型過濾、排序，以及大量結果的漸進式渲染
 - 現代化響應式工作區，使用 Lucide 圖示，並完善懸停、載入和無障礙焦點狀態
+- 應用程式自行繪製無邊框視窗邊緣，提供可拖曳標題列和多語言視窗控制按鈕
+- 主介面固定在視窗範圍內，檔案結果清單獨立捲動
 - 多語言 UI，語言檔案位於 `src/i18n/locales`
 - 基於 GitHub 最新 Release 的更新檢查
 - 本地化更新日誌：軟體會傳入目前 UI 語言，並從 Release 正文中擷取對應語言區塊

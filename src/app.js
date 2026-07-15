@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/plugin-dialog";
 import {
   ArrowUpDown,
@@ -22,6 +23,8 @@ import {
   Languages,
   ListFilter,
   ListOrdered,
+  Maximize2,
+  Minus,
   PackageCheck,
   Radar,
   RefreshCw,
@@ -56,6 +59,8 @@ const uiIcons = {
   Languages,
   ListFilter,
   ListOrdered,
+  Maximize2,
+  Minus,
   Radar,
   RefreshCw,
   ScanLine,
@@ -68,6 +73,9 @@ const uiIcons = {
 };
 
 const elements = {
+  windowMinimize: document.querySelector("#window-minimize"),
+  windowMaximize: document.querySelector("#window-maximize"),
+  windowClose: document.querySelector("#window-close"),
   rootPath: document.querySelector("#root-path"),
   query: document.querySelector("#query"),
   pickDir: document.querySelector("#pick-dir"),
@@ -99,6 +107,8 @@ const elements = {
   openRelease: document.querySelector("#open-release")
 };
 
+const appWindow = getCurrentWindow();
+
 let debounceTimer = 0;
 let activeSearchId = "";
 let isSearching = false;
@@ -118,6 +128,10 @@ initLanguageSelect();
 applyTranslations();
 initializeIcons();
 initializeProgressListener();
+
+elements.windowMinimize.addEventListener("click", () => appWindow.minimize());
+elements.windowMaximize.addEventListener("click", () => appWindow.toggleMaximize());
+elements.windowClose.addEventListener("click", () => appWindow.close());
 
 elements.pickDir.addEventListener("click", async () => {
   const selected = await open({

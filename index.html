@@ -8,18 +8,53 @@
   </head>
   <body>
     <main id="app" class="shell">
-      <section class="workspace">
-        <aside class="sidebar">
-          <header class="brand">
-            <div class="brand-mark" aria-hidden="true">
+      <div class="app-frame">
+        <header class="titlebar" data-tauri-drag-region>
+          <div class="titlebar-brand" data-tauri-drag-region>
+            <span class="titlebar-mark" aria-hidden="true" data-tauri-drag-region>
               <i data-lucide="folder-search"></i>
-            </div>
-            <div class="brand-copy">
-              <h1>FileNavigation</h1>
-              <p data-i18n="brandSubtitle">Local directory file search</p>
-            </div>
-          </header>
+            </span>
+            <span class="titlebar-name" data-tauri-drag-region>FileNavigation</span>
+          </div>
+          <div class="window-controls">
+            <button
+              id="window-minimize"
+              class="window-control"
+              type="button"
+              data-i18n-title="minimizeWindow"
+              data-i18n-aria-label="minimizeWindow"
+              title="Minimize window"
+              aria-label="Minimize window"
+            >
+              <i data-lucide="minus" aria-hidden="true"></i>
+            </button>
+            <button
+              id="window-maximize"
+              class="window-control"
+              type="button"
+              data-i18n-title="maximizeWindow"
+              data-i18n-aria-label="maximizeWindow"
+              title="Maximize or restore window"
+              aria-label="Maximize or restore window"
+            >
+              <i data-lucide="maximize-2" aria-hidden="true"></i>
+            </button>
+            <button
+              id="window-close"
+              class="window-control close"
+              type="button"
+              data-i18n-title="closeWindow"
+              data-i18n-aria-label="closeWindow"
+              title="Close window"
+              aria-label="Close window"
+            >
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </div>
+        </header>
 
+        <section class="workspace">
+        <aside class="sidebar">
           <div class="sidebar-content">
             <div class="field">
               <label for="language">
@@ -262,7 +297,8 @@
             <div id="result-list" class="result-list" aria-live="polite"></div>
           </div>
         </section>
-      </section>
+        </section>
+      </div>
     </main>
     <script type="module" src="/src/app.js"></script>
   </body>

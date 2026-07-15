@@ -1,182 +1,159 @@
 <!-- lang:en -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Refined the responsive workspace with a modern visual hierarchy, Lucide icons, and clearer interaction states.
-- Split UI translations into independent locale files under `src/i18n/locales`.
-- Update checks now request release notes for the current UI language.
-- GitHub Release notes use explicit multilingual blocks so the app can extract the right changelog.
-- README now documents multilingual release-note behavior.
+- Added a frameless window with an app-drawn border, draggable title bar, and localized window controls.
+- Locked the main workspace to the window viewport; only the file results list shows its own scrollbar.
+- Windows release builds now use the GUI subsystem and no longer open a CMD window on startup.
 <!-- /lang -->
 
 <!-- lang:zh-CN -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- 重构响应式工作区视觉层级，加入 Lucide 图标，并优化悬停、加载和焦点状态。
-- 将 UI 翻译拆分到 `src/i18n/locales` 下的独立语言文件。
-- 更新检查会根据当前 UI 语言请求对应语言的更新日志。
-- GitHub Release 正文使用明确的多语言块，软件可自动截取匹配语言的日志。
-- README 已补充多语言 Release notes 约定。
+- 新增无边框窗口，由应用绘制边框、可拖拽标题栏及多语言窗口控制按钮。
+- 主工作区固定在窗口视口内，只有文件结果列表显示独立滚动条。
+- Windows 发布版改用 GUI 子系统，启动时不再弹出 CMD 窗口。
 <!-- /lang -->
 
 <!-- lang:zh-TW -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- 重構響應式工作區視覺層級，加入 Lucide 圖示，並改善懸停、載入和焦點狀態。
-- 將 UI 翻譯拆分到 `src/i18n/locales` 下的獨立語言檔案。
-- 更新檢查會依照目前 UI 語言取得對應語言的更新日誌。
-- GitHub Release 正文使用明確的多語言區塊，軟體可自動擷取相符語言的日誌。
-- README 已補充多語言 Release notes 約定。
+- 新增無邊框視窗，由應用程式繪製邊框、可拖曳標題列及多語言視窗控制按鈕。
+- 主工作區固定在視窗範圍內，只有檔案結果清單顯示獨立捲軸。
+- Windows 發布版改用 GUI 子系統，啟動時不再顯示 CMD 視窗。
 <!-- /lang -->
 
 <!-- lang:es -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Se mejoró el espacio de trabajo adaptable con una jerarquía visual moderna, iconos Lucide y estados de interacción más claros.
-- Las traducciones de la interfaz se separaron en archivos de idioma bajo `src/i18n/locales`.
-- La comprobación de actualizaciones solicita notas de versión para el idioma actual de la interfaz.
-- Las notas de GitHub Release usan bloques multilingües explícitos para que la app extraiga el registro correcto.
+- Se añadió una ventana sin marco con borde dibujado por la aplicación, barra de título arrastrable y controles localizados.
+- El espacio de trabajo queda fijado al área de la ventana; solo la lista de resultados muestra una barra de desplazamiento.
+- Las compilaciones de Windows usan el subsistema GUI y ya no abren una ventana CMD al iniciar.
 <!-- /lang -->
 
 <!-- lang:fr -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- L’espace de travail adaptatif bénéficie d’une hiérarchie visuelle moderne, d’icônes Lucide et d’états d’interaction plus clairs.
-- Les traductions de l’interface sont séparées dans `src/i18n/locales`.
-- La vérification des mises à jour demande les notes de version dans la langue actuelle de l’interface.
-- Les GitHub Releases utilisent des blocs multilingues explicites pour permettre l’extraction du bon journal.
+- Ajout d’une fenêtre sans bordure avec bordure dessinée par l’application, barre de titre déplaçable et commandes localisées.
+- L’espace de travail reste dans la fenêtre ; seule la liste des résultats affiche une barre de défilement.
+- Les versions Windows utilisent le sous-système GUI et n’ouvrent plus de fenêtre CMD au démarrage.
 <!-- /lang -->
 
 <!-- lang:de -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Der responsive Arbeitsbereich wurde mit moderner visueller Hierarchie, Lucide-Symbolen und klareren Interaktionszuständen überarbeitet.
-- UI-Übersetzungen wurden in eigene Sprachdateien unter `src/i18n/locales` ausgelagert.
-- Die Updateprüfung fordert Versionshinweise in der aktuellen UI-Sprache an.
-- GitHub Releases verwenden explizite mehrsprachige Blöcke, damit die App den passenden Changelog extrahieren kann.
+- Rahmenloses Fenster mit app-eigenem Rand, ziehbarer Titelleiste und lokalisierten Fenstersteuerungen hinzugefügt.
+- Der Arbeitsbereich bleibt im Fenster; nur die Dateiergebnisliste zeigt eine eigene Bildlaufleiste.
+- Windows-Builds verwenden jetzt das GUI-Subsystem und öffnen beim Start kein CMD-Fenster mehr.
 <!-- /lang -->
 
 <!-- lang:ja -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- レスポンシブなワークスペースを、現代的な視覚階層、Lucide アイコン、明確な操作状態で刷新しました。
-- UI 翻訳を `src/i18n/locales` の個別言語ファイルへ分離しました。
-- 更新確認は現在の UI 言語に対応するリリースノートを取得します。
-- GitHub Release は多言語ブロックを使い、アプリが適切な更新ログを抽出できます。
+- アプリ独自の境界線、ドラッグ可能なタイトルバー、多言語ウィンドウ操作を備えたフレームレスウィンドウを追加しました。
+- メイン画面をウィンドウ内に固定し、ファイル結果一覧だけにスクロールバーを表示します。
+- Windows リリースは GUI サブシステムを使用し、起動時に CMD ウィンドウを表示しなくなりました。
 <!-- /lang -->
 
 <!-- lang:ko -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- 반응형 작업 공간에 현대적인 시각 계층, Lucide 아이콘, 명확한 상호작용 상태를 적용했습니다.
-- UI 번역을 `src/i18n/locales`의 독립 언어 파일로 분리했습니다.
-- 업데이트 확인은 현재 UI 언어에 맞는 릴리스 노트를 요청합니다.
-- GitHub Release는 명시적인 다국어 블록을 사용해 앱이 올바른 변경 로그를 추출합니다.
+- 앱이 그리는 테두리, 드래그 가능한 제목 표시줄, 다국어 창 제어 기능을 갖춘 프레임리스 창을 추가했습니다.
+- 기본 작업 영역을 창 안에 고정하고 파일 결과 목록에만 스크롤바를 표시합니다.
+- Windows 릴리스는 GUI 하위 시스템을 사용하며 시작할 때 CMD 창을 열지 않습니다.
 <!-- /lang -->
 
 <!-- lang:pt-BR -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- O espaço de trabalho responsivo foi refinado com hierarquia visual moderna, ícones Lucide e estados de interação mais claros.
-- As traduções da interface foram separadas em arquivos de idioma em `src/i18n/locales`.
-- A verificação de atualização solicita notas de versão no idioma atual da interface.
-- GitHub Releases usam blocos multilíngues explícitos para a app extrair o changelog correto.
+- Adicionada janela sem moldura com borda desenhada pelo app, barra de título arrastável e controles localizados.
+- A área principal fica presa à janela; somente a lista de resultados exibe sua própria barra de rolagem.
+- As versões Windows usam o subsistema GUI e não abrem mais uma janela CMD ao iniciar.
 <!-- /lang -->
 
 <!-- lang:ru -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Адаптивное рабочее пространство получило современную визуальную иерархию, значки Lucide и более понятные состояния взаимодействия.
-- Переводы интерфейса вынесены в отдельные файлы языков в `src/i18n/locales`.
-- Проверка обновлений запрашивает заметки релиза для текущего языка интерфейса.
-- GitHub Release использует явные многоязычные блоки, чтобы приложение выбирало нужный журнал изменений.
+- Добавлено окно без системной рамки с границей приложения, перетаскиваемой строкой заголовка и локализованными кнопками.
+- Рабочая область закреплена в окне; полоса прокрутки отображается только у списка результатов.
+- Сборки Windows используют подсистему GUI и больше не открывают окно CMD при запуске.
 <!-- /lang -->
 
 <!-- lang:ar -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- تم تحسين مساحة العمل المتجاوبة بتسلسل بصري حديث وأيقونات Lucide وحالات تفاعل أوضح.
-- تم فصل ترجمات الواجهة إلى ملفات لغة مستقلة داخل `src/i18n/locales`.
-- يتحقق التطبيق من ملاحظات الإصدار حسب لغة الواجهة الحالية.
-- تستخدم GitHub Release كتل لغات واضحة ليتمكن التطبيق من استخراج سجل التغييرات المناسب.
+- تمت إضافة نافذة بلا إطار بحدود يرسمها التطبيق وشريط عنوان قابل للسحب وأزرار نافذة مترجمة.
+- تبقى مساحة العمل داخل النافذة، وتظهر أداة التمرير فقط في قائمة نتائج الملفات.
+- تستخدم إصدارات Windows نظام GUI الفرعي ولم تعد تفتح نافذة CMD عند التشغيل.
 <!-- /lang -->
 
 <!-- lang:hi -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- रिस्पॉन्सिव वर्कस्पेस को आधुनिक दृश्य क्रम, Lucide आइकन और अधिक स्पष्ट इंटरैक्शन स्थितियों के साथ बेहतर बनाया गया।
-- UI अनुवादों को `src/i18n/locales` में अलग भाषा फ़ाइलों में बाँटा गया।
-- अपडेट जाँच अब मौजूदा UI भाषा के अनुसार रिलीज़ नोट्स मांगती है।
-- GitHub Release में स्पष्ट बहुभाषी ब्लॉक हैं ताकि ऐप सही changelog निकाल सके।
+- ऐप द्वारा बनाई गई सीमा, खींचने योग्य शीर्षक पट्टी और स्थानीयकृत नियंत्रणों वाली फ्रेमरहित विंडो जोड़ी गई।
+- मुख्य कार्यक्षेत्र विंडो में स्थिर रहता है; केवल फ़ाइल परिणाम सूची में स्क्रॉलबार दिखाई देता है।
+- Windows रिलीज़ GUI सबसिस्टम का उपयोग करती है और शुरू होने पर CMD विंडो नहीं खोलती।
 <!-- /lang -->
 
 <!-- lang:it -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Lo spazio di lavoro responsive è stato rifinito con una gerarchia visiva moderna, icone Lucide e stati di interazione più chiari.
-- Le traduzioni UI sono state separate in file lingua sotto `src/i18n/locales`.
-- Il controllo aggiornamenti richiede le note di rilascio nella lingua corrente dell’interfaccia.
-- Le GitHub Release usano blocchi multilingue espliciti per estrarre il changelog corretto.
+- Aggiunta una finestra senza cornice con bordo disegnato dall’app, barra del titolo trascinabile e controlli localizzati.
+- L’area di lavoro resta nella finestra; solo l’elenco dei risultati mostra una barra di scorrimento.
+- Le build Windows usano il sottosistema GUI e non aprono più una finestra CMD all’avvio.
 <!-- /lang -->
 
 <!-- lang:nl -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- De responsieve werkruimte is verfijnd met een moderne visuele hiërarchie, Lucide-pictogrammen en duidelijkere interactiestatussen.
-- UI-vertalingen zijn gesplitst naar aparte taalbestanden in `src/i18n/locales`.
-- De updatecontrole vraagt release-opmerkingen op voor de huidige UI-taal.
-- GitHub Releases gebruiken expliciete meertalige blokken zodat de app de juiste changelog kan tonen.
+- Een randloos venster toegevoegd met een door de app getekende rand, versleepbare titelbalk en vertaalde vensterknoppen.
+- De werkruimte blijft binnen het venster; alleen de lijst met bestandsresultaten toont een schuifbalk.
+- Windows-builds gebruiken het GUI-subsysteem en openen bij het starten geen CMD-venster meer.
 <!-- /lang -->
 
 <!-- lang:tr -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Duyarlı çalışma alanı modern görsel hiyerarşi, Lucide simgeleri ve daha belirgin etkileşim durumlarıyla yenilendi.
-- UI çevirileri `src/i18n/locales` altında bağımsız dil dosyalarına ayrıldı.
-- Güncelleme kontrolü geçerli UI diline uygun sürüm notlarını ister.
-- GitHub Release metni, uygulamanın doğru değişiklik günlüğünü seçmesi için açık çok dilli bloklar kullanır.
+- Uygulamanın çizdiği kenarlık, sürüklenebilir başlık çubuğu ve yerelleştirilmiş denetimlere sahip çerçevesiz pencere eklendi.
+- Ana çalışma alanı pencereye sabitlendi; yalnızca dosya sonuç listesi kendi kaydırma çubuğunu gösterir.
+- Windows sürümleri GUI alt sistemini kullanır ve başlangıçta CMD penceresi açmaz.
 <!-- /lang -->
 
 <!-- lang:vi -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Không gian làm việc đáp ứng được tinh chỉnh với phân cấp trực quan hiện đại, biểu tượng Lucide và trạng thái tương tác rõ ràng hơn.
-- Bản dịch UI được tách thành các tệp ngôn ngữ riêng trong `src/i18n/locales`.
-- Kiểm tra cập nhật lấy ghi chú phát hành theo ngôn ngữ UI hiện tại.
-- GitHub Release dùng khối đa ngôn ngữ rõ ràng để ứng dụng trích xuất changelog phù hợp.
+- Đã thêm cửa sổ không khung với viền do ứng dụng vẽ, thanh tiêu đề có thể kéo và nút điều khiển được bản địa hóa.
+- Không gian làm việc được cố định trong cửa sổ; chỉ danh sách kết quả tệp hiển thị thanh cuộn riêng.
+- Bản phát hành Windows dùng hệ thống con GUI và không còn mở cửa sổ CMD khi khởi động.
 <!-- /lang -->
 
 <!-- lang:id -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Ruang kerja responsif disempurnakan dengan hierarki visual modern, ikon Lucide, dan status interaksi yang lebih jelas.
-- Terjemahan UI dipisah ke file bahasa mandiri di `src/i18n/locales`.
-- Pemeriksaan pembaruan meminta catatan rilis sesuai bahasa UI saat ini.
-- GitHub Release memakai blok multibahasa eksplisit agar aplikasi dapat mengambil changelog yang tepat.
+- Menambahkan jendela tanpa bingkai dengan batas buatan aplikasi, bilah judul yang dapat diseret, dan kontrol terlokalisasi.
+- Ruang kerja tetap di dalam jendela; hanya daftar hasil file yang menampilkan bilah gulir sendiri.
+- Rilis Windows menggunakan subsistem GUI dan tidak lagi membuka jendela CMD saat mulai.
 <!-- /lang -->
 
 <!-- lang:th -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- ปรับปรุงพื้นที่ทำงานแบบตอบสนองด้วยลำดับชั้นภาพที่ทันสมัย ไอคอน Lucide และสถานะการโต้ตอบที่ชัดเจนขึ้น
-- แยกคำแปล UI ไปยังไฟล์ภาษาใน `src/i18n/locales`
-- การตรวจสอบอัปเดตจะขอบันทึกรีลีสตามภาษาของ UI ปัจจุบัน
-- GitHub Release ใช้บล็อกหลายภาษาที่ชัดเจนเพื่อให้แอปดึง changelog ที่ถูกต้อง
+- เพิ่มหน้าต่างไร้กรอบพร้อมขอบที่แอปวาด แถบชื่อที่ลากได้ และปุ่มควบคุมหน้าต่างหลายภาษา
+- พื้นที่ทำงานหลักถูกตรึงภายในหน้าต่าง โดยแสดงแถบเลื่อนเฉพาะรายการผลลัพธ์ไฟล์
+- รุ่น Windows ใช้ระบบย่อย GUI และไม่เปิดหน้าต่าง CMD เมื่อเริ่มต้นอีกต่อไป
 <!-- /lang -->
 
 <!-- lang:pl -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Responsywny obszar roboczy ulepszono o nowoczesną hierarchię wizualną, ikony Lucide i czytelniejsze stany interakcji.
-- Tłumaczenia UI zostały przeniesione do osobnych plików językowych w `src/i18n/locales`.
-- Sprawdzanie aktualizacji pobiera notatki wydania dla bieżącego języka UI.
-- GitHub Release używa jawnych bloków wielojęzycznych, aby aplikacja mogła wybrać właściwy changelog.
+- Dodano okno bez ramki z obramowaniem aplikacji, przeciąganym paskiem tytułu i zlokalizowanymi przyciskami.
+- Obszar roboczy pozostaje w oknie; tylko lista wyników plików wyświetla własny pasek przewijania.
+- Wersje Windows używają podsystemu GUI i nie otwierają już okna CMD podczas uruchamiania.
 <!-- /lang -->
 
 <!-- lang:uk -->
-## FileNavigation v0.1.4
+## FileNavigation v0.1.5
 
-- Адаптивний робочий простір оновлено сучасною візуальною ієрархією, піктограмами Lucide та зрозумілішими станами взаємодії.
-- Переклади UI винесено в окремі мовні файли в `src/i18n/locales`.
-- Перевірка оновлень запитує нотатки релізу для поточної мови інтерфейсу.
-- GitHub Release використовує явні багатомовні блоки, щоб застосунок міг вибрати потрібний журнал змін.
+- Додано вікно без системної рамки з межею застосунку, перетягуваним заголовком і локалізованими кнопками.
+- Робоча область закріплена у вікні; смуга прокручування відображається лише у списку результатів.
+- Збірки Windows використовують підсистему GUI і більше не відкривають вікно CMD під час запуску.
 <!-- /lang -->

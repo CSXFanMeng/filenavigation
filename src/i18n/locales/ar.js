@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "بحث ملفات داخل مجلد محلي",
+    minimizeWindow: "تصغير النافذة",
+    maximizeWindow: "تكبير النافذة أو استعادتها",
+    closeWindow: "إغلاق النافذة",
     languageLabel: "اللغة",
     rootLabel: "مجلد البحث",
     rootPlaceholder: "اختر مسار مجلد أو أدخله",

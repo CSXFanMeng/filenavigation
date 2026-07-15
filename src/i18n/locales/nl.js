@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Lokale bestandszoeker",
+    minimizeWindow: "Venster minimaliseren",
+    maximizeWindow: "Venster maximaliseren of herstellen",
+    closeWindow: "Venster sluiten",
     languageLabel: "Taal",
     rootLabel: "Zoekmap",
     rootPlaceholder: "Kies of typ een mappad",

@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "로컬 폴더 파일 검색",
+    minimizeWindow: "창 최소화",
+    maximizeWindow: "창 최대화 또는 복원",
+    closeWindow: "창 닫기",
     languageLabel: "언어",
     rootLabel: "검색 폴더",
     rootPlaceholder: "폴더 경로를 선택하거나 입력",

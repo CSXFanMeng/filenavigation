@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "ローカルフォルダーのファイル検索",
+    minimizeWindow: "ウィンドウを最小化",
+    maximizeWindow: "ウィンドウを最大化または元に戻す",
+    closeWindow: "ウィンドウを閉じる",
     languageLabel: "言語",
     rootLabel: "検索フォルダー",
     rootPlaceholder: "フォルダーのパスを選択または入力",

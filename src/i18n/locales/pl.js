@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Lokalne wyszukiwanie plików",
+    minimizeWindow: "Minimalizuj okno",
+    maximizeWindow: "Maksymalizuj lub przywróć okno",
+    closeWindow: "Zamknij okno",
     languageLabel: "Język",
     rootLabel: "Folder wyszukiwania",
     rootPlaceholder: "Wybierz lub wpisz ścieżkę folderu",

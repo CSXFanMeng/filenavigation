@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Ricerca locale di file",
+    minimizeWindow: "Riduci finestra",
+    maximizeWindow: "Ingrandisci o ripristina finestra",
+    closeWindow: "Chiudi finestra",
     languageLabel: "Lingua",
     rootLabel: "Cartella di ricerca",
     rootPlaceholder: "Scegli o inserisci il percorso",

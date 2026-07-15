@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "ค้นหาไฟล์ในโฟลเดอร์ภายในเครื่อง",
+    minimizeWindow: "ย่อหน้าต่าง",
+    maximizeWindow: "ขยายหรือคืนค่าหน้าต่าง",
+    closeWindow: "ปิดหน้าต่าง",
     languageLabel: "ภาษา",
     rootLabel: "โฟลเดอร์ค้นหา",
     rootPlaceholder: "เลือกหรือป้อนเส้นทางโฟลเดอร์",

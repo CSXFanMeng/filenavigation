@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "本機目錄檔案搜尋",
+    minimizeWindow: "最小化視窗",
+    maximizeWindow: "最大化或還原視窗",
+    closeWindow: "關閉視窗",
     languageLabel: "語言",
     rootLabel: "搜尋目錄",
     rootPlaceholder: "選擇或輸入目錄路徑",

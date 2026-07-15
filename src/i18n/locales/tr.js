@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Yerel klasör dosya arama",
+    minimizeWindow: "Pencereyi küçült",
+    maximizeWindow: "Pencereyi büyüt veya geri yükle",
+    closeWindow: "Pencereyi kapat",
     languageLabel: "Dil",
     rootLabel: "Arama klasörü",
     rootPlaceholder: "Klasör yolu seçin veya girin",

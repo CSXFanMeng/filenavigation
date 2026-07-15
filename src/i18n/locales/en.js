@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Local directory file search",
+    minimizeWindow: "Minimize window",
+    maximizeWindow: "Maximize or restore window",
+    closeWindow: "Close window",
     languageLabel: "Language",
     rootLabel: "Search folder",
     rootPlaceholder: "Choose or enter a folder path",

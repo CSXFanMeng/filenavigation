@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Tìm tệp trong thư mục cục bộ",
+    minimizeWindow: "Thu nhỏ cửa sổ",
+    maximizeWindow: "Phóng to hoặc khôi phục cửa sổ",
+    closeWindow: "Đóng cửa sổ",
     languageLabel: "Ngôn ngữ",
     rootLabel: "Thư mục tìm kiếm",
     rootPlaceholder: "Chọn hoặc nhập đường dẫn thư mục",

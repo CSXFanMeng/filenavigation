@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Pencarian file folder lokal",
+    minimizeWindow: "Minimalkan jendela",
+    maximizeWindow: "Maksimalkan atau pulihkan jendela",
+    closeWindow: "Tutup jendela",
     languageLabel: "Bahasa",
     rootLabel: "Folder pencarian",
     rootPlaceholder: "Pilih atau masukkan path folder",

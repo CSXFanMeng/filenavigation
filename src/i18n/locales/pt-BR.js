@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Busca local de arquivos",
+    minimizeWindow: "Minimizar janela",
+    maximizeWindow: "Maximizar ou restaurar janela",
+    closeWindow: "Fechar janela",
     languageLabel: "Idioma",
     rootLabel: "Pasta de busca",
     rootPlaceholder: "Escolha ou digite o caminho da pasta",

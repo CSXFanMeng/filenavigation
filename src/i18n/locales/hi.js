@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "स्थानीय फ़ोल्डर फ़ाइल खोज",
+    minimizeWindow: "विंडो को छोटा करें",
+    maximizeWindow: "विंडो को बड़ा करें या पुनर्स्थापित करें",
+    closeWindow: "विंडो बंद करें",
     languageLabel: "भाषा",
     rootLabel: "खोज फ़ोल्डर",
     rootPlaceholder: "फ़ोल्डर पथ चुनें या लिखें",

@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "Локальний пошук файлів",
+    minimizeWindow: "Згорнути вікно",
+    maximizeWindow: "Розгорнути або відновити вікно",
+    closeWindow: "Закрити вікно",
     languageLabel: "Мова",
     rootLabel: "Папка пошуку",
     rootPlaceholder: "Виберіть або введіть шлях до папки",

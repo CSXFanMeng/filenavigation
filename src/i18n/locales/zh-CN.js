@@ -1,5 +1,8 @@
 const messages = {
     brandSubtitle: "本地目录文件查找",
+    minimizeWindow: "最小化窗口",
+    maximizeWindow: "最大化或还原窗口",
+    closeWindow: "关闭窗口",
     languageLabel: "语言",
     rootLabel: "搜索目录",
     rootPlaceholder: "选择或输入目录路径",
