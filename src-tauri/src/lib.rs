@@ -98,6 +98,7 @@ struct UpdateResponse {
     has_update: bool,
     release_name: String,
     release_notes: String,
+    release_language: String,
     release_url: String,
     published_at: Option<String>,
     assets: Vec<UpdateAsset>,
@@ -160,7 +161,7 @@ async fn open_path(path: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-async fn check_for_updates() -> Result<UpdateResponse, String> {
+async fn check_for_updates(language: String) -> Result<UpdateResponse, String> {
     let release = reqwest::Client::new()
         .get(LATEST_RELEASE_URL)
         .header(reqwest::header::USER_AGENT, RELEASE_USER_AGENT)
@@ -189,12 +190,16 @@ async fn check_for_updates() -> Result<UpdateResponse, String> {
         Version::parse(&current_version).map_err(|_| "versionCompareFailed".to_string())?;
     let latest = Version::parse(&latest_version).map_err(|_| "versionCompareFailed".to_string())?;
 
+    let raw_notes = release.body.unwrap_or_default();
+    let (release_notes, release_language) = localized_release_notes(&raw_notes, &language);
+
     Ok(UpdateResponse {
         current_version,
         latest_version: latest_version.clone(),
         has_update: latest > current,
         release_name: release.name.unwrap_or_else(|| release.tag_name.clone()),
-        release_notes: release.body.unwrap_or_default(),
+        release_notes,
+        release_language,
         release_url: release.html_url,
         published_at: release.published_at,
         assets: release
@@ -208,6 +213,55 @@ async fn check_for_updates() -> Result<UpdateResponse, String> {
             })
             .collect(),
     })
+}
+
+fn localized_release_notes(body: &str, language: &str) -> (String, String) {
+    let candidates = release_language_candidates(language);
+    for candidate in candidates {
+        if let Some(notes) = extract_lang_block(body, &candidate) {
+            return (notes, candidate);
+        }
+    }
+
+    if let Some(notes) = extract_lang_block(body, "en") {
+        return (notes, "en".to_string());
+    }
+
+    (body.to_string(), "raw".to_string())
+}
+
+fn release_language_candidates(language: &str) -> Vec<String> {
+    let mut candidates = vec![language.to_string()];
+    if let Some(base) = language.split('-').next() {
+        if base != language {
+            candidates.push(base.to_string());
+        }
+    }
+
+    match language {
+        "zh" | "zh-CN" | "zh-Hans" => candidates.push("zh-CN".to_string()),
+        "zh-TW" | "zh-Hant" => candidates.push("zh-TW".to_string()),
+        "pt" | "pt-BR" | "pt-PT" => candidates.push("pt-BR".to_string()),
+        _ => {}
+    }
+
+    candidates.dedup();
+    candidates
+}
+
+fn extract_lang_block(body: &str, language: &str) -> Option<String> {
+    let start_marker = format!("<!-- lang:{language} -->");
+    let end_marker = "<!-- /lang -->";
+    let start = body.find(&start_marker)? + start_marker.len();
+    let rest = &body[start..];
+    let end = rest.find(end_marker).unwrap_or(rest.len());
+    let notes = rest[..end].trim();
+
+    if notes.is_empty() {
+        None
+    } else {
+        Some(notes.to_string())
+    }
 }
 
 fn perform_search(
@@ -421,4 +475,41 @@ pub fn run() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running FileNavigation");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::localized_release_notes;
+
+    #[test]
+    fn extracts_requested_release_language() {
+        let body = r#"
+<!-- lang:en -->
+English notes.
+<!-- /lang -->
+
+<!-- lang:zh-CN -->
+中文日志。
+<!-- /lang -->
+"#;
+
+        let (notes, language) = localized_release_notes(body, "zh-CN");
+
+        assert_eq!(language, "zh-CN");
+        assert_eq!(notes, "中文日志。");
+    }
+
+    #[test]
+    fn falls_back_to_english_release_language() {
+        let body = r#"
+<!-- lang:en -->
+English notes.
+<!-- /lang -->
+"#;
+
+        let (notes, language) = localized_release_notes(body, "ja");
+
+        assert_eq!(language, "en");
+        assert_eq!(notes, "English notes.");
+    }
 }

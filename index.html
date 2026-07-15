@@ -3,98 +3,138 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f6f5" />
     <title>FileNavigation</title>
   </head>
   <body>
     <main id="app" class="shell">
       <section class="workspace">
         <aside class="sidebar">
-          <div class="brand">
-            <div class="brand-mark">FN</div>
-            <div>
+          <header class="brand">
+            <div class="brand-mark" aria-hidden="true">
+              <i data-lucide="folder-search"></i>
+            </div>
+            <div class="brand-copy">
               <h1>FileNavigation</h1>
               <p data-i18n="brandSubtitle">Local directory file search</p>
             </div>
-          </div>
+          </header>
 
-          <div class="field">
-            <label for="language" data-i18n="languageLabel">Language</label>
-            <select id="language" aria-label="Language"></select>
-          </div>
+          <div class="sidebar-content">
+            <div class="field">
+              <label for="language">
+                <i data-lucide="languages" aria-hidden="true"></i>
+                <span data-i18n="languageLabel">Language</span>
+              </label>
+              <div class="control-shell select-shell">
+                <select id="language" aria-label="Language"></select>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </div>
+            </div>
 
-          <div class="field">
-            <label for="root-path" data-i18n="rootLabel">Search folder</label>
-            <div class="path-row">
-              <input
-                id="root-path"
-                type="text"
-                data-i18n-placeholder="rootPlaceholder"
-                placeholder="Choose or enter a folder path"
-                spellcheck="false"
-              />
-              <button
-                id="pick-dir"
-                class="icon-button"
-                type="button"
-                data-i18n-title="pickDirectory"
-                data-i18n-aria-label="pickDirectory"
-                title="Choose folder"
-                aria-label="Choose folder"
-              >
-                <span aria-hidden="true">...</span>
+            <div class="field">
+              <label for="root-path">
+                <i data-lucide="folder-tree" aria-hidden="true"></i>
+                <span data-i18n="rootLabel">Search folder</span>
+              </label>
+              <div class="path-row">
+                <div class="control-shell input-shell">
+                  <i data-lucide="hard-drive" aria-hidden="true"></i>
+                  <input
+                    id="root-path"
+                    type="text"
+                    data-i18n-placeholder="rootPlaceholder"
+                    placeholder="Choose or enter a folder path"
+                    spellcheck="false"
+                  />
+                </div>
+                <button
+                  id="pick-dir"
+                  class="icon-button"
+                  type="button"
+                  data-i18n-title="pickDirectory"
+                  data-i18n-aria-label="pickDirectory"
+                  title="Choose folder"
+                  aria-label="Choose folder"
+                >
+                  <i data-lucide="folder-open" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="query">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span data-i18n="queryLabel">File name keyword</span>
+              </label>
+              <div class="control-shell input-shell">
+                <i data-lucide="scan-search" aria-hidden="true"></i>
+                <input
+                  id="query"
+                  type="search"
+                  data-i18n-placeholder="queryPlaceholder"
+                  placeholder="For example report, .rs, invoice"
+                  autocomplete="off"
+                />
+              </div>
+            </div>
+
+            <div class="controls">
+              <label class="check-row">
+                <input id="case-sensitive" type="checkbox" />
+                <span class="check-control" aria-hidden="true"><i data-lucide="check"></i></span>
+                <span data-i18n="caseSensitive">Case sensitive</span>
+              </label>
+              <label class="check-row">
+                <input id="include-hidden" type="checkbox" />
+                <span class="check-control" aria-hidden="true"><i data-lucide="check"></i></span>
+                <span data-i18n="includeHidden">Include hidden files</span>
+              </label>
+            </div>
+
+            <div class="field">
+              <label for="max-results">
+                <i data-lucide="list-ordered" aria-hidden="true"></i>
+                <span data-i18n="maxResults">Maximum results</span>
+              </label>
+              <div class="control-shell input-shell">
+                <i data-lucide="list-filter" aria-hidden="true"></i>
+                <input id="max-results" type="number" min="10" max="5000" step="10" value="500" />
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button id="search" class="primary" type="button">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span data-i18n="searchButton">Search</span>
+              </button>
+              <button id="cancel-search" class="secondary icon-command" type="button" disabled>
+                <i data-lucide="x" aria-hidden="true"></i>
+                <span data-i18n="cancelSearchButton">Cancel</span>
               </button>
             </div>
-          </div>
-
-          <div class="field">
-            <label for="query" data-i18n="queryLabel">File name keyword</label>
-            <input
-              id="query"
-              type="search"
-              data-i18n-placeholder="queryPlaceholder"
-              placeholder="For example report, .rs, invoice"
-              autocomplete="off"
-            />
-          </div>
-
-          <div class="controls">
-            <label class="check-row">
-              <input id="case-sensitive" type="checkbox" />
-              <span data-i18n="caseSensitive">Case sensitive</span>
-            </label>
-            <label class="check-row">
-              <input id="include-hidden" type="checkbox" />
-              <span data-i18n="includeHidden">Include hidden files</span>
-            </label>
-          </div>
-
-          <div class="field">
-            <label for="max-results" data-i18n="maxResults">Maximum results</label>
-            <input id="max-results" type="number" min="10" max="5000" step="10" value="500" />
-          </div>
-
-          <div class="action-row">
-            <button id="search" class="primary" type="button" data-i18n="searchButton">
-              Search
-            </button>
-            <button id="cancel-search" class="secondary" type="button" data-i18n="cancelSearchButton" disabled>
-              Cancel
-            </button>
           </div>
 
           <section class="update-panel" aria-live="polite">
             <div class="update-heading">
-              <div>
-                <p class="eyebrow" data-i18n="updateEyebrow">Updates</p>
-                <h2 data-i18n="updateTitle">Software update</h2>
+              <div class="section-heading">
+                <span class="section-icon" aria-hidden="true"><i data-lucide="circle-arrow-up"></i></span>
+                <div>
+                  <p class="eyebrow" data-i18n="updateEyebrow">Updates</p>
+                  <h2 data-i18n="updateTitle">Software update</h2>
+                </div>
               </div>
-              <button id="check-update" class="secondary" type="button" data-i18n="checkUpdateButton">
-                Check
+              <button id="check-update" class="secondary icon-command compact" type="button">
+                <i data-lucide="refresh-cw" aria-hidden="true"></i>
+                <span data-i18n="checkUpdateButton">Check</span>
               </button>
             </div>
-            <p id="update-status" class="update-status" data-i18n="updateIdle">
-              Check GitHub Releases for the newest version.
-            </p>
+            <div class="update-message">
+              <i data-lucide="git-branch" aria-hidden="true"></i>
+              <p id="update-status" class="update-status" data-i18n="updateIdle">
+                Check GitHub Releases for the newest version.
+              </p>
+            </div>
             <div id="update-details" class="update-details" hidden>
               <dl>
                 <div>
@@ -114,8 +154,9 @@
               <pre id="release-notes"></pre>
               <h3 data-i18n="packageChecksums">Package checksums</h3>
               <div id="release-assets" class="release-assets"></div>
-              <button id="open-release" class="secondary wide" type="button" data-i18n="openReleaseButton">
-                Open release
+              <button id="open-release" class="secondary wide icon-command" type="button">
+                <i data-lucide="external-link" aria-hidden="true"></i>
+                <span data-i18n="openReleaseButton">Open release</span>
               </button>
             </div>
           </section>
@@ -124,23 +165,30 @@
         <section class="results-panel">
           <header class="topbar">
             <div class="status-heading">
-              <p class="eyebrow" data-i18n="eyebrow">Search</p>
-              <h2 id="status-title" data-i18n="waiting">Ready to search</h2>
+              <div class="status-icon" aria-hidden="true"><i data-lucide="radar"></i></div>
+              <div>
+                <p class="eyebrow" data-i18n="eyebrow">Search</p>
+                <h2 id="status-title" data-i18n="waiting">Ready to search</h2>
+              </div>
             </div>
             <div class="stats">
               <div>
+                <i data-lucide="files" aria-hidden="true"></i>
                 <span id="stat-files">0</span>
                 <small data-i18n="statFiles">Files scanned</small>
               </div>
               <div>
+                <i data-lucide="folders" aria-hidden="true"></i>
                 <span id="stat-dirs">0</span>
                 <small data-i18n="statDirs">Folders scanned</small>
               </div>
               <div>
+                <i data-lucide="timer" aria-hidden="true"></i>
                 <span id="stat-ms">0 ms</span>
                 <small data-i18n="statTime">Time</small>
               </div>
               <div>
+                <i data-lucide="shield-alert" aria-hidden="true"></i>
                 <span id="stat-skipped">0</span>
                 <small data-i18n="statSkipped">Skipped</small>
               </div>
@@ -149,47 +197,70 @@
 
           <section class="result-toolbar">
             <div class="field">
-              <label for="result-filter" data-i18n="resultFilterLabel">Filter results</label>
-              <input
-                id="result-filter"
-                type="search"
-                data-i18n-placeholder="resultFilterPlaceholder"
-                placeholder="Filter visible results"
-                autocomplete="off"
-              />
+              <label for="result-filter">
+                <i data-lucide="filter" aria-hidden="true"></i>
+                <span data-i18n="resultFilterLabel">Filter results</span>
+              </label>
+              <div class="control-shell input-shell">
+                <i data-lucide="search" aria-hidden="true"></i>
+                <input
+                  id="result-filter"
+                  type="search"
+                  data-i18n-placeholder="resultFilterPlaceholder"
+                  placeholder="Filter visible results"
+                  autocomplete="off"
+                />
+              </div>
             </div>
             <div class="field">
-              <label for="type-filter" data-i18n="typeFilterLabel">Type</label>
-              <select id="type-filter">
-                <option value="all" data-i18n="typeAll">All</option>
-                <option value="file" data-i18n="typeFiles">Files</option>
-                <option value="directory" data-i18n="typeFolders">Folders</option>
-              </select>
+              <label for="type-filter">
+                <i data-lucide="file-type" aria-hidden="true"></i>
+                <span data-i18n="typeFilterLabel">Type</span>
+              </label>
+              <div class="control-shell select-shell">
+                <select id="type-filter">
+                  <option value="all" data-i18n="typeAll">All</option>
+                  <option value="file" data-i18n="typeFiles">Files</option>
+                  <option value="directory" data-i18n="typeFolders">Folders</option>
+                </select>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </div>
             </div>
             <div class="field">
-              <label for="sort-results" data-i18n="sortLabel">Sort</label>
-              <select id="sort-results">
-                <option value="name-asc" data-i18n="sortNameAsc">Name A-Z</option>
-                <option value="name-desc" data-i18n="sortNameDesc">Name Z-A</option>
-                <option value="modified-desc" data-i18n="sortModifiedDesc">Newest</option>
-                <option value="modified-asc" data-i18n="sortModifiedAsc">Oldest</option>
-                <option value="size-desc" data-i18n="sortSizeDesc">Largest</option>
-                <option value="size-asc" data-i18n="sortSizeAsc">Smallest</option>
-              </select>
+              <label for="sort-results">
+                <i data-lucide="arrow-up-down" aria-hidden="true"></i>
+                <span data-i18n="sortLabel">Sort</span>
+              </label>
+              <div class="control-shell select-shell">
+                <select id="sort-results">
+                  <option value="name-asc" data-i18n="sortNameAsc">Name A-Z</option>
+                  <option value="name-desc" data-i18n="sortNameDesc">Name Z-A</option>
+                  <option value="modified-desc" data-i18n="sortModifiedDesc">Newest</option>
+                  <option value="modified-asc" data-i18n="sortModifiedAsc">Oldest</option>
+                  <option value="size-desc" data-i18n="sortSizeDesc">Largest</option>
+                  <option value="size-asc" data-i18n="sortSizeAsc">Smallest</option>
+                </select>
+                <i data-lucide="chevron-down" aria-hidden="true"></i>
+              </div>
             </div>
           </section>
 
-          <p id="progress-detail" class="progress-detail" data-i18n="progressIdle">
-            Progress details will appear while searching.
-          </p>
-
-          <div id="empty-state" class="empty-state">
-            <div class="empty-symbol">⌕</div>
-            <h3 data-i18n="emptyTitle">Enter a folder and keyword to begin</h3>
-            <p data-i18n="emptyText">Search runs locally. File names, paths, and content are not uploaded.</p>
+          <div class="progress-bar">
+            <i data-lucide="scan-line" aria-hidden="true"></i>
+            <p id="progress-detail" class="progress-detail" data-i18n="progressIdle">
+              Progress details will appear while searching.
+            </p>
           </div>
 
-          <div id="result-list" class="result-list" aria-live="polite"></div>
+          <div class="results-body">
+            <div id="empty-state" class="empty-state">
+              <div class="empty-symbol" aria-hidden="true"><i data-lucide="search-x"></i></div>
+              <h3 data-i18n="emptyTitle">Enter a folder and keyword to begin</h3>
+              <p data-i18n="emptyText">Search runs locally. File names, paths, and content are not uploaded.</p>
+            </div>
+
+            <div id="result-list" class="result-list" aria-live="polite"></div>
+          </div>
         </section>
       </section>
     </main>

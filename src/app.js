@@ -1,1180 +1,70 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { open } from "@tauri-apps/plugin-dialog";
+import {
+  ArrowUpDown,
+  ArrowUpRight,
+  Check,
+  ChevronDown,
+  CircleArrowUp,
+  ExternalLink,
+  File as FileIcon,
+  Files,
+  FileType,
+  Filter,
+  Folder as FolderIcon,
+  FolderOpen,
+  FolderSearch,
+  Folders,
+  FolderTree,
+  GitBranch,
+  HardDrive,
+  Languages,
+  ListFilter,
+  ListOrdered,
+  PackageCheck,
+  Radar,
+  RefreshCw,
+  ScanLine,
+  ScanSearch,
+  Search,
+  SearchX,
+  ShieldAlert,
+  Timer,
+  X,
+  createElement as createIconElement,
+  createIcons
+} from "lucide";
+import { languageOptions, resolveLanguage as resolveLocaleLanguage, translateForLanguage } from "./i18n/index.js";
 import "./styles.css";
 
-const languageOptions = [
-  ["auto", "Auto"],
-  ["en", "English"],
-  ["zh-CN", "简体中文"],
-  ["zh-TW", "繁體中文"],
-  ["es", "Español"],
-  ["fr", "Français"],
-  ["de", "Deutsch"],
-  ["ja", "日本語"],
-  ["ko", "한국어"],
-  ["pt-BR", "Português"],
-  ["ru", "Русский"],
-  ["ar", "العربية"],
-  ["hi", "हिन्दी"],
-  ["it", "Italiano"],
-  ["nl", "Nederlands"],
-  ["tr", "Türkçe"],
-  ["vi", "Tiếng Việt"],
-  ["id", "Bahasa Indonesia"],
-  ["th", "ไทย"],
-  ["pl", "Polski"],
-  ["uk", "Українська"]
-];
-
-const translations = {
-  en: {
-    brandSubtitle: "Local directory file search",
-    languageLabel: "Language",
-    rootLabel: "Search folder",
-    rootPlaceholder: "Choose or enter a folder path",
-    pickDirectory: "Choose folder",
-    queryLabel: "File name keyword",
-    queryPlaceholder: "For example report, .rs, invoice",
-    caseSensitive: "Case sensitive",
-    includeHidden: "Include hidden files",
-    maxResults: "Maximum results",
-    searchButton: "Search",
-    eyebrow: "Search",
-    waiting: "Ready to search",
-    statFiles: "Files scanned",
-    statDirs: "Folders scanned",
-    statTime: "Time",
-    emptyTitle: "Enter a folder and keyword to begin",
-    emptyText: "Search runs locally. File names, paths, and content are not uploaded.",
-    searching: "Searching...",
-    found: (count) => `Found ${count} result${count === 1 ? "" : "s"}`,
-    foundTruncated: (count) => `Found ${count} results, limit reached`,
-    noResultsTitle: "No matches",
-    noResultsText: "Try another keyword or include hidden files.",
-    searchFailed: "Search failed",
-    cannotComplete: "Unable to complete the search",
-    openFailed: "Open failed",
-    file: "File",
-    directory: "Folder",
-    unknownTime: "Unknown time",
-    invalidDirectory: "The selected folder does not exist or is not a folder.",
-    searchTaskFailed: "The search task failed.",
-    openTaskFailed: "The open task failed.",
-    openPathFailed: "Unable to open this path."
-  },
-  "zh-CN": {
-    brandSubtitle: "本地目录文件查找",
-    languageLabel: "语言",
-    rootLabel: "搜索目录",
-    rootPlaceholder: "选择或输入目录路径",
-    pickDirectory: "选择目录",
-    queryLabel: "文件名关键字",
-    queryPlaceholder: "例如 report、.rs、合同",
-    caseSensitive: "区分大小写",
-    includeHidden: "包含隐藏文件",
-    maxResults: "最大结果数",
-    searchButton: "开始查找",
-    eyebrow: "搜索",
-    waiting: "等待搜索",
-    statFiles: "扫描文件",
-    statDirs: "扫描目录",
-    statTime: "耗时",
-    emptyTitle: "输入目录和关键字后开始查找",
-    emptyText: "搜索在本机完成，不上传文件名、路径或内容。",
-    searching: "正在查找...",
-    found: (count) => `找到 ${count} 个结果`,
-    foundTruncated: (count) => `找到 ${count} 个结果，已达上限`,
-    noResultsTitle: "没有匹配结果",
-    noResultsText: "换一个关键字，或启用隐藏文件搜索。",
-    searchFailed: "搜索失败",
-    cannotComplete: "无法完成搜索",
-    openFailed: "打开失败",
-    file: "文件",
-    directory: "目录",
-    unknownTime: "未知时间",
-    invalidDirectory: "搜索目录不存在或不是目录。",
-    searchTaskFailed: "搜索任务失败。",
-    openTaskFailed: "打开任务失败。",
-    openPathFailed: "无法打开路径。"
-  },
-  "zh-TW": {
-    brandSubtitle: "本機目錄檔案搜尋",
-    languageLabel: "語言",
-    rootLabel: "搜尋目錄",
-    rootPlaceholder: "選擇或輸入目錄路徑",
-    pickDirectory: "選擇目錄",
-    queryLabel: "檔名關鍵字",
-    queryPlaceholder: "例如 report、.rs、合約",
-    caseSensitive: "區分大小寫",
-    includeHidden: "包含隱藏檔案",
-    maxResults: "最大結果數",
-    searchButton: "開始搜尋",
-    eyebrow: "搜尋",
-    waiting: "等待搜尋",
-    statFiles: "掃描檔案",
-    statDirs: "掃描目錄",
-    statTime: "耗時",
-    emptyTitle: "輸入目錄和關鍵字後開始搜尋",
-    emptyText: "搜尋在本機完成，不會上傳檔名、路徑或內容。",
-    searching: "正在搜尋...",
-    found: (count) => `找到 ${count} 個結果`,
-    foundTruncated: (count) => `找到 ${count} 個結果，已達上限`,
-    noResultsTitle: "沒有符合結果",
-    noResultsText: "請更換關鍵字，或啟用隱藏檔案搜尋。",
-    searchFailed: "搜尋失敗",
-    cannotComplete: "無法完成搜尋",
-    openFailed: "開啟失敗",
-    file: "檔案",
-    directory: "目錄",
-    unknownTime: "未知時間",
-    invalidDirectory: "搜尋目錄不存在或不是目錄。",
-    searchTaskFailed: "搜尋任務失敗。",
-    openTaskFailed: "開啟任務失敗。",
-    openPathFailed: "無法開啟路徑。"
-  },
-  es: {
-    brandSubtitle: "Búsqueda local de archivos",
-    languageLabel: "Idioma",
-    rootLabel: "Carpeta de búsqueda",
-    rootPlaceholder: "Elige o escribe una ruta de carpeta",
-    pickDirectory: "Elegir carpeta",
-    queryLabel: "Palabra clave del archivo",
-    queryPlaceholder: "Por ejemplo report, .rs, factura",
-    caseSensitive: "Distinguir mayúsculas",
-    includeHidden: "Incluir archivos ocultos",
-    maxResults: "Resultados máximos",
-    searchButton: "Buscar",
-    eyebrow: "Buscar",
-    waiting: "Listo para buscar",
-    statFiles: "Archivos escaneados",
-    statDirs: "Carpetas escaneadas",
-    statTime: "Tiempo",
-    emptyTitle: "Introduce una carpeta y una palabra clave",
-    emptyText: "La búsqueda se ejecuta localmente. No se suben nombres, rutas ni contenido.",
-    searching: "Buscando...",
-    found: (count) => `${count} resultado${count === 1 ? "" : "s"} encontrado${count === 1 ? "" : "s"}`,
-    foundTruncated: (count) => `${count} resultados encontrados, límite alcanzado`,
-    noResultsTitle: "Sin coincidencias",
-    noResultsText: "Prueba otra palabra clave o incluye archivos ocultos.",
-    searchFailed: "Error de búsqueda",
-    cannotComplete: "No se pudo completar la búsqueda",
-    openFailed: "No se pudo abrir",
-    file: "Archivo",
-    directory: "Carpeta",
-    unknownTime: "Hora desconocida",
-    invalidDirectory: "La carpeta seleccionada no existe o no es una carpeta.",
-    searchTaskFailed: "La tarea de búsqueda falló.",
-    openTaskFailed: "La tarea de apertura falló.",
-    openPathFailed: "No se pudo abrir esta ruta."
-  },
-  fr: {
-    brandSubtitle: "Recherche locale de fichiers",
-    languageLabel: "Langue",
-    rootLabel: "Dossier de recherche",
-    rootPlaceholder: "Choisissez ou saisissez un chemin",
-    pickDirectory: "Choisir un dossier",
-    queryLabel: "Mot-clé du nom de fichier",
-    queryPlaceholder: "Par exemple report, .rs, facture",
-    caseSensitive: "Respecter la casse",
-    includeHidden: "Inclure les fichiers masqués",
-    maxResults: "Résultats maximum",
-    searchButton: "Rechercher",
-    eyebrow: "Recherche",
-    waiting: "Prêt à rechercher",
-    statFiles: "Fichiers analysés",
-    statDirs: "Dossiers analysés",
-    statTime: "Durée",
-    emptyTitle: "Saisissez un dossier et un mot-clé",
-    emptyText: "La recherche s’exécute localement. Aucun nom, chemin ou contenu n’est envoyé.",
-    searching: "Recherche...",
-    found: (count) => `${count} résultat${count === 1 ? "" : "s"} trouvé${count === 1 ? "" : "s"}`,
-    foundTruncated: (count) => `${count} résultats trouvés, limite atteinte`,
-    noResultsTitle: "Aucune correspondance",
-    noResultsText: "Essayez un autre mot-clé ou incluez les fichiers masqués.",
-    searchFailed: "Échec de la recherche",
-    cannotComplete: "Impossible de terminer la recherche",
-    openFailed: "Ouverture impossible",
-    file: "Fichier",
-    directory: "Dossier",
-    unknownTime: "Heure inconnue",
-    invalidDirectory: "Le dossier sélectionné n’existe pas ou n’est pas un dossier.",
-    searchTaskFailed: "La tâche de recherche a échoué.",
-    openTaskFailed: "La tâche d’ouverture a échoué.",
-    openPathFailed: "Impossible d’ouvrir ce chemin."
-  },
-  de: {
-    brandSubtitle: "Lokale Dateisuche",
-    languageLabel: "Sprache",
-    rootLabel: "Suchordner",
-    rootPlaceholder: "Ordnerpfad wählen oder eingeben",
-    pickDirectory: "Ordner wählen",
-    queryLabel: "Dateiname-Schlüsselwort",
-    queryPlaceholder: "Zum Beispiel report, .rs, Rechnung",
-    caseSensitive: "Groß-/Kleinschreibung",
-    includeHidden: "Versteckte Dateien einbeziehen",
-    maxResults: "Maximale Treffer",
-    searchButton: "Suchen",
-    eyebrow: "Suche",
-    waiting: "Bereit zur Suche",
-    statFiles: "Dateien geprüft",
-    statDirs: "Ordner geprüft",
-    statTime: "Zeit",
-    emptyTitle: "Ordner und Schlüsselwort eingeben",
-    emptyText: "Die Suche läuft lokal. Dateinamen, Pfade und Inhalte werden nicht hochgeladen.",
-    searching: "Suche...",
-    found: (count) => `${count} Treffer gefunden`,
-    foundTruncated: (count) => `${count} Treffer gefunden, Limit erreicht`,
-    noResultsTitle: "Keine Treffer",
-    noResultsText: "Versuchen Sie ein anderes Schlüsselwort oder versteckte Dateien.",
-    searchFailed: "Suche fehlgeschlagen",
-    cannotComplete: "Die Suche konnte nicht abgeschlossen werden",
-    openFailed: "Öffnen fehlgeschlagen",
-    file: "Datei",
-    directory: "Ordner",
-    unknownTime: "Unbekannte Zeit",
-    invalidDirectory: "Der ausgewählte Ordner existiert nicht oder ist kein Ordner.",
-    searchTaskFailed: "Die Suchaufgabe ist fehlgeschlagen.",
-    openTaskFailed: "Die Öffnungsaufgabe ist fehlgeschlagen.",
-    openPathFailed: "Dieser Pfad konnte nicht geöffnet werden."
-  },
-  ja: {
-    brandSubtitle: "ローカルフォルダーのファイル検索",
-    languageLabel: "言語",
-    rootLabel: "検索フォルダー",
-    rootPlaceholder: "フォルダーのパスを選択または入力",
-    pickDirectory: "フォルダーを選択",
-    queryLabel: "ファイル名キーワード",
-    queryPlaceholder: "例: report、.rs、請求書",
-    caseSensitive: "大文字小文字を区別",
-    includeHidden: "隠しファイルを含める",
-    maxResults: "最大結果数",
-    searchButton: "検索",
-    eyebrow: "検索",
-    waiting: "検索待機中",
-    statFiles: "スキャンしたファイル",
-    statDirs: "スキャンしたフォルダー",
-    statTime: "時間",
-    emptyTitle: "フォルダーとキーワードを入力してください",
-    emptyText: "検索はローカルで実行されます。ファイル名、パス、内容はアップロードされません。",
-    searching: "検索中...",
-    found: (count) => `${count} 件見つかりました`,
-    foundTruncated: (count) => `${count} 件見つかりました。上限に達しました`,
-    noResultsTitle: "一致する結果はありません",
-    noResultsText: "別のキーワードを試すか、隠しファイルを含めてください。",
-    searchFailed: "検索に失敗しました",
-    cannotComplete: "検索を完了できません",
-    openFailed: "開けませんでした",
-    file: "ファイル",
-    directory: "フォルダー",
-    unknownTime: "不明な時刻",
-    invalidDirectory: "選択したフォルダーが存在しないか、フォルダーではありません。",
-    searchTaskFailed: "検索タスクに失敗しました。",
-    openTaskFailed: "オープンタスクに失敗しました。",
-    openPathFailed: "このパスを開けません。"
-  },
-  ko: {
-    brandSubtitle: "로컬 폴더 파일 검색",
-    languageLabel: "언어",
-    rootLabel: "검색 폴더",
-    rootPlaceholder: "폴더 경로를 선택하거나 입력",
-    pickDirectory: "폴더 선택",
-    queryLabel: "파일 이름 키워드",
-    queryPlaceholder: "예: report, .rs, 계약서",
-    caseSensitive: "대소문자 구분",
-    includeHidden: "숨김 파일 포함",
-    maxResults: "최대 결과 수",
-    searchButton: "검색",
-    eyebrow: "검색",
-    waiting: "검색 대기 중",
-    statFiles: "스캔한 파일",
-    statDirs: "스캔한 폴더",
-    statTime: "시간",
-    emptyTitle: "폴더와 키워드를 입력하세요",
-    emptyText: "검색은 로컬에서 실행됩니다. 파일명, 경로, 내용은 업로드되지 않습니다.",
-    searching: "검색 중...",
-    found: (count) => `${count}개 결과를 찾았습니다`,
-    foundTruncated: (count) => `${count}개 결과를 찾았으며 한도에 도달했습니다`,
-    noResultsTitle: "일치 항목 없음",
-    noResultsText: "다른 키워드를 사용하거나 숨김 파일을 포함하세요.",
-    searchFailed: "검색 실패",
-    cannotComplete: "검색을 완료할 수 없습니다",
-    openFailed: "열기 실패",
-    file: "파일",
-    directory: "폴더",
-    unknownTime: "알 수 없는 시간",
-    invalidDirectory: "선택한 폴더가 없거나 폴더가 아닙니다.",
-    searchTaskFailed: "검색 작업이 실패했습니다.",
-    openTaskFailed: "열기 작업이 실패했습니다.",
-    openPathFailed: "이 경로를 열 수 없습니다."
-  },
-  "pt-BR": {
-    brandSubtitle: "Busca local de arquivos",
-    languageLabel: "Idioma",
-    rootLabel: "Pasta de busca",
-    rootPlaceholder: "Escolha ou digite o caminho da pasta",
-    pickDirectory: "Escolher pasta",
-    queryLabel: "Palavra-chave do arquivo",
-    queryPlaceholder: "Por exemplo report, .rs, contrato",
-    caseSensitive: "Diferenciar maiúsculas",
-    includeHidden: "Incluir arquivos ocultos",
-    maxResults: "Resultados máximos",
-    searchButton: "Buscar",
-    eyebrow: "Busca",
-    waiting: "Pronto para buscar",
-    statFiles: "Arquivos verificados",
-    statDirs: "Pastas verificadas",
-    statTime: "Tempo",
-    emptyTitle: "Informe uma pasta e uma palavra-chave",
-    emptyText: "A busca roda localmente. Nomes, caminhos e conteúdo não são enviados.",
-    searching: "Buscando...",
-    found: (count) => `${count} resultado${count === 1 ? "" : "s"} encontrado${count === 1 ? "" : "s"}`,
-    foundTruncated: (count) => `${count} resultados encontrados, limite atingido`,
-    noResultsTitle: "Nenhuma correspondência",
-    noResultsText: "Tente outra palavra-chave ou inclua arquivos ocultos.",
-    searchFailed: "Falha na busca",
-    cannotComplete: "Não foi possível concluir a busca",
-    openFailed: "Falha ao abrir",
-    file: "Arquivo",
-    directory: "Pasta",
-    unknownTime: "Hora desconhecida",
-    invalidDirectory: "A pasta selecionada não existe ou não é uma pasta.",
-    searchTaskFailed: "A tarefa de busca falhou.",
-    openTaskFailed: "A tarefa de abertura falhou.",
-    openPathFailed: "Não foi possível abrir este caminho."
-  },
-  ru: {
-    brandSubtitle: "Локальный поиск файлов",
-    languageLabel: "Язык",
-    rootLabel: "Папка поиска",
-    rootPlaceholder: "Выберите или введите путь к папке",
-    pickDirectory: "Выбрать папку",
-    queryLabel: "Ключевое слово имени файла",
-    queryPlaceholder: "Например report, .rs, договор",
-    caseSensitive: "Учитывать регистр",
-    includeHidden: "Включать скрытые файлы",
-    maxResults: "Максимум результатов",
-    searchButton: "Искать",
-    eyebrow: "Поиск",
-    waiting: "Готово к поиску",
-    statFiles: "Файлов проверено",
-    statDirs: "Папок проверено",
-    statTime: "Время",
-    emptyTitle: "Введите папку и ключевое слово",
-    emptyText: "Поиск выполняется локально. Имена, пути и содержимое не отправляются.",
-    searching: "Поиск...",
-    found: (count) => `Найдено результатов: ${count}`,
-    foundTruncated: (count) => `Найдено результатов: ${count}, достигнут лимит`,
-    noResultsTitle: "Совпадений нет",
-    noResultsText: "Попробуйте другое ключевое слово или включите скрытые файлы.",
-    searchFailed: "Ошибка поиска",
-    cannotComplete: "Не удалось завершить поиск",
-    openFailed: "Не удалось открыть",
-    file: "Файл",
-    directory: "Папка",
-    unknownTime: "Неизвестное время",
-    invalidDirectory: "Выбранная папка не существует или не является папкой.",
-    searchTaskFailed: "Задача поиска завершилась ошибкой.",
-    openTaskFailed: "Задача открытия завершилась ошибкой.",
-    openPathFailed: "Не удалось открыть этот путь."
-  },
-  ar: {
-    brandSubtitle: "بحث ملفات داخل مجلد محلي",
-    languageLabel: "اللغة",
-    rootLabel: "مجلد البحث",
-    rootPlaceholder: "اختر مسار مجلد أو أدخله",
-    pickDirectory: "اختر مجلدا",
-    queryLabel: "كلمة مفتاحية لاسم الملف",
-    queryPlaceholder: "مثال report أو .rs أو invoice",
-    caseSensitive: "مطابقة حالة الأحرف",
-    includeHidden: "تضمين الملفات المخفية",
-    maxResults: "الحد الأقصى للنتائج",
-    searchButton: "بحث",
-    eyebrow: "بحث",
-    waiting: "جاهز للبحث",
-    statFiles: "ملفات ممسوحة",
-    statDirs: "مجلدات ممسوحة",
-    statTime: "الوقت",
-    emptyTitle: "أدخل مجلدا وكلمة مفتاحية للبدء",
-    emptyText: "يعمل البحث محليا. لا يتم رفع أسماء الملفات أو المسارات أو المحتوى.",
-    searching: "جار البحث...",
-    found: (count) => `تم العثور على ${count} نتيجة`,
-    foundTruncated: (count) => `تم العثور على ${count} نتيجة، تم بلوغ الحد`,
-    noResultsTitle: "لا توجد نتائج",
-    noResultsText: "جرب كلمة أخرى أو فعّل الملفات المخفية.",
-    searchFailed: "فشل البحث",
-    cannotComplete: "تعذر إكمال البحث",
-    openFailed: "فشل الفتح",
-    file: "ملف",
-    directory: "مجلد",
-    unknownTime: "وقت غير معروف",
-    invalidDirectory: "المجلد المحدد غير موجود أو ليس مجلدا.",
-    searchTaskFailed: "فشلت مهمة البحث.",
-    openTaskFailed: "فشلت مهمة الفتح.",
-    openPathFailed: "تعذر فتح هذا المسار."
-  },
-  hi: {
-    brandSubtitle: "स्थानीय फ़ोल्डर फ़ाइल खोज",
-    languageLabel: "भाषा",
-    rootLabel: "खोज फ़ोल्डर",
-    rootPlaceholder: "फ़ोल्डर पथ चुनें या लिखें",
-    pickDirectory: "फ़ोल्डर चुनें",
-    queryLabel: "फ़ाइल नाम कीवर्ड",
-    queryPlaceholder: "जैसे report, .rs, invoice",
-    caseSensitive: "बड़े-छोटे अक्षर अलग मानें",
-    includeHidden: "छिपी फ़ाइलें शामिल करें",
-    maxResults: "अधिकतम परिणाम",
-    searchButton: "खोजें",
-    eyebrow: "खोज",
-    waiting: "खोज के लिए तैयार",
-    statFiles: "स्कैन फ़ाइलें",
-    statDirs: "स्कैन फ़ोल्डर",
-    statTime: "समय",
-    emptyTitle: "शुरू करने के लिए फ़ोल्डर और कीवर्ड दर्ज करें",
-    emptyText: "खोज स्थानीय रूप से चलती है। फ़ाइल नाम, पथ और सामग्री अपलोड नहीं होती।",
-    searching: "खोज जारी है...",
-    found: (count) => `${count} परिणाम मिले`,
-    foundTruncated: (count) => `${count} परिणाम मिले, सीमा पूरी हुई`,
-    noResultsTitle: "कोई मिलान नहीं",
-    noResultsText: "दूसरा कीवर्ड आज़माएँ या छिपी फ़ाइलें शामिल करें।",
-    searchFailed: "खोज विफल",
-    cannotComplete: "खोज पूरी नहीं हो सकी",
-    openFailed: "खोलना विफल",
-    file: "फ़ाइल",
-    directory: "फ़ोल्डर",
-    unknownTime: "अज्ञात समय",
-    invalidDirectory: "चुना गया फ़ोल्डर मौजूद नहीं है या फ़ोल्डर नहीं है।",
-    searchTaskFailed: "खोज कार्य विफल हुआ।",
-    openTaskFailed: "खोलने का कार्य विफल हुआ।",
-    openPathFailed: "यह पथ नहीं खोला जा सका।"
-  },
-  it: {
-    brandSubtitle: "Ricerca locale di file",
-    languageLabel: "Lingua",
-    rootLabel: "Cartella di ricerca",
-    rootPlaceholder: "Scegli o inserisci il percorso",
-    pickDirectory: "Scegli cartella",
-    queryLabel: "Parola chiave del file",
-    queryPlaceholder: "Per esempio report, .rs, fattura",
-    caseSensitive: "Maiuscole/minuscole",
-    includeHidden: "Includi file nascosti",
-    maxResults: "Risultati massimi",
-    searchButton: "Cerca",
-    eyebrow: "Ricerca",
-    waiting: "Pronto per la ricerca",
-    statFiles: "File scansionati",
-    statDirs: "Cartelle scansionate",
-    statTime: "Tempo",
-    emptyTitle: "Inserisci cartella e parola chiave",
-    emptyText: "La ricerca avviene localmente. Nomi, percorsi e contenuti non vengono caricati.",
-    searching: "Ricerca...",
-    found: (count) => `${count} risultat${count === 1 ? "o" : "i"} trovat${count === 1 ? "o" : "i"}`,
-    foundTruncated: (count) => `${count} risultati trovati, limite raggiunto`,
-    noResultsTitle: "Nessuna corrispondenza",
-    noResultsText: "Prova un'altra parola chiave o includi i file nascosti.",
-    searchFailed: "Ricerca non riuscita",
-    cannotComplete: "Impossibile completare la ricerca",
-    openFailed: "Apertura non riuscita",
-    file: "File",
-    directory: "Cartella",
-    unknownTime: "Ora sconosciuta",
-    invalidDirectory: "La cartella selezionata non esiste o non è una cartella.",
-    searchTaskFailed: "L'attività di ricerca non è riuscita.",
-    openTaskFailed: "L'attività di apertura non è riuscita.",
-    openPathFailed: "Impossibile aprire questo percorso."
-  },
-  nl: {
-    brandSubtitle: "Lokale bestandszoeker",
-    languageLabel: "Taal",
-    rootLabel: "Zoekmap",
-    rootPlaceholder: "Kies of typ een mappad",
-    pickDirectory: "Map kiezen",
-    queryLabel: "Bestandsnaam trefwoord",
-    queryPlaceholder: "Bijvoorbeeld report, .rs, factuur",
-    caseSensitive: "Hoofdlettergevoelig",
-    includeHidden: "Verborgen bestanden opnemen",
-    maxResults: "Maximale resultaten",
-    searchButton: "Zoeken",
-    eyebrow: "Zoeken",
-    waiting: "Klaar om te zoeken",
-    statFiles: "Bestanden gescand",
-    statDirs: "Mappen gescand",
-    statTime: "Tijd",
-    emptyTitle: "Voer een map en trefwoord in",
-    emptyText: "Zoeken gebeurt lokaal. Bestandsnamen, paden en inhoud worden niet geüpload.",
-    searching: "Zoeken...",
-    found: (count) => `${count} resultaat${count === 1 ? "" : "en"} gevonden`,
-    foundTruncated: (count) => `${count} resultaten gevonden, limiet bereikt`,
-    noResultsTitle: "Geen overeenkomsten",
-    noResultsText: "Probeer een ander trefwoord of verborgen bestanden.",
-    searchFailed: "Zoeken mislukt",
-    cannotComplete: "Zoeken kan niet worden voltooid",
-    openFailed: "Openen mislukt",
-    file: "Bestand",
-    directory: "Map",
-    unknownTime: "Onbekende tijd",
-    invalidDirectory: "De gekozen map bestaat niet of is geen map.",
-    searchTaskFailed: "De zoektaak is mislukt.",
-    openTaskFailed: "De opentaak is mislukt.",
-    openPathFailed: "Dit pad kan niet worden geopend."
-  },
-  tr: {
-    brandSubtitle: "Yerel klasör dosya arama",
-    languageLabel: "Dil",
-    rootLabel: "Arama klasörü",
-    rootPlaceholder: "Klasör yolu seçin veya girin",
-    pickDirectory: "Klasör seç",
-    queryLabel: "Dosya adı anahtar sözcüğü",
-    queryPlaceholder: "Örneğin report, .rs, fatura",
-    caseSensitive: "Büyük/küçük harfe duyarlı",
-    includeHidden: "Gizli dosyaları dahil et",
-    maxResults: "Maksimum sonuç",
-    searchButton: "Ara",
-    eyebrow: "Arama",
-    waiting: "Aramaya hazır",
-    statFiles: "Taranan dosyalar",
-    statDirs: "Taranan klasörler",
-    statTime: "Süre",
-    emptyTitle: "Başlamak için klasör ve anahtar sözcük girin",
-    emptyText: "Arama yerel olarak çalışır. Dosya adları, yollar ve içerik yüklenmez.",
-    searching: "Aranıyor...",
-    found: (count) => `${count} sonuç bulundu`,
-    foundTruncated: (count) => `${count} sonuç bulundu, sınıra ulaşıldı`,
-    noResultsTitle: "Eşleşme yok",
-    noResultsText: "Başka bir anahtar sözcük deneyin veya gizli dosyaları dahil edin.",
-    searchFailed: "Arama başarısız",
-    cannotComplete: "Arama tamamlanamadı",
-    openFailed: "Açılamadı",
-    file: "Dosya",
-    directory: "Klasör",
-    unknownTime: "Bilinmeyen zaman",
-    invalidDirectory: "Seçilen klasör yok veya klasör değil.",
-    searchTaskFailed: "Arama görevi başarısız oldu.",
-    openTaskFailed: "Açma görevi başarısız oldu.",
-    openPathFailed: "Bu yol açılamadı."
-  },
-  vi: {
-    brandSubtitle: "Tìm tệp trong thư mục cục bộ",
-    languageLabel: "Ngôn ngữ",
-    rootLabel: "Thư mục tìm kiếm",
-    rootPlaceholder: "Chọn hoặc nhập đường dẫn thư mục",
-    pickDirectory: "Chọn thư mục",
-    queryLabel: "Từ khóa tên tệp",
-    queryPlaceholder: "Ví dụ report, .rs, hóa đơn",
-    caseSensitive: "Phân biệt hoa thường",
-    includeHidden: "Bao gồm tệp ẩn",
-    maxResults: "Số kết quả tối đa",
-    searchButton: "Tìm kiếm",
-    eyebrow: "Tìm kiếm",
-    waiting: "Sẵn sàng tìm kiếm",
-    statFiles: "Tệp đã quét",
-    statDirs: "Thư mục đã quét",
-    statTime: "Thời gian",
-    emptyTitle: "Nhập thư mục và từ khóa để bắt đầu",
-    emptyText: "Tìm kiếm chạy cục bộ. Tên tệp, đường dẫn và nội dung không được tải lên.",
-    searching: "Đang tìm...",
-    found: (count) => `Tìm thấy ${count} kết quả`,
-    foundTruncated: (count) => `Tìm thấy ${count} kết quả, đã đạt giới hạn`,
-    noResultsTitle: "Không có kết quả",
-    noResultsText: "Thử từ khóa khác hoặc bao gồm tệp ẩn.",
-    searchFailed: "Tìm kiếm thất bại",
-    cannotComplete: "Không thể hoàn tất tìm kiếm",
-    openFailed: "Mở thất bại",
-    file: "Tệp",
-    directory: "Thư mục",
-    unknownTime: "Không rõ thời gian",
-    invalidDirectory: "Thư mục đã chọn không tồn tại hoặc không phải thư mục.",
-    searchTaskFailed: "Tác vụ tìm kiếm thất bại.",
-    openTaskFailed: "Tác vụ mở thất bại.",
-    openPathFailed: "Không thể mở đường dẫn này."
-  },
-  id: {
-    brandSubtitle: "Pencarian file folder lokal",
-    languageLabel: "Bahasa",
-    rootLabel: "Folder pencarian",
-    rootPlaceholder: "Pilih atau masukkan path folder",
-    pickDirectory: "Pilih folder",
-    queryLabel: "Kata kunci nama file",
-    queryPlaceholder: "Misalnya report, .rs, invoice",
-    caseSensitive: "Peka huruf besar/kecil",
-    includeHidden: "Sertakan file tersembunyi",
-    maxResults: "Hasil maksimum",
-    searchButton: "Cari",
-    eyebrow: "Cari",
-    waiting: "Siap mencari",
-    statFiles: "File dipindai",
-    statDirs: "Folder dipindai",
-    statTime: "Waktu",
-    emptyTitle: "Masukkan folder dan kata kunci",
-    emptyText: "Pencarian berjalan lokal. Nama file, path, dan konten tidak diunggah.",
-    searching: "Mencari...",
-    found: (count) => `Menemukan ${count} hasil`,
-    foundTruncated: (count) => `Menemukan ${count} hasil, batas tercapai`,
-    noResultsTitle: "Tidak ada kecocokan",
-    noResultsText: "Coba kata kunci lain atau sertakan file tersembunyi.",
-    searchFailed: "Pencarian gagal",
-    cannotComplete: "Tidak dapat menyelesaikan pencarian",
-    openFailed: "Gagal membuka",
-    file: "File",
-    directory: "Folder",
-    unknownTime: "Waktu tidak diketahui",
-    invalidDirectory: "Folder yang dipilih tidak ada atau bukan folder.",
-    searchTaskFailed: "Tugas pencarian gagal.",
-    openTaskFailed: "Tugas membuka gagal.",
-    openPathFailed: "Tidak dapat membuka path ini."
-  },
-  th: {
-    brandSubtitle: "ค้นหาไฟล์ในโฟลเดอร์ภายในเครื่อง",
-    languageLabel: "ภาษา",
-    rootLabel: "โฟลเดอร์ค้นหา",
-    rootPlaceholder: "เลือกหรือป้อนเส้นทางโฟลเดอร์",
-    pickDirectory: "เลือกโฟลเดอร์",
-    queryLabel: "คำค้นชื่อไฟล์",
-    queryPlaceholder: "เช่น report, .rs, invoice",
-    caseSensitive: "แยกตัวพิมพ์ใหญ่เล็ก",
-    includeHidden: "รวมไฟล์ที่ซ่อน",
-    maxResults: "จำนวนผลลัพธ์สูงสุด",
-    searchButton: "ค้นหา",
-    eyebrow: "ค้นหา",
-    waiting: "พร้อมค้นหา",
-    statFiles: "ไฟล์ที่สแกน",
-    statDirs: "โฟลเดอร์ที่สแกน",
-    statTime: "เวลา",
-    emptyTitle: "ป้อนโฟลเดอร์และคำค้นเพื่อเริ่ม",
-    emptyText: "การค้นหาทำงานในเครื่อง ไม่มีการอัปโหลดชื่อไฟล์ เส้นทาง หรือเนื้อหา",
-    searching: "กำลังค้นหา...",
-    found: (count) => `พบ ${count} รายการ`,
-    foundTruncated: (count) => `พบ ${count} รายการ ถึงขีดจำกัดแล้ว`,
-    noResultsTitle: "ไม่พบรายการ",
-    noResultsText: "ลองคำค้นอื่น หรือรวมไฟล์ที่ซ่อน",
-    searchFailed: "ค้นหาล้มเหลว",
-    cannotComplete: "ไม่สามารถค้นหาให้เสร็จได้",
-    openFailed: "เปิดไม่สำเร็จ",
-    file: "ไฟล์",
-    directory: "โฟลเดอร์",
-    unknownTime: "ไม่ทราบเวลา",
-    invalidDirectory: "โฟลเดอร์ที่เลือกไม่มีอยู่หรือไม่ใช่โฟลเดอร์",
-    searchTaskFailed: "งานค้นหาล้มเหลว",
-    openTaskFailed: "งานเปิดล้มเหลว",
-    openPathFailed: "ไม่สามารถเปิดเส้นทางนี้"
-  },
-  pl: {
-    brandSubtitle: "Lokalne wyszukiwanie plików",
-    languageLabel: "Język",
-    rootLabel: "Folder wyszukiwania",
-    rootPlaceholder: "Wybierz lub wpisz ścieżkę folderu",
-    pickDirectory: "Wybierz folder",
-    queryLabel: "Słowo kluczowe nazwy pliku",
-    queryPlaceholder: "Na przykład report, .rs, faktura",
-    caseSensitive: "Rozróżniaj wielkość liter",
-    includeHidden: "Uwzględnij ukryte pliki",
-    maxResults: "Maksymalna liczba wyników",
-    searchButton: "Szukaj",
-    eyebrow: "Szukaj",
-    waiting: "Gotowe do wyszukiwania",
-    statFiles: "Przeskanowane pliki",
-    statDirs: "Przeskanowane foldery",
-    statTime: "Czas",
-    emptyTitle: "Wpisz folder i słowo kluczowe",
-    emptyText: "Wyszukiwanie działa lokalnie. Nazwy, ścieżki i treść nie są wysyłane.",
-    searching: "Wyszukiwanie...",
-    found: (count) => `Znaleziono ${count} wyników`,
-    foundTruncated: (count) => `Znaleziono ${count} wyników, osiągnięto limit`,
-    noResultsTitle: "Brak dopasowań",
-    noResultsText: "Spróbuj innego słowa lub uwzględnij ukryte pliki.",
-    searchFailed: "Wyszukiwanie nie powiodło się",
-    cannotComplete: "Nie można ukończyć wyszukiwania",
-    openFailed: "Nie udało się otworzyć",
-    file: "Plik",
-    directory: "Folder",
-    unknownTime: "Nieznany czas",
-    invalidDirectory: "Wybrany folder nie istnieje lub nie jest folderem.",
-    searchTaskFailed: "Zadanie wyszukiwania nie powiodło się.",
-    openTaskFailed: "Zadanie otwierania nie powiodło się.",
-    openPathFailed: "Nie można otworzyć tej ścieżki."
-  },
-  uk: {
-    brandSubtitle: "Локальний пошук файлів",
-    languageLabel: "Мова",
-    rootLabel: "Папка пошуку",
-    rootPlaceholder: "Виберіть або введіть шлях до папки",
-    pickDirectory: "Вибрати папку",
-    queryLabel: "Ключове слово імені файлу",
-    queryPlaceholder: "Наприклад report, .rs, рахунок",
-    caseSensitive: "Враховувати регістр",
-    includeHidden: "Включати приховані файли",
-    maxResults: "Максимум результатів",
-    searchButton: "Шукати",
-    eyebrow: "Пошук",
-    waiting: "Готово до пошуку",
-    statFiles: "Проскановано файлів",
-    statDirs: "Проскановано папок",
-    statTime: "Час",
-    emptyTitle: "Введіть папку і ключове слово",
-    emptyText: "Пошук виконується локально. Імена, шляхи і вміст не завантажуються.",
-    searching: "Пошук...",
-    found: (count) => `Знайдено результатів: ${count}`,
-    foundTruncated: (count) => `Знайдено результатів: ${count}, досягнуто ліміт`,
-    noResultsTitle: "Збігів немає",
-    noResultsText: "Спробуйте інше ключове слово або включіть приховані файли.",
-    searchFailed: "Помилка пошуку",
-    cannotComplete: "Не вдалося завершити пошук",
-    openFailed: "Не вдалося відкрити",
-    file: "Файл",
-    directory: "Папка",
-    unknownTime: "Невідомий час",
-    invalidDirectory: "Вибрана папка не існує або не є папкою.",
-    searchTaskFailed: "Завдання пошуку завершилося помилкою.",
-    openTaskFailed: "Завдання відкриття завершилося помилкою.",
-    openPathFailed: "Не вдалося відкрити цей шлях."
-  }
-};
-
-const updateTranslations = {
-  en: {
-    updateEyebrow: "Updates",
-    updateTitle: "Software update",
-    checkUpdateButton: "Check",
-    checkingUpdate: "Checking for updates...",
-    updateIdle: "Check GitHub Releases for the newest version.",
-    updateAvailable: (version) => `Version ${version} is available.`,
-    upToDate: "You are using the latest version.",
-    currentVersion: "Current",
-    latestVersion: "Latest",
-    publishedAt: "Published",
-    releaseNotes: "Release notes",
-    openReleaseButton: "Open release",
-    emptyReleaseNotes: "This release does not include release notes.",
-    updateCheckFailed: "Unable to check for updates.",
-    versionCompareFailed: "Unable to compare release versions."
-    ,
-    packageChecksums: "Package checksums",
-    noPackageChecksums: "No package checksum metadata was returned by GitHub.",
-    updateRateLimited: "GitHub rate limit reached. Try again later.",
-    updateNotFound: "No GitHub release was found.",
-    updateNetworkFailed: "Network request failed."
-  },
-  "zh-CN": {
-    updateEyebrow: "更新",
-    updateTitle: "软件更新",
-    checkUpdateButton: "检查",
-    checkingUpdate: "正在检查更新...",
-    updateIdle: "检查 GitHub Releases 中的最新版本。",
-    updateAvailable: (version) => `发现新版本 ${version}。`,
-    upToDate: "当前已是最新版本。",
-    currentVersion: "当前版本",
-    latestVersion: "最新版本",
-    publishedAt: "发布时间",
-    releaseNotes: "更新日志",
-    openReleaseButton: "打开发布页",
-    emptyReleaseNotes: "此版本没有更新日志。",
-    updateCheckFailed: "无法检查更新。",
-    versionCompareFailed: "无法比较版本。",
-    packageChecksums: "安装包校验值",
-    noPackageChecksums: "GitHub 未返回安装包校验元数据。",
-    updateRateLimited: "GitHub 访问频率已达上限，请稍后再试。",
-    updateNotFound: "没有找到 GitHub Release。",
-    updateNetworkFailed: "网络请求失败。"
-  },
-  "zh-TW": {
-    updateEyebrow: "更新",
-    updateTitle: "軟體更新",
-    checkUpdateButton: "檢查",
-    checkingUpdate: "正在檢查更新...",
-    updateIdle: "檢查 GitHub Releases 中的最新版本。",
-    updateAvailable: (version) => `發現新版本 ${version}。`,
-    upToDate: "目前已是最新版本。",
-    currentVersion: "目前版本",
-    latestVersion: "最新版本",
-    publishedAt: "發布時間",
-    releaseNotes: "更新日誌",
-    openReleaseButton: "開啟發布頁",
-    emptyReleaseNotes: "此版本沒有更新日誌。",
-    updateCheckFailed: "無法檢查更新。",
-    versionCompareFailed: "無法比較版本。",
-    packageChecksums: "安裝包校驗值",
-    noPackageChecksums: "GitHub 未回傳安裝包校驗中繼資料。",
-    updateRateLimited: "GitHub 存取頻率已達上限，請稍後再試。",
-    updateNotFound: "找不到 GitHub Release。",
-    updateNetworkFailed: "網路請求失敗。"
-  },
-  es: {
-    updateEyebrow: "Actualizaciones",
-    updateTitle: "Actualización",
-    checkUpdateButton: "Comprobar",
-    checkingUpdate: "Buscando actualizaciones...",
-    updateIdle: "Consulta GitHub Releases para ver la versión más reciente.",
-    updateAvailable: (version) => `La versión ${version} está disponible.`,
-    upToDate: "Ya estás usando la versión más reciente.",
-    currentVersion: "Actual",
-    latestVersion: "Más reciente",
-    publishedAt: "Publicado",
-    releaseNotes: "Notas de la versión",
-    openReleaseButton: "Abrir release",
-    emptyReleaseNotes: "Esta versión no incluye notas.",
-    updateCheckFailed: "No se pudo comprobar actualizaciones.",
-    versionCompareFailed: "No se pudieron comparar las versiones."
-  },
-  fr: {
-    updateEyebrow: "Mises à jour",
-    updateTitle: "Mise à jour",
-    checkUpdateButton: "Vérifier",
-    checkingUpdate: "Recherche de mises à jour...",
-    updateIdle: "Consulte GitHub Releases pour trouver la dernière version.",
-    updateAvailable: (version) => `La version ${version} est disponible.`,
-    upToDate: "Vous utilisez la dernière version.",
-    currentVersion: "Actuelle",
-    latestVersion: "Dernière",
-    publishedAt: "Publié",
-    releaseNotes: "Notes de version",
-    openReleaseButton: "Ouvrir la release",
-    emptyReleaseNotes: "Cette version ne contient pas de notes.",
-    updateCheckFailed: "Impossible de vérifier les mises à jour.",
-    versionCompareFailed: "Impossible de comparer les versions."
-  },
-  de: {
-    updateEyebrow: "Updates",
-    updateTitle: "Softwareupdate",
-    checkUpdateButton: "Prüfen",
-    checkingUpdate: "Suche nach Updates...",
-    updateIdle: "GitHub Releases nach der neuesten Version prüfen.",
-    updateAvailable: (version) => `Version ${version} ist verfügbar.`,
-    upToDate: "Sie verwenden die neueste Version.",
-    currentVersion: "Aktuell",
-    latestVersion: "Neueste",
-    publishedAt: "Veröffentlicht",
-    releaseNotes: "Versionshinweise",
-    openReleaseButton: "Release öffnen",
-    emptyReleaseNotes: "Diese Version enthält keine Hinweise.",
-    updateCheckFailed: "Updates konnten nicht geprüft werden.",
-    versionCompareFailed: "Versionen konnten nicht verglichen werden."
-  },
-  ja: {
-    updateEyebrow: "更新",
-    updateTitle: "ソフトウェア更新",
-    checkUpdateButton: "確認",
-    checkingUpdate: "更新を確認しています...",
-    updateIdle: "GitHub Releases で最新バージョンを確認します。",
-    updateAvailable: (version) => `バージョン ${version} が利用できます。`,
-    upToDate: "最新バージョンを使用しています。",
-    currentVersion: "現在",
-    latestVersion: "最新",
-    publishedAt: "公開日",
-    releaseNotes: "更新ログ",
-    openReleaseButton: "リリースを開く",
-    emptyReleaseNotes: "このリリースには更新ログがありません。",
-    updateCheckFailed: "更新を確認できません。",
-    versionCompareFailed: "バージョンを比較できません。"
-  },
-  ko: {
-    updateEyebrow: "업데이트",
-    updateTitle: "소프트웨어 업데이트",
-    checkUpdateButton: "확인",
-    checkingUpdate: "업데이트 확인 중...",
-    updateIdle: "GitHub Releases에서 최신 버전을 확인합니다.",
-    updateAvailable: (version) => `${version} 버전을 사용할 수 있습니다.`,
-    upToDate: "최신 버전을 사용 중입니다.",
-    currentVersion: "현재",
-    latestVersion: "최신",
-    publishedAt: "게시일",
-    releaseNotes: "변경 사항",
-    openReleaseButton: "릴리스 열기",
-    emptyReleaseNotes: "이 릴리스에는 변경 사항이 없습니다.",
-    updateCheckFailed: "업데이트를 확인할 수 없습니다.",
-    versionCompareFailed: "버전을 비교할 수 없습니다."
-  },
-  "pt-BR": {
-    updateEyebrow: "Atualizações",
-    updateTitle: "Atualização",
-    checkUpdateButton: "Verificar",
-    checkingUpdate: "Verificando atualizações...",
-    updateIdle: "Verifica no GitHub Releases a versão mais recente.",
-    updateAvailable: (version) => `A versão ${version} está disponível.`,
-    upToDate: "Você está usando a versão mais recente.",
-    currentVersion: "Atual",
-    latestVersion: "Mais recente",
-    publishedAt: "Publicado",
-    releaseNotes: "Notas da versão",
-    openReleaseButton: "Abrir release",
-    emptyReleaseNotes: "Esta versão não inclui notas.",
-    updateCheckFailed: "Não foi possível verificar atualizações.",
-    versionCompareFailed: "Não foi possível comparar versões."
-  },
-  ru: {
-    updateEyebrow: "Обновления",
-    updateTitle: "Обновление ПО",
-    checkUpdateButton: "Проверить",
-    checkingUpdate: "Проверка обновлений...",
-    updateIdle: "Проверить последнюю версию в GitHub Releases.",
-    updateAvailable: (version) => `Доступна версия ${version}.`,
-    upToDate: "Установлена последняя версия.",
-    currentVersion: "Текущая",
-    latestVersion: "Последняя",
-    publishedAt: "Опубликовано",
-    releaseNotes: "Журнал изменений",
-    openReleaseButton: "Открыть релиз",
-    emptyReleaseNotes: "У этого релиза нет описания.",
-    updateCheckFailed: "Не удалось проверить обновления.",
-    versionCompareFailed: "Не удалось сравнить версии."
-  },
-  ar: {
-    updateEyebrow: "التحديثات",
-    updateTitle: "تحديث البرنامج",
-    checkUpdateButton: "تحقق",
-    checkingUpdate: "جار التحقق من التحديثات...",
-    updateIdle: "تحقق من أحدث إصدار في GitHub Releases.",
-    updateAvailable: (version) => `الإصدار ${version} متاح.`,
-    upToDate: "أنت تستخدم أحدث إصدار.",
-    currentVersion: "الحالي",
-    latestVersion: "الأحدث",
-    publishedAt: "نشر",
-    releaseNotes: "سجل التحديث",
-    openReleaseButton: "فتح الإصدار",
-    emptyReleaseNotes: "لا يحتوي هذا الإصدار على سجل تحديث.",
-    updateCheckFailed: "تعذر التحقق من التحديثات.",
-    versionCompareFailed: "تعذرت مقارنة الإصدارات."
-  },
-  hi: {
-    updateEyebrow: "अपडेट",
-    updateTitle: "सॉफ़्टवेयर अपडेट",
-    checkUpdateButton: "जाँचें",
-    checkingUpdate: "अपडेट जाँचा जा रहा है...",
-    updateIdle: "नवीनतम संस्करण के लिए GitHub Releases जाँचें।",
-    updateAvailable: (version) => `संस्करण ${version} उपलब्ध है।`,
-    upToDate: "आप नवीनतम संस्करण उपयोग कर रहे हैं।",
-    currentVersion: "वर्तमान",
-    latestVersion: "नवीनतम",
-    publishedAt: "प्रकाशित",
-    releaseNotes: "अपडेट लॉग",
-    openReleaseButton: "रिलीज़ खोलें",
-    emptyReleaseNotes: "इस रिलीज़ में नोट्स नहीं हैं।",
-    updateCheckFailed: "अपडेट जाँच नहीं हो सकी।",
-    versionCompareFailed: "संस्करणों की तुलना नहीं हो सकी।"
-  },
-  it: {
-    updateEyebrow: "Aggiornamenti",
-    updateTitle: "Aggiornamento",
-    checkUpdateButton: "Controlla",
-    checkingUpdate: "Controllo aggiornamenti...",
-    updateIdle: "Controlla GitHub Releases per la versione più recente.",
-    updateAvailable: (version) => `La versione ${version} è disponibile.`,
-    upToDate: "Stai usando la versione più recente.",
-    currentVersion: "Attuale",
-    latestVersion: "Ultima",
-    publishedAt: "Pubblicata",
-    releaseNotes: "Note di rilascio",
-    openReleaseButton: "Apri release",
-    emptyReleaseNotes: "Questa release non include note.",
-    updateCheckFailed: "Impossibile controllare gli aggiornamenti.",
-    versionCompareFailed: "Impossibile confrontare le versioni."
-  },
-  nl: {
-    updateEyebrow: "Updates",
-    updateTitle: "Software-update",
-    checkUpdateButton: "Controleren",
-    checkingUpdate: "Controleren op updates...",
-    updateIdle: "Controleer GitHub Releases voor de nieuwste versie.",
-    updateAvailable: (version) => `Versie ${version} is beschikbaar.`,
-    upToDate: "Je gebruikt de nieuwste versie.",
-    currentVersion: "Huidig",
-    latestVersion: "Nieuwste",
-    publishedAt: "Gepubliceerd",
-    releaseNotes: "Release-opmerkingen",
-    openReleaseButton: "Release openen",
-    emptyReleaseNotes: "Deze release bevat geen opmerkingen.",
-    updateCheckFailed: "Kan niet controleren op updates.",
-    versionCompareFailed: "Kan versies niet vergelijken."
-  },
-  tr: {
-    updateEyebrow: "Güncellemeler",
-    updateTitle: "Yazılım güncellemesi",
-    checkUpdateButton: "Kontrol et",
-    checkingUpdate: "Güncellemeler kontrol ediliyor...",
-    updateIdle: "En yeni sürüm için GitHub Releases'ı kontrol et.",
-    updateAvailable: (version) => `${version} sürümü mevcut.`,
-    upToDate: "En yeni sürümü kullanıyorsunuz.",
-    currentVersion: "Mevcut",
-    latestVersion: "En yeni",
-    publishedAt: "Yayınlandı",
-    releaseNotes: "Sürüm notları",
-    openReleaseButton: "Sürümü aç",
-    emptyReleaseNotes: "Bu sürüm not içermiyor.",
-    updateCheckFailed: "Güncellemeler kontrol edilemedi.",
-    versionCompareFailed: "Sürümler karşılaştırılamadı."
-  },
-  vi: {
-    updateEyebrow: "Cập nhật",
-    updateTitle: "Cập nhật phần mềm",
-    checkUpdateButton: "Kiểm tra",
-    checkingUpdate: "Đang kiểm tra cập nhật...",
-    updateIdle: "Kiểm tra phiên bản mới nhất trên GitHub Releases.",
-    updateAvailable: (version) => `Có phiên bản ${version}.`,
-    upToDate: "Bạn đang dùng phiên bản mới nhất.",
-    currentVersion: "Hiện tại",
-    latestVersion: "Mới nhất",
-    publishedAt: "Đã phát hành",
-    releaseNotes: "Nhật ký cập nhật",
-    openReleaseButton: "Mở release",
-    emptyReleaseNotes: "Bản phát hành này không có ghi chú.",
-    updateCheckFailed: "Không thể kiểm tra cập nhật.",
-    versionCompareFailed: "Không thể so sánh phiên bản."
-  },
-  id: {
-    updateEyebrow: "Pembaruan",
-    updateTitle: "Pembaruan perangkat lunak",
-    checkUpdateButton: "Periksa",
-    checkingUpdate: "Memeriksa pembaruan...",
-    updateIdle: "Periksa versi terbaru di GitHub Releases.",
-    updateAvailable: (version) => `Versi ${version} tersedia.`,
-    upToDate: "Anda memakai versi terbaru.",
-    currentVersion: "Saat ini",
-    latestVersion: "Terbaru",
-    publishedAt: "Diterbitkan",
-    releaseNotes: "Catatan rilis",
-    openReleaseButton: "Buka rilis",
-    emptyReleaseNotes: "Rilis ini tidak memiliki catatan.",
-    updateCheckFailed: "Tidak dapat memeriksa pembaruan.",
-    versionCompareFailed: "Tidak dapat membandingkan versi."
-  },
-  th: {
-    updateEyebrow: "อัปเดต",
-    updateTitle: "อัปเดตซอฟต์แวร์",
-    checkUpdateButton: "ตรวจสอบ",
-    checkingUpdate: "กำลังตรวจสอบอัปเดต...",
-    updateIdle: "ตรวจสอบเวอร์ชันล่าสุดจาก GitHub Releases",
-    updateAvailable: (version) => `มีเวอร์ชัน ${version}`,
-    upToDate: "คุณใช้เวอร์ชันล่าสุดแล้ว",
-    currentVersion: "ปัจจุบัน",
-    latestVersion: "ล่าสุด",
-    publishedAt: "เผยแพร่",
-    releaseNotes: "บันทึกการอัปเดต",
-    openReleaseButton: "เปิดรีลีส",
-    emptyReleaseNotes: "รีลีสนี้ไม่มีบันทึก",
-    updateCheckFailed: "ไม่สามารถตรวจสอบอัปเดตได้",
-    versionCompareFailed: "ไม่สามารถเปรียบเทียบเวอร์ชันได้"
-  },
-  pl: {
-    updateEyebrow: "Aktualizacje",
-    updateTitle: "Aktualizacja",
-    checkUpdateButton: "Sprawdź",
-    checkingUpdate: "Sprawdzanie aktualizacji...",
-    updateIdle: "Sprawdź najnowszą wersję w GitHub Releases.",
-    updateAvailable: (version) => `Dostępna jest wersja ${version}.`,
-    upToDate: "Używasz najnowszej wersji.",
-    currentVersion: "Obecna",
-    latestVersion: "Najnowsza",
-    publishedAt: "Opublikowano",
-    releaseNotes: "Informacje o wydaniu",
-    openReleaseButton: "Otwórz wydanie",
-    emptyReleaseNotes: "To wydanie nie zawiera notatek.",
-    updateCheckFailed: "Nie można sprawdzić aktualizacji.",
-    versionCompareFailed: "Nie można porównać wersji."
-  },
-  uk: {
-    updateEyebrow: "Оновлення",
-    updateTitle: "Оновлення ПЗ",
-    checkUpdateButton: "Перевірити",
-    checkingUpdate: "Перевірка оновлень...",
-    updateIdle: "Перевірити останню версію в GitHub Releases.",
-    updateAvailable: (version) => `Доступна версія ${version}.`,
-    upToDate: "Ви використовуєте останню версію.",
-    currentVersion: "Поточна",
-    latestVersion: "Остання",
-    publishedAt: "Опубліковано",
-    releaseNotes: "Журнал змін",
-    openReleaseButton: "Відкрити реліз",
-    emptyReleaseNotes: "Цей реліз не містить опису.",
-    updateCheckFailed: "Не вдалося перевірити оновлення.",
-    versionCompareFailed: "Не вдалося порівняти версії."
-  }
-};
-
-for (const [language, values] of Object.entries(updateTranslations)) {
-  Object.assign(translations[language], values);
-}
-
-const improvementTranslations = {
-  en: {
-    cancelSearchButton: "Cancel",
-    statSkipped: "Skipped",
-    resultFilterLabel: "Filter results",
-    resultFilterPlaceholder: "Filter visible results",
-    typeFilterLabel: "Type",
-    typeAll: "All",
-    typeFiles: "Files",
-    typeFolders: "Folders",
-    sortLabel: "Sort",
-    sortNameAsc: "Name A-Z",
-    sortNameDesc: "Name Z-A",
-    sortModifiedDesc: "Newest",
-    sortModifiedAsc: "Oldest",
-    sortSizeDesc: "Largest",
-    sortSizeAsc: "Smallest",
-    progressIdle: "Progress details will appear while searching.",
-    scanningProgress: (matches, path) => `Scanning... ${matches} matches${path ? ` · ${path}` : ""}`,
-    searchCancelled: "Search cancelled",
-    noVisibleResultsTitle: "No visible results",
-    noVisibleResultsText: "Adjust result filters or sorting.",
-    visibleResultCount: (visible, total) => `Showing ${visible} of ${total} results`
-  },
-  "zh-CN": {
-    cancelSearchButton: "取消",
-    statSkipped: "跳过",
-    resultFilterLabel: "结果过滤",
-    resultFilterPlaceholder: "过滤当前结果",
-    typeFilterLabel: "类型",
-    typeAll: "全部",
-    typeFiles: "文件",
-    typeFolders: "目录",
-    sortLabel: "排序",
-    sortNameAsc: "名称 A-Z",
-    sortNameDesc: "名称 Z-A",
-    sortModifiedDesc: "最新修改",
-    sortModifiedAsc: "最早修改",
-    sortSizeDesc: "最大文件",
-    sortSizeAsc: "最小文件",
-    progressIdle: "搜索时会显示进度详情。",
-    scanningProgress: (matches, path) => `正在扫描... ${matches} 个匹配${path ? ` · ${path}` : ""}`,
-    searchCancelled: "搜索已取消",
-    noVisibleResultsTitle: "没有可见结果",
-    noVisibleResultsText: "调整结果过滤或排序条件。",
-    visibleResultCount: (visible, total) => `显示 ${visible} / ${total} 个结果`
-  },
-  "zh-TW": {
-    cancelSearchButton: "取消",
-    statSkipped: "跳過",
-    resultFilterLabel: "結果過濾",
-    resultFilterPlaceholder: "過濾目前結果",
-    typeFilterLabel: "類型",
-    typeAll: "全部",
-    typeFiles: "檔案",
-    typeFolders: "目錄",
-    sortLabel: "排序",
-    sortNameAsc: "名稱 A-Z",
-    sortNameDesc: "名稱 Z-A",
-    sortModifiedDesc: "最新修改",
-    sortModifiedAsc: "最早修改",
-    sortSizeDesc: "最大檔案",
-    sortSizeAsc: "最小檔案",
-    progressIdle: "搜尋時會顯示進度詳情。",
-    scanningProgress: (matches, path) => `正在掃描... ${matches} 個符合${path ? ` · ${path}` : ""}`,
-    searchCancelled: "搜尋已取消",
-    noVisibleResultsTitle: "沒有可見結果",
-    noVisibleResultsText: "調整結果過濾或排序條件。",
-    visibleResultCount: (visible, total) => `顯示 ${visible} / ${total} 個結果`
-  }
-};
-
-for (const [language, values] of Object.entries(improvementTranslations)) {
-  Object.assign(translations[language], values);
-}
-
-const aliases = {
-  zh: "zh-CN",
-  "zh-Hans": "zh-CN",
-  "zh-Hant": "zh-TW",
-  pt: "pt-BR",
-  "pt-PT": "pt-BR"
+const uiIcons = {
+  ArrowUpDown,
+  Check,
+  ChevronDown,
+  CircleArrowUp,
+  ExternalLink,
+  Files,
+  FileType,
+  Filter,
+  FolderOpen,
+  FolderSearch,
+  Folders,
+  FolderTree,
+  GitBranch,
+  HardDrive,
+  Languages,
+  ListFilter,
+  ListOrdered,
+  Radar,
+  RefreshCw,
+  ScanLine,
+  ScanSearch,
+  Search,
+  SearchX,
+  ShieldAlert,
+  Timer,
+  X
 };
 
 const elements = {
@@ -1226,6 +116,7 @@ let lastUpdateError = "";
 
 initLanguageSelect();
 applyTranslations();
+initializeIcons();
 initializeProgressListener();
 
 elements.pickDir.addEventListener("click", async () => {
@@ -1287,28 +178,22 @@ function initLanguageSelect() {
 }
 
 function resolveLanguage(value) {
-  if (value && value !== "auto") {
-    return translations[value] ? value : aliases[value] || value.split("-")[0];
-  }
-
-  for (const locale of navigator.languages || [navigator.language]) {
-    const normalized = aliases[locale] || locale;
-    if (translations[normalized]) {
-      return normalized;
-    }
-
-    const base = normalized.split("-")[0];
-    if (translations[base]) {
-      return base;
-    }
-  }
-
-  return "en";
+  return resolveLocaleLanguage(value, navigator.languages || [navigator.language]);
 }
 
 function translate(key, ...args) {
-  const value = translations[currentLanguage]?.[key] ?? translations.en[key] ?? key;
-  return typeof value === "function" ? value(...args) : value;
+  return translateForLanguage(currentLanguage, key, ...args);
+}
+
+function initializeIcons() {
+  createIcons({
+    icons: uiIcons,
+    attrs: {
+      width: 18,
+      height: 18,
+      "stroke-width": 1.8
+    }
+  });
 }
 
 function applyTranslations() {
@@ -1448,12 +333,13 @@ async function cancelActiveSearch() {
 
 async function checkForUpdates() {
   elements.checkUpdate.disabled = true;
+  elements.checkUpdate.classList.add("is-busy");
   lastUpdateStatus = "checkingUpdate";
   lastUpdateError = "";
   renderUpdate();
 
   try {
-    lastUpdate = await invoke("check_for_updates");
+    lastUpdate = await invoke("check_for_updates", { language: currentLanguage });
     lastUpdateStatus = lastUpdate.has_update ? "updateAvailable" : "upToDate";
   } catch (error) {
     lastUpdate = null;
@@ -1461,6 +347,7 @@ async function checkForUpdates() {
     lastUpdateError = mapError(error);
   } finally {
     elements.checkUpdate.disabled = false;
+    elements.checkUpdate.classList.remove("is-busy");
     renderUpdate();
   }
 }
@@ -1577,35 +464,50 @@ function renderResults(results) {
 }
 
 function createResultRow(result) {
-    const row = document.createElement("article");
-    row.className = "result-row";
+  const row = document.createElement("article");
+  row.className = "result-row";
 
-    const icon = document.createElement("div");
-    icon.className = "file-icon";
-    icon.textContent = result.is_dir ? "DIR" : "FILE";
+  const icon = document.createElement("div");
+  icon.className = `file-icon${result.is_dir ? " directory" : ""}`;
+  icon.setAttribute("aria-hidden", "true");
+  icon.append(
+    createIconElement(result.is_dir ? FolderIcon : FileIcon, {
+      width: 19,
+      height: 19,
+      "stroke-width": 1.8
+    })
+  );
 
-    const content = document.createElement("div");
-    content.className = "result-content";
+  const content = document.createElement("div");
+  content.className = "result-content";
 
-    const name = document.createElement("button");
-    name.className = "result-name";
-    name.type = "button";
-    name.textContent = result.name;
-    name.addEventListener("click", () => openPath(result.path));
+  const name = document.createElement("button");
+  name.className = "result-name";
+  name.type = "button";
+  name.textContent = result.name;
+  name.addEventListener("click", () => openPath(result.path));
 
-    const path = document.createElement("p");
-    path.className = "result-path";
-    path.textContent = result.path;
+  const path = document.createElement("p");
+  path.className = "result-path";
+  path.textContent = result.path;
 
-    const meta = document.createElement("p");
-    meta.className = "result-meta";
-    meta.textContent = `${translate(result.is_dir ? "directory" : "file")} · ${formatBytes(result.size)} · ${
-      result.modified ?? translate("unknownTime")
-    }`;
+  const meta = document.createElement("p");
+  meta.className = "result-meta";
+  meta.textContent = `${translate(result.is_dir ? "directory" : "file")} · ${formatBytes(result.size)} · ${
+    result.modified ?? translate("unknownTime")
+  }`;
 
-    content.append(name, path, meta);
-    row.append(icon, content);
-    return row;
+  const openIndicator = createIconElement(ArrowUpRight, {
+    class: "result-open-icon",
+    width: 15,
+    height: 15,
+    "stroke-width": 1.9,
+    "aria-hidden": "true"
+  });
+
+  content.append(name, path, meta);
+  row.append(icon, content, openIndicator);
+  return row;
 }
 
 function renderUpdate() {
@@ -1645,13 +547,20 @@ function renderReleaseAssets(assets) {
     const item = document.createElement("article");
     item.className = "asset-row";
 
+    const icon = createIconElement(PackageCheck, {
+      width: 16,
+      height: 16,
+      "stroke-width": 1.8,
+      "aria-hidden": "true"
+    });
+
     const name = document.createElement("strong");
     name.textContent = asset.name;
 
     const meta = document.createElement("span");
     meta.textContent = `${formatBytes(asset.size)} · ${asset.digest || translate("noPackageChecksums")}`;
 
-    item.append(name, meta);
+    item.append(icon, name, meta);
     fragment.append(item);
   }
 
@@ -1680,7 +589,8 @@ async function openPath(path) {
 
 function mapError(error) {
   const key = String(error);
-  return translations[currentLanguage]?.[key] ? translate(key) : key;
+  const translated = translate(key);
+  return translated === key ? key : translated;
 }
 
 function formatNumber(value) {
