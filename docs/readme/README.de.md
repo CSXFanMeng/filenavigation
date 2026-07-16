@@ -13,7 +13,8 @@ FileNavigation ist eine mit Rust und Tauri entwickelte Desktop-Anwendung zum Suc
 - Rahmenloses, von der App gezeichnetes Fenster mit lokalisierten Bedienelementen
 - Fester Arbeitsbereich mit unabhängig scrollender Ergebnisliste
 - Oberfläche in 20 Sprachen mit getrennten Sprachdateien
-- Updateprüfung über die neueste GitHub Release mit passenden Sprachhinweisen
+- Update-Fenster in der Titelleiste mit scrollbaren lokalisierten GitHub-Hinweisen und signierter automatischer Installation
+- Einstellungsfenster mit dauerhaft gespeicherten hellen und dunklen Designs
 - Anzeige von Paketprüfsummen zur Integritätsprüfung
 
 ## Downloads

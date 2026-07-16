@@ -76,7 +76,25 @@ const messages = {
     searchCancelled: "Search cancelled",
     noVisibleResultsTitle: "No visible results",
     noVisibleResultsText: "Adjust result filters or sorting.",
-    visibleResultCount: (visible, total) => `Showing ${visible} of ${total} results`
+    visibleResultCount: (visible, total) => `Showing ${visible} of ${total} results`,
+    openUpdates: "Check for updates",
+    openSettings: "Open settings",
+    closeDialog: "Close dialog",
+    preferencesEyebrow: "Preferences",
+    settingsTitle: "Settings",
+    settingsCategories: "Settings categories",
+    appearanceCategory: "Appearance",
+    themeTitle: "Theme",
+    themeDescription: "Choose a preset appearance for FileNavigation.",
+    lightTheme: "Light",
+    darkTheme: "Dark",
+    automaticUpdateButton: "Download, install and restart",
+    preparingUpdate: "Detecting the system and preparing the update...",
+    updateDownloading: (percent) => "Downloading update... " + percent + "%",
+    installingUpdate: "Update downloaded. Installing...",
+    restartingUpdate: "Installation complete. Restarting...",
+    automaticUpdateFailed: "Automatic update failed.",
+    updaterUnavailable: "No compatible update package is available for this system."
 };
 
 export default messages;

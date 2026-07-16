@@ -16,6 +16,16 @@ OpenAI Codex and GPT-5.6 were used as engineering collaborators throughout FileN
 
 AI was used during development only. FileNavigation does not call OpenAI services at runtime and does not send file names, paths, search queries, or file contents to a model.
 
+## Highlights
+
+- Fully asynchronous, cancellable local file search with live progress
+- Responsive frameless interface with independent result and release-note scrolling
+- 20 complete interface languages stored in independent locale files
+- Persistent light and dark themes in a category-based settings window
+- Language-matched GitHub Release notes and signed automatic updates for the current OS and CPU architecture
+
+The signed updater trust chain begins with v0.1.6. Users upgrading from v0.1.5 must install v0.1.6 manually once; later signed releases can download, install, and restart automatically.
+
 Complete project documentation is available in the same 20 languages supported by the application.
 
 | Language | Documentation | Language | Documentation |

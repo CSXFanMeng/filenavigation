@@ -13,7 +13,8 @@ FileNavigation est une application de bureau Rust + Tauri permettant de recherch
 - Fenêtre sans bordure dessinée par l’application avec commandes localisées
 - Espace de travail fixe et liste de résultats défilant indépendamment
 - Interface en 20 langues stockées dans des fichiers séparés
-- Vérification de la dernière GitHub Release avec notes dans la langue active
+- Fenêtre de mise à jour dans la barre de titre avec notes GitHub localisées et défilantes et installation automatique signée
+- Fenêtre de paramètres avec thèmes clair et sombre persistants
 - Affichage des empreintes des installateurs pour vérifier leur intégrité
 
 ## Téléchargements

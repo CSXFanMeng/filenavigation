@@ -13,7 +13,8 @@ FileNavigation adalah aplikasi desktop Rust + Tauri untuk menemukan file dan fol
 - Jendela tanpa bingkai buatan aplikasi dengan kontrol terlokalisasi
 - Ruang kerja tetap dan daftar hasil yang bergulir secara mandiri
 - Antarmuka 20 bahasa dalam file bahasa terpisah
-- Pemeriksaan GitHub Release terbaru dengan catatan sesuai bahasa aktif
+- Jendela pembaruan di bilah judul dengan catatan GitHub lokal yang dapat digulir dan instalasi otomatis bertanda tangan
+- Jendela pengaturan dengan tema terang dan gelap yang tersimpan
 - Tampilan digest installer untuk verifikasi integritas
 
 ## Unduhan

@@ -16,11 +16,17 @@ jobs:
       matrix:
         include:
           - platform: windows-latest
-            bundles: nsis,msi
+            args: --bundles nsis,msi
+            rust-target: null
           - platform: macos-latest
-            bundles: dmg,app
+            args: --target aarch64-apple-darwin --bundles dmg,app
+            rust-target: aarch64-apple-darwin
+          - platform: macos-latest
+            args: --target x86_64-apple-darwin --bundles dmg,app
+            rust-target: x86_64-apple-darwin
           - platform: ubuntu-latest
-            bundles: deb,rpm,appimage
+            args: --bundles deb,rpm,appimage
+            rust-target: null
 
     runs-on: ${{ matrix.platform }}
 
@@ -34,6 +40,10 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
+      - name: Install cross-compilation target
+        if: matrix.rust-target != null
+        run: rustup target add ${{ matrix.rust-target }}
+
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-latest'
         run: |
@@ -43,21 +53,32 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build bundles
-        run: npm run tauri -- build --bundles ${{ matrix.bundles }}
+      - name: Read multilingual release notes
+        id: release-notes
+        shell: bash
+        run: |
+          {
+            echo 'body<<FILENAVIGATION_RELEASE_NOTES'
+            cat RELEASE_NOTES.md
+            echo 'FILENAVIGATION_RELEASE_NOTES'
+          } >> "$GITHUB_OUTPUT"
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Build and upload signed bundles
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
         with:
-          name: FileNavigation-${{ matrix.platform }}
-          path: |
-            src-tauri/target/release/bundle/**/*.exe
-            src-tauri/target/release/bundle/**/*.msi
-            src-tauri/target/release/bundle/**/*.dmg
-            src-tauri/target/release/bundle/**/*.app
-            src-tauri/target/release/bundle/**/*.deb
-            src-tauri/target/release/bundle/**/*.rpm
-            src-tauri/target/release/bundle/**/*.AppImage
+          tagName: v__VERSION__
+          releaseName: FileNavigation v__VERSION__
+          releaseBody: ${{ steps.release-notes.outputs.body }}
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
+          releaseAssetNamePattern: FileNavigation_[version]_[platform]_[arch][setup].[ext]
+          updaterJsonPreferNsis: true
+          uploadUpdaterJson: true
+          uploadUpdaterSignatures: true
 
   publish:
     needs: build
@@ -65,22 +86,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Download bundle artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: release-artifacts
-
-      - name: Publish GitHub release
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          body_path: RELEASE_NOTES.md
-          files: |
-            release-artifacts/**/*.exe
-            release-artifacts/**/*.msi
-            release-artifacts/**/*.dmg
-            release-artifacts/**/*.deb
-            release-artifacts/**/*.rpm
-            release-artifacts/**/*.AppImage
+      - name: Publish completed release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false --latest

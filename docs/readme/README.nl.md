@@ -13,7 +13,8 @@ FileNavigation is een Rust + Tauri-desktopapp om bestanden en mappen in een geko
 - Randloos, door de app getekend venster met vertaalde bediening
 - Vaste werkruimte met onafhankelijk scrollende resultatenlijst
 - Interface in 20 talen via afzonderlijke taalbestanden
-- Controle van de nieuwste GitHub Release met notities in de actieve taal
+- Updatevenster in de titelbalk met schuifbare gelokaliseerde GitHub-notities en ondertekende automatische installatie
+- Instellingenvenster met blijvend opgeslagen lichte en donkere thema's
 - Weergave van installatiedigests voor integriteitscontrole
 
 ## Downloads

@@ -1,6 +1,6 @@
 {
   "name": "filenavigation",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,7 +14,10 @@
   "dependencies": {
     "@tauri-apps/api": "^2.8.0",
     "@tauri-apps/plugin-dialog": "^2.4.0",
-    "lucide": "^1.24.0"
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "@tauri-apps/plugin-updater": "^2.10.1",
+    "lucide": "^1.24.0",
+    "simple-icons": "^16.26.0"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.8.0",

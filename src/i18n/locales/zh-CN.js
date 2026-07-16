@@ -75,7 +75,25 @@ const messages = {
     searchCancelled: "搜索已取消",
     noVisibleResultsTitle: "没有可见结果",
     noVisibleResultsText: "调整结果过滤或排序条件。",
-    visibleResultCount: (visible, total) => `显示 ${visible} / ${total} 个结果`
+    visibleResultCount: (visible, total) => `显示 ${visible} / ${total} 个结果`,
+    openUpdates: "检查更新",
+    openSettings: "打开设置",
+    closeDialog: "关闭窗口",
+    preferencesEyebrow: "偏好设置",
+    settingsTitle: "设置",
+    settingsCategories: "设置分类",
+    appearanceCategory: "外观",
+    themeTitle: "主题",
+    themeDescription: "选择 FileNavigation 的预设外观。",
+    lightTheme: "浅色",
+    darkTheme: "深色",
+    automaticUpdateButton: "下载、安装并重启",
+    preparingUpdate: "正在识别系统并准备更新...",
+    updateDownloading: (percent) => "正在下载更新... " + percent + "%",
+    installingUpdate: "下载完成，正在安装...",
+    restartingUpdate: "安装完成，正在重启...",
+    automaticUpdateFailed: "自动更新失败。",
+    updaterUnavailable: "没有适用于当前系统的更新包。"
 };
 
 export default messages;

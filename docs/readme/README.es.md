@@ -13,7 +13,8 @@ FileNavigation es una aplicación de escritorio creada con Rust y Tauri para enc
 - Ventana sin marco dibujada por la app con controles localizados
 - Área de trabajo fija y lista de resultados con desplazamiento independiente
 - Interfaz en 20 idiomas mediante archivos de idioma separados
-- Actualizaciones desde la última GitHub Release con notas en el idioma actual
+- Ventana de actualización en la barra de título con notas de GitHub localizadas y desplazables e instalación automática firmada
+- Ventana de ajustes con temas claro y oscuro persistentes
 - Resúmenes de instaladores para verificar su integridad
 
 ## Descargas

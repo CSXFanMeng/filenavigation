@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f4f6f5" />
     <title>FileNavigation</title>
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("filenavigation.theme") || "light";
+    </script>
   </head>
   <body>
     <main id="app" class="shell">
@@ -16,7 +19,32 @@
             </span>
             <span class="titlebar-name" data-tauri-drag-region>FileNavigation</span>
           </div>
-          <div class="window-controls">
+          <div class="titlebar-actions">
+            <div class="titlebar-tools">
+              <button
+                id="open-updates"
+                class="window-control titlebar-tool"
+                type="button"
+                data-i18n-title="openUpdates"
+                data-i18n-aria-label="openUpdates"
+                title="Check for updates"
+                aria-label="Check for updates"
+              >
+                <i data-brand-icon="github" aria-hidden="true"></i>
+              </button>
+              <button
+                id="open-settings"
+                class="window-control titlebar-tool"
+                type="button"
+                data-i18n-title="openSettings"
+                data-i18n-aria-label="openSettings"
+                title="Open settings"
+                aria-label="Open settings"
+              >
+                <i data-lucide="settings-2" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="window-controls">
             <button
               id="window-minimize"
               class="window-control"
@@ -50,6 +78,7 @@
             >
               <i data-lucide="x" aria-hidden="true"></i>
             </button>
+            </div>
           </div>
         </header>
 
@@ -150,51 +179,6 @@
             </div>
           </div>
 
-          <section class="update-panel" aria-live="polite">
-            <div class="update-heading">
-              <div class="section-heading">
-                <span class="section-icon" aria-hidden="true"><i data-lucide="circle-arrow-up"></i></span>
-                <div>
-                  <p class="eyebrow" data-i18n="updateEyebrow">Updates</p>
-                  <h2 data-i18n="updateTitle">Software update</h2>
-                </div>
-              </div>
-              <button id="check-update" class="secondary icon-command compact" type="button">
-                <i data-lucide="refresh-cw" aria-hidden="true"></i>
-                <span data-i18n="checkUpdateButton">Check</span>
-              </button>
-            </div>
-            <div class="update-message">
-              <i data-lucide="git-branch" aria-hidden="true"></i>
-              <p id="update-status" class="update-status" data-i18n="updateIdle">
-                Check GitHub Releases for the newest version.
-              </p>
-            </div>
-            <div id="update-details" class="update-details" hidden>
-              <dl>
-                <div>
-                  <dt data-i18n="currentVersion">Current</dt>
-                  <dd id="current-version">-</dd>
-                </div>
-                <div>
-                  <dt data-i18n="latestVersion">Latest</dt>
-                  <dd id="latest-version">-</dd>
-                </div>
-                <div>
-                  <dt data-i18n="publishedAt">Published</dt>
-                  <dd id="published-at">-</dd>
-                </div>
-              </dl>
-              <h3 data-i18n="releaseNotes">Release notes</h3>
-              <pre id="release-notes"></pre>
-              <h3 data-i18n="packageChecksums">Package checksums</h3>
-              <div id="release-assets" class="release-assets"></div>
-              <button id="open-release" class="secondary wide icon-command" type="button">
-                <i data-lucide="external-link" aria-hidden="true"></i>
-                <span data-i18n="openReleaseButton">Open release</span>
-              </button>
-            </div>
-          </section>
         </aside>
 
         <section class="results-panel">
@@ -297,6 +281,132 @@
             <div id="result-list" class="result-list" aria-live="polite"></div>
           </div>
         </section>
+        </section>
+      </div>
+
+      <div id="updates-dialog" class="dialog-backdrop" hidden>
+        <section class="dialog-window update-dialog" role="dialog" aria-modal="true" aria-labelledby="updates-dialog-title">
+          <header class="dialog-header">
+            <div class="section-heading">
+              <span class="section-icon" aria-hidden="true"><i data-brand-icon="github"></i></span>
+              <div>
+                <p class="eyebrow" data-i18n="updateEyebrow">Updates</p>
+                <h2 id="updates-dialog-title" data-i18n="updateTitle">Software update</h2>
+              </div>
+            </div>
+            <button class="dialog-close" type="button" data-dialog-close data-i18n-title="closeDialog" data-i18n-aria-label="closeDialog" title="Close" aria-label="Close">
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </header>
+          <div class="dialog-body update-dialog-body">
+            <div class="update-summary" aria-live="polite">
+              <div class="update-message">
+                <i data-lucide="git-branch" aria-hidden="true"></i>
+                <p id="update-status" class="update-status" data-i18n="updateIdle">
+                  Check GitHub Releases for the newest version.
+                </p>
+              </div>
+              <button id="check-update" class="secondary icon-command compact" type="button">
+                <i data-lucide="refresh-cw" aria-hidden="true"></i>
+                <span data-i18n="checkUpdateButton">Check</span>
+              </button>
+            </div>
+            <div id="update-details" class="update-details" hidden>
+              <dl>
+                <div>
+                  <dt data-i18n="currentVersion">Current</dt>
+                  <dd id="current-version">-</dd>
+                </div>
+                <div>
+                  <dt data-i18n="latestVersion">Latest</dt>
+                  <dd id="latest-version">-</dd>
+                </div>
+                <div>
+                  <dt data-i18n="publishedAt">Published</dt>
+                  <dd id="published-at">-</dd>
+                </div>
+              </dl>
+              <section class="update-section">
+                <h3 data-i18n="releaseNotes">Release notes</h3>
+                <pre id="release-notes" class="release-notes-scroll" tabindex="0"></pre>
+              </section>
+              <section class="update-section">
+                <h3 data-i18n="packageChecksums">Package checksums</h3>
+                <div id="release-assets" class="release-assets" tabindex="0"></div>
+              </section>
+              <div id="automatic-update" class="automatic-update" hidden>
+                <button id="install-update" class="primary wide icon-command" type="button">
+                  <i data-lucide="download" aria-hidden="true"></i>
+                  <span data-i18n="automaticUpdateButton">Download, install and restart</span>
+                </button>
+                <div id="update-progress" class="update-download-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden>
+                  <span id="update-progress-fill"></span>
+                </div>
+                <p id="update-install-status" class="update-install-status"></p>
+              </div>
+              <button id="open-release" class="secondary wide icon-command" type="button">
+                <i data-lucide="external-link" aria-hidden="true"></i>
+                <span data-i18n="openReleaseButton">Open release</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div id="settings-dialog" class="dialog-backdrop" hidden>
+        <section class="dialog-window settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settings-dialog-title">
+          <header class="dialog-header">
+            <div class="section-heading">
+              <span class="section-icon" aria-hidden="true"><i data-lucide="settings-2"></i></span>
+              <div>
+                <p class="eyebrow" data-i18n="preferencesEyebrow">Preferences</p>
+                <h2 id="settings-dialog-title" data-i18n="settingsTitle">Settings</h2>
+              </div>
+            </div>
+            <button class="dialog-close" type="button" data-dialog-close data-i18n-title="closeDialog" data-i18n-aria-label="closeDialog" title="Close" aria-label="Close">
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </header>
+          <div class="settings-layout">
+            <nav class="settings-nav" data-i18n-aria-label="settingsCategories" aria-label="Settings categories">
+              <button class="settings-nav-item is-active" type="button" aria-current="page">
+                <i data-lucide="palette" aria-hidden="true"></i>
+                <span data-i18n="appearanceCategory">Appearance</span>
+              </button>
+            </nav>
+            <div class="settings-content">
+              <div class="settings-section-heading">
+                <h3 data-i18n="themeTitle">Theme</h3>
+                <p data-i18n="themeDescription">Choose a preset appearance for FileNavigation.</p>
+              </div>
+              <div class="theme-presets" role="radiogroup" data-i18n-aria-label="themeTitle" aria-label="Theme">
+                <label class="theme-card theme-card-light">
+                  <input type="radio" name="theme" value="light" />
+                  <span class="theme-preview" aria-hidden="true">
+                    <span class="theme-preview-sidebar"></span>
+                    <span class="theme-preview-content"><i></i><i></i><i></i></span>
+                  </span>
+                  <span class="theme-card-label">
+                    <i data-lucide="sun" aria-hidden="true"></i>
+                    <span data-i18n="lightTheme">Light</span>
+                    <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
+                  </span>
+                </label>
+                <label class="theme-card theme-card-dark">
+                  <input type="radio" name="theme" value="dark" />
+                  <span class="theme-preview" aria-hidden="true">
+                    <span class="theme-preview-sidebar"></span>
+                    <span class="theme-preview-content"><i></i><i></i><i></i></span>
+                  </span>
+                  <span class="theme-card-label">
+                    <i data-lucide="moon" aria-hidden="true"></i>
+                    <span data-i18n="darkTheme">Dark</span>
+                    <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>

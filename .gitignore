@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .npm-cache/
+.tauri/
 
 src-tauri/target/
 src-tauri/gen/schemas/

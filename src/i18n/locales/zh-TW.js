@@ -75,7 +75,25 @@ const messages = {
     searchCancelled: "搜尋已取消",
     noVisibleResultsTitle: "沒有可見結果",
     noVisibleResultsText: "調整結果過濾或排序條件。",
-    visibleResultCount: (visible, total) => `顯示 ${visible} / ${total} 個結果`
+    visibleResultCount: (visible, total) => `顯示 ${visible} / ${total} 個結果`,
+    openUpdates: "檢查更新",
+    openSettings: "開啟設定",
+    closeDialog: "關閉視窗",
+    preferencesEyebrow: "偏好設定",
+    settingsTitle: "設定",
+    settingsCategories: "設定分類",
+    appearanceCategory: "外觀",
+    themeTitle: "主題",
+    themeDescription: "選擇 FileNavigation 的預設外觀。",
+    lightTheme: "淺色",
+    darkTheme: "深色",
+    automaticUpdateButton: "下載、安裝並重新啟動",
+    preparingUpdate: "正在識別系統並準備更新...",
+    updateDownloading: (percent) => "正在下載更新... " + percent + "%",
+    installingUpdate: "下載完成，正在安裝...",
+    restartingUpdate: "安裝完成，正在重新啟動...",
+    automaticUpdateFailed: "自動更新失敗。",
+    updaterUnavailable: "沒有適用於目前系統的更新套件。"
 };
 
 export default messages;

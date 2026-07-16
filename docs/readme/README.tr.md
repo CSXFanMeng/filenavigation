@@ -13,7 +13,8 @@ FileNavigation, seçilen yerel dizindeki dosya ve klasörleri bulmak için Rust 
 - Uygulamanın çizdiği kenarlık ve yerelleştirilmiş denetimlerle çerçevesiz pencere
 - Sabit çalışma alanı ve bağımsız kayan sonuç listesi
 - Ayrı dil dosyalarıyla 20 dil arayüzü
-- En son GitHub Release ve geçerli dilde sürüm notu kontrolü
+- Başlık çubuğu güncelleme penceresinde kaydırılabilir yerelleştirilmiş GitHub notları ve imzalı otomatik kurulum
+- Kalıcı açık ve koyu temalar sunan ayarlar penceresi
 - Bütünlük doğrulaması için yükleyici özetleri
 
 ## İndirmeler

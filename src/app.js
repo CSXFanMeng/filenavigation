@@ -1,13 +1,16 @@
-import { invoke } from "@tauri-apps/api/core";
+import { invoke, isTauri } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { open } from "@tauri-apps/plugin-dialog";
+import { relaunch } from "@tauri-apps/plugin-process";
+import { check as checkForAppUpdate } from "@tauri-apps/plugin-updater";
+import { siGithub } from "simple-icons";
 import {
   ArrowUpDown,
   ArrowUpRight,
   Check,
   ChevronDown,
-  CircleArrowUp,
+  Download,
   ExternalLink,
   File as FileIcon,
   Files,
@@ -25,14 +28,18 @@ import {
   ListOrdered,
   Maximize2,
   Minus,
+  Moon,
   PackageCheck,
+  Palette,
   Radar,
   RefreshCw,
   ScanLine,
   ScanSearch,
   Search,
   SearchX,
+  Settings2,
   ShieldAlert,
+  Sun,
   Timer,
   X,
   createElement as createIconElement,
@@ -45,7 +52,7 @@ const uiIcons = {
   ArrowUpDown,
   Check,
   ChevronDown,
-  CircleArrowUp,
+  Download,
   ExternalLink,
   Files,
   FileType,
@@ -61,18 +68,24 @@ const uiIcons = {
   ListOrdered,
   Maximize2,
   Minus,
+  Moon,
+  Palette,
   Radar,
   RefreshCw,
   ScanLine,
   ScanSearch,
   Search,
   SearchX,
+  Settings2,
   ShieldAlert,
+  Sun,
   Timer,
   X
 };
 
 const elements = {
+  openUpdates: document.querySelector("#open-updates"),
+  openSettings: document.querySelector("#open-settings"),
   windowMinimize: document.querySelector("#window-minimize"),
   windowMaximize: document.querySelector("#window-maximize"),
   windowClose: document.querySelector("#window-close"),
@@ -104,10 +117,18 @@ const elements = {
   publishedAt: document.querySelector("#published-at"),
   releaseNotes: document.querySelector("#release-notes"),
   releaseAssets: document.querySelector("#release-assets"),
-  openRelease: document.querySelector("#open-release")
+  automaticUpdate: document.querySelector("#automatic-update"),
+  installUpdate: document.querySelector("#install-update"),
+  updateProgress: document.querySelector("#update-progress"),
+  updateProgressFill: document.querySelector("#update-progress-fill"),
+  updateInstallStatus: document.querySelector("#update-install-status"),
+  openRelease: document.querySelector("#open-release"),
+  updatesDialog: document.querySelector("#updates-dialog"),
+  settingsDialog: document.querySelector("#settings-dialog"),
+  themeOptions: [...document.querySelectorAll('input[name="theme"]')]
 };
 
-const appWindow = getCurrentWindow();
+const appWindow = isTauri() ? getCurrentWindow() : null;
 
 let debounceTimer = 0;
 let activeSearchId = "";
@@ -123,15 +144,58 @@ let lastStatusTruncated = false;
 let lastUpdate = null;
 let lastUpdateStatus = "updateIdle";
 let lastUpdateError = "";
+let isInstallingUpdate = false;
+let updateInstallStatusKey = "";
+let updateDownloadPercent = 0;
+let updateInstallError = "";
+let currentTheme = normalizeTheme(localStorage.getItem("filenavigation.theme"));
+let activeDialog = null;
+let dialogTrigger = null;
 
 initLanguageSelect();
+applyTheme(currentTheme, false);
 applyTranslations();
 initializeIcons();
-initializeProgressListener();
+if (appWindow) {
+  initializeProgressListener();
+}
 
-elements.windowMinimize.addEventListener("click", () => appWindow.minimize());
-elements.windowMaximize.addEventListener("click", () => appWindow.toggleMaximize());
-elements.windowClose.addEventListener("click", () => appWindow.close());
+elements.windowMinimize.addEventListener("click", () => appWindow?.minimize());
+elements.windowMaximize.addEventListener("click", () => appWindow?.toggleMaximize());
+elements.windowClose.addEventListener("click", () => appWindow?.close());
+elements.openUpdates.addEventListener("click", () => {
+  openDialog(elements.updatesDialog, elements.openUpdates);
+  if (lastUpdateStatus === "updateIdle") {
+    checkForUpdates();
+  }
+});
+elements.openSettings.addEventListener("click", () => openDialog(elements.settingsDialog, elements.openSettings));
+
+document.querySelectorAll("[data-dialog-close]").forEach((button) => {
+  button.addEventListener("click", () => closeDialog(button.closest(".dialog-backdrop")));
+});
+
+document.querySelectorAll(".dialog-backdrop").forEach((backdrop) => {
+  backdrop.addEventListener("mousedown", (event) => {
+    if (event.target === backdrop) {
+      closeDialog(backdrop);
+    }
+  });
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && activeDialog) {
+    closeDialog(activeDialog);
+  }
+});
+
+elements.themeOptions.forEach((option) => {
+  option.addEventListener("change", () => {
+    if (option.checked) {
+      applyTheme(option.value);
+    }
+  });
+});
 
 elements.pickDir.addEventListener("click", async () => {
   const selected = await open({
@@ -160,12 +224,19 @@ elements.language.addEventListener("change", () => {
     lastStats.skipped
   );
   applyResultView();
+  lastUpdate = null;
+  lastUpdateStatus = "updateIdle";
+  lastUpdateError = "";
   renderUpdate();
+  if (!elements.updatesDialog.hidden) {
+    checkForUpdates();
+  }
 });
 
 elements.search.addEventListener("click", () => runSearch());
 elements.cancelSearch.addEventListener("click", () => cancelActiveSearch());
 elements.checkUpdate.addEventListener("click", () => checkForUpdates());
+elements.installUpdate.addEventListener("click", () => installAvailableUpdate());
 elements.openRelease.addEventListener("click", () => openReleasePage());
 elements.query.addEventListener("input", () => scheduleSearch());
 elements.rootPath.addEventListener("input", () => scheduleSearch());
@@ -195,6 +266,55 @@ function resolveLanguage(value) {
   return resolveLocaleLanguage(value, navigator.languages || [navigator.language]);
 }
 
+function normalizeTheme(value) {
+  return value === "dark" ? "dark" : "light";
+}
+
+function applyTheme(value, persist = true) {
+  currentTheme = normalizeTheme(value);
+  document.documentElement.dataset.theme = currentTheme;
+  document.querySelector('meta[name="theme-color"]').content = currentTheme === "dark" ? "#171b1a" : "#f4f6f5";
+  elements.themeOptions.forEach((option) => {
+    option.checked = option.value === currentTheme;
+  });
+
+  if (persist) {
+    localStorage.setItem("filenavigation.theme", currentTheme);
+  }
+}
+
+function openDialog(dialog, trigger) {
+  if (activeDialog && activeDialog !== dialog) {
+    closeDialog(activeDialog, false);
+  }
+
+  activeDialog = dialog;
+  dialogTrigger = trigger;
+  dialog.hidden = false;
+  document.body.classList.add("dialog-open");
+  window.requestAnimationFrame(() => {
+    dialog.classList.add("is-open");
+    dialog.querySelector(".dialog-close")?.focus();
+  });
+}
+
+function closeDialog(dialog, restoreFocus = true) {
+  if (!dialog || dialog.hidden) {
+    return;
+  }
+
+  dialog.classList.remove("is-open");
+  dialog.hidden = true;
+  if (activeDialog === dialog) {
+    activeDialog = null;
+    document.body.classList.remove("dialog-open");
+    if (restoreFocus) {
+      dialogTrigger?.focus();
+    }
+    dialogTrigger = null;
+  }
+}
+
 function translate(key, ...args) {
   return translateForLanguage(currentLanguage, key, ...args);
 }
@@ -207,6 +327,19 @@ function initializeIcons() {
       height: 18,
       "stroke-width": 1.8
     }
+  });
+
+  document.querySelectorAll('[data-brand-icon="github"]').forEach((container) => {
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("width", "18");
+    svg.setAttribute("height", "18");
+    svg.setAttribute("fill", "currentColor");
+    svg.setAttribute("aria-hidden", "true");
+    path.setAttribute("d", siGithub.path);
+    svg.append(path);
+    container.replaceWith(svg);
   });
 }
 
@@ -363,6 +496,75 @@ async function checkForUpdates() {
     elements.checkUpdate.disabled = false;
     elements.checkUpdate.classList.remove("is-busy");
     renderUpdate();
+  }
+}
+
+async function installAvailableUpdate() {
+  if (isInstallingUpdate || !lastUpdate?.has_update) {
+    return;
+  }
+
+  isInstallingUpdate = true;
+  elements.installUpdate.disabled = true;
+  setUpdateInstallStatus("preparingUpdate", 0);
+
+  try {
+    const update = await checkForAppUpdate({ timeout: 30_000 });
+    if (!update) {
+      throw new Error("updaterUnavailable");
+    }
+
+    let downloaded = 0;
+    let total = 0;
+
+    await update.downloadAndInstall((event) => {
+      if (event.event === "Started") {
+        total = Number(event.data.contentLength || 0);
+        downloaded = 0;
+        setUpdateInstallStatus("updateDownloading", 0);
+      } else if (event.event === "Progress") {
+        downloaded += Number(event.data.chunkLength || 0);
+        const percent = total > 0 ? Math.min(100, Math.round((downloaded / total) * 100)) : 0;
+        setUpdateInstallStatus("updateDownloading", percent);
+      } else if (event.event === "Finished") {
+        setUpdateInstallStatus("installingUpdate", 100);
+      }
+    });
+
+    setUpdateInstallStatus("restartingUpdate", 100);
+    await relaunch();
+  } catch (error) {
+    const key = String(error);
+    updateInstallError = key === "Error: updaterUnavailable" ? translate("updaterUnavailable") : key;
+    setUpdateInstallStatus("automaticUpdateFailed", updateDownloadPercent, updateInstallError);
+  } finally {
+    isInstallingUpdate = false;
+    elements.installUpdate.disabled = false;
+  }
+}
+
+function setUpdateInstallStatus(key, percent = 0, error = "") {
+  updateInstallStatusKey = key;
+  updateDownloadPercent = Math.max(0, Math.min(100, percent));
+  updateInstallError = error;
+  renderUpdateInstallStatus();
+}
+
+function renderUpdateInstallStatus() {
+  const hasStatus = Boolean(updateInstallStatusKey);
+  elements.updateProgress.hidden = !hasStatus;
+  elements.updateProgress.classList.toggle("is-indeterminate", hasStatus && updateInstallStatusKey === "preparingUpdate");
+  elements.updateProgress.setAttribute("aria-valuenow", String(updateDownloadPercent));
+  elements.updateProgressFill.style.width = `${updateDownloadPercent}%`;
+
+  if (!hasStatus) {
+    elements.updateInstallStatus.textContent = "";
+  } else if (updateInstallStatusKey === "updateDownloading") {
+    elements.updateInstallStatus.textContent = translate("updateDownloading", updateDownloadPercent);
+  } else if (updateInstallStatusKey === "automaticUpdateFailed" && updateInstallError) {
+    elements.updateInstallStatus.textContent = `${translate("automaticUpdateFailed")} ${updateInstallError}`;
+  } else {
+    elements.updateInstallStatus.textContent = translate(updateInstallStatusKey);
   }
 }
 
@@ -532,6 +734,10 @@ function renderUpdate() {
   } else {
     elements.updateStatus.textContent = translate(lastUpdateStatus);
   }
+
+  elements.openUpdates.classList.toggle("has-update", Boolean(lastUpdate?.has_update));
+  elements.automaticUpdate.hidden = !lastUpdate?.has_update;
+  renderUpdateInstallStatus();
 
   elements.updateDetails.hidden = !lastUpdate;
   if (!lastUpdate) {
