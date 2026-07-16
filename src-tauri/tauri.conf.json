@@ -58,7 +58,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDZGOTI2RkI4NzU0QjNGNEEKUldSS1AwdDF1RytTYjg5Y2RBTzZheUZGOEJhM1FCenVrM3BudFU5Z2I3b2RZa0lFSWJobDlWS2oK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZEMjQzNkY2Q0MwNDZCMEYKUldRUGF3VE05allrL2FpZEt2ZkRjZ1VTc3diSjdYSXpmeXZmbVhSSVoxWUdpN1dVNXVib295T0IK",
       "endpoints": [
         "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json"
       ],
