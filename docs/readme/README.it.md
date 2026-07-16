@@ -1,0 +1,43 @@
+# FileNavigation
+
+[Tutte le lingue](../../README.md) · [Ultima versione](https://github.com/CSXFanMeng/filenavigation/releases/latest)
+
+FileNavigation è un’app desktop Rust + Tauri per trovare file e cartelle in una directory locale selezionata. La ricerca viene eseguita interamente sul computer locale; nomi, percorsi e contenuti non vengono caricati.
+
+## Funzionalità
+
+- Ricerca locale di file e cartelle
+- Backend Rust/Tauri completamente asincrono con annullamento e avanzamento in tempo reale
+- Filtri, ordinamento e rendering progressivo dei risultati
+- Interfaccia moderna e responsive con icone Lucide e focus accessibile
+- Finestra senza cornice disegnata dall’app con controlli localizzati
+- Area di lavoro fissa e lista risultati con scorrimento indipendente
+- Interfaccia in 20 lingue memorizzate in file separati
+- Controllo dell’ultima GitHub Release con note nella lingua corrente
+- Visualizzazione dei digest degli installer per verificarne l’integrità
+
+## Download
+
+- Windows: `.exe` e `.msi`
+- macOS: `.dmg` e `.app`
+- Linux: `.deb`, `.rpm` e `.AppImage`
+
+Scarica i pacchetti da [GitHub Releases](https://github.com/CSXFanMeng/filenavigation/releases/latest).
+
+## Sviluppo E Build
+
+```bash
+npm install
+npm run tauri:dev
+npm run tauri:build
+```
+
+Se PowerShell blocca `npm.ps1`, usa `npm.cmd`. I pacchetti vengono creati in `src-tauri/target/release/bundle/`.
+
+## Lingue E Aggiornamenti
+
+Le traduzioni sono in `src/i18n/locales`. [RELEASE_NOTES.md](../../RELEASE_NOTES.md) usa blocchi `<!-- lang:xx -->`. Il controllo aggiornamenti prova la lingua corrente, poi l’inglese e infine il testo completo della Release.
+
+## Licenza
+
+Il progetto usa la [FileNavigation Non-Commercial Source License](../../LICENSE.md). Sono vietati uso commerciale, rivendita, hosting SaaS, servizi a pagamento, integrazione commerciale chiusa e distribuzione in prodotti commerciali.
