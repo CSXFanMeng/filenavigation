@@ -38,6 +38,12 @@ Gebruik `npm.cmd` als PowerShell `npm.ps1` blokkeert. Uitvoer staat in `src-taur
 
 Vertalingen staan in `src/i18n/locales`. [RELEASE_NOTES.md](../../RELEASE_NOTES.md) gebruikt `<!-- lang:xx -->`-blokken. De updatecontrole kiest eerst de actieve taal, daarna Engels en ten slotte de volledige Release-tekst.
 
+## Gebouwd Met OpenAI Codex En GPT-5.6
+
+OpenAI Codex en GPT-5.6 zijn als technische ontwikkelpartners gebruikt voor de architectuur, annuleerbaar asynchroon zoeken, modulaire internationalisatie, foutopsporing in de responsieve en randloze interface, platformonafhankelijke CI- en release-automatisering, meertalige documentatie en doorlopende verificatie met builds en tests.
+
+AI wordt alleen tijdens de ontwikkeling gebruikt. FileNavigation roept tijdens gebruik geen OpenAI-diensten aan en stuurt geen bestandsnamen, paden, zoekopdrachten of bestandsinhoud naar een model.
+
 ## Licentie
 
 Het project gebruikt de [FileNavigation Non-Commercial Source License](../../LICENSE.md). Commercieel gebruik, wederverkoop, SaaS-hosting, betaalde diensten, gesloten commerciële integratie en bundeling in commerciële producten zijn verboden.

@@ -38,6 +38,12 @@ Falls PowerShell `npm.ps1` blockiert, verwenden Sie `npm.cmd`. Die Ausgaben lieg
 
 Übersetzungen liegen in `src/i18n/locales`. [RELEASE_NOTES.md](../../RELEASE_NOTES.md) verwendet `<!-- lang:xx -->`-Blöcke. Die Updateprüfung nutzt zuerst die aktive Sprache, dann Englisch und zuletzt den vollständigen Release-Text.
 
+## Entwickelt Mit OpenAI Codex Und GPT-5.6
+
+OpenAI Codex und GPT-5.6 wurden als technische Entwicklungspartner für Architektur, abbrechbare asynchrone Suche, modulare Internationalisierung, Fehlerbehebung an der responsiven und rahmenlosen Oberfläche, plattformübergreifende CI- und Release-Automatisierung, mehrsprachige Dokumentation sowie fortlaufende Build- und Testprüfungen eingesetzt.
+
+KI wird ausschließlich während der Entwicklung verwendet. FileNavigation ruft zur Laufzeit keine OpenAI-Dienste auf und sendet keine Dateinamen, Pfade, Suchanfragen oder Dateiinhalte an ein Modell.
+
 ## Lizenz
 
 Das Projekt verwendet die [FileNavigation Non-Commercial Source License](../../LICENSE.md). Kommerzielle Nutzung, Weiterverkauf, SaaS-Hosting, bezahlte Dienste, geschlossene kommerzielle Integration und Einbindung in kommerzielle Produkte sind untersagt.

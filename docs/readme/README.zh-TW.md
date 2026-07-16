@@ -50,6 +50,12 @@ npm run tauri:build
 
 UI 翻譯分別保存在 `src/i18n/locales`。發布說明維護在 [RELEASE_NOTES.md](../../RELEASE_NOTES.md)，使用明確的 `<!-- lang:xx -->` 語言區塊。更新檢查會優先讀取目前 UI 語言，然後回退英文，最後回退完整 Release 正文。
 
+## 使用 OpenAI Codex 與 GPT-5.6 建置
+
+OpenAI Codex 與 GPT-5.6 作為工程協作工具參與了 FileNavigation 的開發，協助完成架構設計、可取消的全非同步搜尋、模組化國際化、響應式與無邊框介面除錯、跨平台 CI 與 Release 自動化、多語言文件，以及持續的建置和測試驗證。
+
+AI 僅用於開發過程。FileNavigation 執行時不會呼叫 OpenAI 服務，也不會將檔案名稱、路徑、搜尋內容或檔案內容傳送給任何模型。
+
 ## 授權
 
 本專案使用 [FileNavigation Non-Commercial Source License](../../LICENSE.md)。禁止商業使用、轉售、SaaS 託管、收費託管服務、閉源商業整合和商業產品綑綁。

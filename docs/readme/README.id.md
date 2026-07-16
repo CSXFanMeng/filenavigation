@@ -38,6 +38,12 @@ Jika PowerShell memblokir `npm.ps1`, gunakan `npm.cmd`. Hasil build berada di `s
 
 Terjemahan berada di `src/i18n/locales`. [RELEASE_NOTES.md](../../RELEASE_NOTES.md) menggunakan blok `<!-- lang:xx -->`. Pemeriksa pembaruan memilih bahasa aktif, lalu bahasa Inggris, dan terakhir isi Release lengkap.
 
+## Dibangun Dengan OpenAI Codex Dan GPT-5.6
+
+OpenAI Codex dan GPT-5.6 digunakan sebagai rekan kolaborasi rekayasa untuk arsitektur, pencarian asinkron yang dapat dibatalkan, internasionalisasi modular, debugging antarmuka responsif tanpa bingkai, otomatisasi CI dan rilis lintas platform, dokumentasi multibahasa, serta verifikasi build dan pengujian secara berkelanjutan.
+
+AI hanya digunakan selama pengembangan. FileNavigation tidak memanggil layanan OpenAI saat berjalan dan tidak mengirim nama file, jalur, pencarian, atau isi file ke model apa pun.
+
 ## Lisensi
 
 Proyek menggunakan [FileNavigation Non-Commercial Source License](../../LICENSE.md). Penggunaan komersial, penjualan kembali, hosting SaaS, layanan berbayar, integrasi komersial tertutup, dan bundling produk komersial dilarang.

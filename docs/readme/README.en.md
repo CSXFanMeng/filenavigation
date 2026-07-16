@@ -50,6 +50,12 @@ Build output is written to `src-tauri/target/release/bundle/`.
 
 UI translations are stored separately under `src/i18n/locales`. Release notes are maintained in [RELEASE_NOTES.md](../../RELEASE_NOTES.md) using explicit `<!-- lang:xx -->` blocks. The update checker requests the current UI language, then falls back to English and finally to the raw Release body.
 
+## Built With OpenAI Codex And GPT-5.6
+
+OpenAI Codex and GPT-5.6 were used as engineering collaborators for architecture, cancellable asynchronous search, modular internationalization, responsive and frameless UI debugging, cross-platform CI and release automation, multilingual documentation, and iterative build and test verification.
+
+AI is used only during development. FileNavigation does not call OpenAI services at runtime or send file names, paths, search queries, or file contents to a model.
+
 ## License
 
 This project uses the [FileNavigation Non-Commercial Source License](../../LICENSE.md). Commercial use, resale, SaaS hosting, paid managed services, closed-source commercial integration, and commercial product bundling are prohibited.

@@ -38,6 +38,12 @@ Nếu PowerShell chặn `npm.ps1`, hãy dùng `npm.cmd`. Sản phẩm build nằ
 
 Bản dịch nằm trong `src/i18n/locales`. [RELEASE_NOTES.md](../../RELEASE_NOTES.md) dùng các khối `<!-- lang:xx -->`. Trình cập nhật chọn ngôn ngữ hiện tại, sau đó tiếng Anh và cuối cùng là toàn bộ nội dung Release.
 
+## Được Xây Dựng Với OpenAI Codex Và GPT-5.6
+
+OpenAI Codex và GPT-5.6 được sử dụng như các cộng sự kỹ thuật cho kiến trúc, tìm kiếm bất đồng bộ có thể hủy, quốc tế hóa theo mô-đun, gỡ lỗi giao diện đáp ứng không viền, tự động hóa CI và phát hành đa nền tảng, tài liệu đa ngôn ngữ, cùng quá trình xác minh liên tục bằng bản dựng và kiểm thử.
+
+AI chỉ được sử dụng trong quá trình phát triển. FileNavigation không gọi dịch vụ OpenAI khi chạy và không gửi tên tệp, đường dẫn, nội dung tìm kiếm hoặc nội dung tệp đến bất kỳ mô hình nào.
+
 ## Giấy Phép
 
 Dự án sử dụng [FileNavigation Non-Commercial Source License](../../LICENSE.md). Cấm sử dụng thương mại, bán lại, lưu trữ SaaS, dịch vụ trả phí, tích hợp thương mại mã nguồn đóng và đóng gói trong sản phẩm thương mại.

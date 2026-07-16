@@ -38,6 +38,12 @@ PowerShell `npm.ps1` dosyasını engellerse `npm.cmd` kullanın. Çıktılar `sr
 
 Çeviriler `src/i18n/locales` altında tutulur. [RELEASE_NOTES.md](../../RELEASE_NOTES.md), `<!-- lang:xx -->` bloklarını kullanır. Güncelleme denetimi geçerli dili, ardından İngilizceyi ve son olarak tam Release metnini seçer.
 
+## OpenAI Codex Ve GPT-5.6 İle Geliştirildi
+
+OpenAI Codex ve GPT-5.6; mimari, iptal edilebilir eşzamansız arama, modüler uluslararasılaştırma, duyarlı ve çerçevesiz arayüz hata ayıklama, platformlar arası CI ve sürüm otomasyonu, çok dilli belgeler ve sürekli derleme ile test doğrulaması için mühendislik iş birliği araçları olarak kullanıldı.
+
+Yapay zeka yalnızca geliştirme sırasında kullanılır. FileNavigation çalışma zamanında OpenAI hizmetlerini çağırmaz ve dosya adlarını, yolları, aramaları veya dosya içeriklerini herhangi bir modele göndermez.
+
 ## Lisans
 
 Proje [FileNavigation Non-Commercial Source License](../../LICENSE.md) kullanır. Ticari kullanım, yeniden satış, SaaS barındırma, ücretli hizmetler, kapalı ticari entegrasyon ve ticari ürünlerde paketleme yasaktır.

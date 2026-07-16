@@ -1,5 +1,21 @@
 # FileNavigation
 
+A fast, private, cross-platform desktop file search application built with Rust and Tauri.
+
+## Built With OpenAI Codex And GPT-5.6
+
+OpenAI Codex and GPT-5.6 were used as engineering collaborators throughout FileNavigation's development. They helped:
+
+- Explore the repository and define the Rust/Tauri architecture
+- Design cancellable asynchronous search and live progress reporting
+- Refactor UI translations into 20 independent locale files
+- Diagnose responsive layout, frameless-window, and Windows GUI-subsystem issues
+- Build and review the GitHub Actions cross-platform release pipeline
+- Create multilingual documentation and language-aware release notes
+- Run iterative verification with frontend builds, Rust checks and tests, CI results, and executable-header inspection
+
+AI was used during development only. FileNavigation does not call OpenAI services at runtime and does not send file names, paths, search queries, or file contents to a model.
+
 Complete project documentation is available in the same 20 languages supported by the application.
 
 | Language | Documentation | Language | Documentation |
