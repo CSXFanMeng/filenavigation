@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Ajustes",
     settingsCategories: "Categorías de ajustes",
     appearanceCategory: "Apariencia",
+    languageDescription: "Elige el idioma de la interfaz.",
     themeTitle: "Tema",
     themeDescription: "Elige una apariencia predefinida para FileNavigation.",
     lightTheme: "Claro",

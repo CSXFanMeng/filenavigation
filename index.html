@@ -86,17 +86,6 @@
         <aside class="sidebar">
           <div class="sidebar-content">
             <div class="field">
-              <label for="language">
-                <i data-lucide="languages" aria-hidden="true"></i>
-                <span data-i18n="languageLabel">Language</span>
-              </label>
-              <div class="control-shell select-shell">
-                <select id="language" aria-label="Language"></select>
-                <i data-lucide="chevron-down" aria-hidden="true"></i>
-              </div>
-            </div>
-
-            <div class="field">
               <label for="root-path">
                 <i data-lucide="folder-tree" aria-hidden="true"></i>
                 <span data-i18n="rootLabel">Search folder</span>
@@ -368,43 +357,95 @@
             </button>
           </header>
           <div class="settings-layout">
-            <nav class="settings-nav" data-i18n-aria-label="settingsCategories" aria-label="Settings categories">
-              <button class="settings-nav-item is-active" type="button" aria-current="page">
+            <nav class="settings-nav" role="tablist" data-i18n-aria-label="settingsCategories" aria-label="Settings categories">
+              <button
+                id="settings-tab-appearance"
+                class="settings-nav-item is-active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="settings-panel-appearance"
+                data-settings-target="appearance"
+              >
                 <i data-lucide="palette" aria-hidden="true"></i>
                 <span data-i18n="appearanceCategory">Appearance</span>
               </button>
+              <button
+                id="settings-tab-language"
+                class="settings-nav-item"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="settings-panel-language"
+                data-settings-target="language"
+                tabindex="-1"
+              >
+                <i data-lucide="languages" aria-hidden="true"></i>
+                <span data-i18n="languageLabel">Language</span>
+              </button>
             </nav>
             <div class="settings-content">
-              <div class="settings-section-heading">
-                <h3 data-i18n="themeTitle">Theme</h3>
-                <p data-i18n="themeDescription">Choose a preset appearance for FileNavigation.</p>
-              </div>
-              <div class="theme-presets" role="radiogroup" data-i18n-aria-label="themeTitle" aria-label="Theme">
-                <label class="theme-card theme-card-light">
-                  <input type="radio" name="theme" value="light" />
-                  <span class="theme-preview" aria-hidden="true">
-                    <span class="theme-preview-sidebar"></span>
-                    <span class="theme-preview-content"><i></i><i></i><i></i></span>
-                  </span>
-                  <span class="theme-card-label">
-                    <i data-lucide="sun" aria-hidden="true"></i>
-                    <span data-i18n="lightTheme">Light</span>
-                    <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
-                  </span>
-                </label>
-                <label class="theme-card theme-card-dark">
-                  <input type="radio" name="theme" value="dark" />
-                  <span class="theme-preview" aria-hidden="true">
-                    <span class="theme-preview-sidebar"></span>
-                    <span class="theme-preview-content"><i></i><i></i><i></i></span>
-                  </span>
-                  <span class="theme-card-label">
-                    <i data-lucide="moon" aria-hidden="true"></i>
-                    <span data-i18n="darkTheme">Dark</span>
-                    <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
-                  </span>
-                </label>
-              </div>
+              <section
+                id="settings-panel-appearance"
+                class="settings-section"
+                role="tabpanel"
+                aria-labelledby="settings-tab-appearance"
+                data-settings-section="appearance"
+              >
+                <div class="settings-section-heading">
+                  <h3 data-i18n="themeTitle">Theme</h3>
+                  <p data-i18n="themeDescription">Choose a preset appearance for FileNavigation.</p>
+                </div>
+                <div class="theme-presets" role="radiogroup" data-i18n-aria-label="themeTitle" aria-label="Theme">
+                  <label class="theme-card theme-card-light">
+                    <input type="radio" name="theme" value="light" />
+                    <span class="theme-preview" aria-hidden="true">
+                      <span class="theme-preview-sidebar"></span>
+                      <span class="theme-preview-content"><i></i><i></i><i></i></span>
+                    </span>
+                    <span class="theme-card-label">
+                      <i data-lucide="sun" aria-hidden="true"></i>
+                      <span data-i18n="lightTheme">Light</span>
+                      <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
+                    </span>
+                  </label>
+                  <label class="theme-card theme-card-dark">
+                    <input type="radio" name="theme" value="dark" />
+                    <span class="theme-preview" aria-hidden="true">
+                      <span class="theme-preview-sidebar"></span>
+                      <span class="theme-preview-content"><i></i><i></i><i></i></span>
+                    </span>
+                    <span class="theme-card-label">
+                      <i data-lucide="moon" aria-hidden="true"></i>
+                      <span data-i18n="darkTheme">Dark</span>
+                      <i class="theme-selected" data-lucide="check" aria-hidden="true"></i>
+                    </span>
+                  </label>
+                </div>
+              </section>
+              <section
+                id="settings-panel-language"
+                class="settings-section"
+                role="tabpanel"
+                aria-labelledby="settings-tab-language"
+                data-settings-section="language"
+                hidden
+              >
+                <div class="settings-section-heading">
+                  <h3 data-i18n="languageLabel">Language</h3>
+                  <p data-i18n="languageDescription">Choose the interface language.</p>
+                </div>
+                <div class="field settings-field">
+                  <label for="language">
+                    <i data-lucide="languages" aria-hidden="true"></i>
+                    <span data-i18n="languageLabel">Language</span>
+                  </label>
+                  <div class="control-shell select-shell">
+                    <select id="language" data-i18n-aria-label="languageLabel" aria-label="Language"></select>
+                    <i data-lucide="chevron-down" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </section>
             </div>
           </div>
         </section>

@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "設定",
     settingsCategories: "設定分類",
     appearanceCategory: "外觀",
+    languageDescription: "選擇介面顯示語言。",
     themeTitle: "主題",
     themeDescription: "選擇 FileNavigation 的預設外觀。",
     lightTheme: "淺色",

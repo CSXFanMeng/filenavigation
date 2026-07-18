@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Ayarlar",
     settingsCategories: "Ayar kategorileri",
     appearanceCategory: "Görünüm",
+    languageDescription: "Arayüz dilini seçin.",
     themeTitle: "Tema",
     themeDescription: "FileNavigation için hazır bir görünüm seçin.",
     lightTheme: "Açık",

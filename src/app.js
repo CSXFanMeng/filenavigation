@@ -125,6 +125,8 @@ const elements = {
   openRelease: document.querySelector("#open-release"),
   updatesDialog: document.querySelector("#updates-dialog"),
   settingsDialog: document.querySelector("#settings-dialog"),
+  settingsNavItems: [...document.querySelectorAll("[data-settings-target]")],
+  settingsSections: [...document.querySelectorAll("[data-settings-section]")],
   themeOptions: [...document.querySelectorAll('input[name="theme"]')]
 };
 
@@ -194,6 +196,26 @@ elements.themeOptions.forEach((option) => {
     if (option.checked) {
       applyTheme(option.value);
     }
+  });
+});
+
+elements.settingsNavItems.forEach((item, index) => {
+  item.addEventListener("click", () => activateSettingsSection(item.dataset.settingsTarget));
+  item.addEventListener("keydown", (event) => {
+    const previous = event.key === "ArrowUp" || event.key === "ArrowLeft";
+    const next = event.key === "ArrowDown" || event.key === "ArrowRight";
+    if (!previous && !next && event.key !== "Home" && event.key !== "End") {
+      return;
+    }
+
+    event.preventDefault();
+    let targetIndex = index;
+    if (event.key === "Home") targetIndex = 0;
+    else if (event.key === "End") targetIndex = elements.settingsNavItems.length - 1;
+    else targetIndex = (index + (next ? 1 : -1) + elements.settingsNavItems.length) % elements.settingsNavItems.length;
+
+    const target = elements.settingsNavItems[targetIndex];
+    activateSettingsSection(target.dataset.settingsTarget, true);
   });
 });
 
@@ -281,6 +303,20 @@ function applyTheme(value, persist = true) {
   if (persist) {
     localStorage.setItem("filenavigation.theme", currentTheme);
   }
+}
+
+function activateSettingsSection(target, focus = false) {
+  elements.settingsNavItems.forEach((item) => {
+    const selected = item.dataset.settingsTarget === target;
+    item.classList.toggle("is-active", selected);
+    item.setAttribute("aria-selected", String(selected));
+    item.tabIndex = selected ? 0 : -1;
+    if (selected && focus) item.focus();
+  });
+
+  elements.settingsSections.forEach((section) => {
+    section.hidden = section.dataset.settingsSection !== target;
+  });
 }
 
 function openDialog(dialog, trigger) {
@@ -778,7 +814,10 @@ function renderReleaseAssets(assets) {
     name.textContent = asset.name;
 
     const meta = document.createElement("span");
-    meta.textContent = `${formatBytes(asset.size)} · ${asset.digest || translate("noPackageChecksums")}`;
+    const metadata = [];
+    if (asset.size > 0) metadata.push(formatBytes(asset.size));
+    if (asset.digest) metadata.push(asset.digest);
+    meta.textContent = metadata.join(" · ") || translate("noPackageChecksums");
 
     item.append(icon, name, meta);
     fragment.append(item);

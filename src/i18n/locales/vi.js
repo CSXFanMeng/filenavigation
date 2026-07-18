@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Cài đặt",
     settingsCategories: "Danh mục cài đặt",
     appearanceCategory: "Giao diện",
+    languageDescription: "Chọn ngôn ngữ giao diện.",
     themeTitle: "Chủ đề",
     themeDescription: "Chọn giao diện cài sẵn cho FileNavigation.",
     lightTheme: "Sáng",

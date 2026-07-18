@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "การตั้งค่า",
     settingsCategories: "หมวดหมู่การตั้งค่า",
     appearanceCategory: "รูปลักษณ์",
+    languageDescription: "เลือกภาษาของอินเทอร์เฟซ",
     themeTitle: "ธีม",
     themeDescription: "เลือกรูปลักษณ์ที่ตั้งไว้ล่วงหน้าสำหรับ FileNavigation",
     lightTheme: "สว่าง",

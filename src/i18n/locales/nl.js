@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Instellingen",
     settingsCategories: "Instellingscategorieën",
     appearanceCategory: "Uiterlijk",
+    languageDescription: "Kies de interfacetaal.",
     themeTitle: "Thema",
     themeDescription: "Kies een vooraf ingesteld uiterlijk voor FileNavigation.",
     lightTheme: "Licht",

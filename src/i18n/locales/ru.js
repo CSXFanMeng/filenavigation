@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Настройки",
     settingsCategories: "Категории настроек",
     appearanceCategory: "Оформление",
+    languageDescription: "Выберите язык интерфейса.",
     themeTitle: "Тема",
     themeDescription: "Выберите готовое оформление FileNavigation.",
     lightTheme: "Светлая",

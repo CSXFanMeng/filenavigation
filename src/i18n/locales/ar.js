@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "الإعدادات",
     settingsCategories: "فئات الإعدادات",
     appearanceCategory: "المظهر",
+    languageDescription: "اختر لغة الواجهة.",
     themeTitle: "السمة",
     themeDescription: "اختر مظهرا جاهزا لـ FileNavigation.",
     lightTheme: "فاتح",

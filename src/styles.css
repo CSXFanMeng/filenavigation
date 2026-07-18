@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light;
   color: #17201d;
   background: #f2f5f3;
   font-family:
@@ -30,6 +31,8 @@
   --label: #45514d;
   --icon-muted: #73817b;
   --control-hover-border: #aebcb5;
+  --control-hover-bg: #fbfcfc;
+  --control-active-bg: #f2f8f5;
   --placeholder: #9aa5a0;
   --button-dark: #202a26;
   --button-dark-hover: #303d37;
@@ -50,6 +53,12 @@
   --result-name: #25302b;
   --open-icon: #a1aba7;
   --scroll-thumb: #bdc8c3;
+  --select-option-bg: #ffffff;
+  --select-option-hover: #edf6f3;
+  --select-option-selected: #d9eee8;
+  --select-option-selected-ink: #045d4b;
+  --pressed-bg: #e7eeeb;
+  --disabled-bg: #f1f4f2;
   --amber-border: #edd9b5;
   --blue-border: #c9deed;
   --backdrop: rgba(18, 25, 22, 0.42);
@@ -80,6 +89,8 @@
   --label: #c6d0cc;
   --icon-muted: #8f9d97;
   --control-hover-border: #5a6862;
+  --control-hover-bg: #1d2321;
+  --control-active-bg: #202825;
   --placeholder: #7f8d87;
   --button-dark: #d8e2de;
   --button-dark-hover: #ffffff;
@@ -100,6 +111,12 @@
   --result-name: #e4ebe8;
   --open-icon: #77847f;
   --scroll-thumb: #56635e;
+  --select-option-bg: #171b1a;
+  --select-option-hover: #26312d;
+  --select-option-selected: #1d4a41;
+  --select-option-selected-ink: #f0fffb;
+  --pressed-bg: #2a332f;
+  --disabled-bg: #1d2321;
   --amber-border: #5a4524;
   --blue-border: #2c526b;
   --backdrop: rgba(0, 0, 0, 0.62);
@@ -107,6 +124,11 @@
 
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: var(--select-option-selected);
+  color: var(--select-option-selected-ink);
 }
 
 html,
@@ -275,6 +297,11 @@ p {
   color: var(--ink);
 }
 
+.window-control:active {
+  background: var(--pressed-bg);
+  color: var(--ink);
+}
+
 .window-control.close:hover {
   background: var(--close-hover);
   color: var(--on-accent);
@@ -350,10 +377,12 @@ p {
 
 .control-shell:hover {
   border-color: var(--control-hover-border);
+  background: var(--control-hover-bg);
 }
 
 .control-shell:focus-within {
   border-color: var(--accent);
+  background: var(--control-active-bg);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
@@ -391,6 +420,33 @@ p {
   appearance: none;
   cursor: pointer;
   padding: 0 34px 0 11px;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] .control-shell select {
+  color-scheme: dark;
+}
+
+.control-shell select option,
+.control-shell select optgroup {
+  background-color: var(--select-option-bg);
+  color: var(--ink);
+}
+
+.control-shell select option:hover {
+  background-color: var(--select-option-hover);
+}
+
+.control-shell select option:checked {
+  background-color: var(--select-option-selected);
+  color: var(--select-option-selected-ink);
+}
+
+.control-shell input:disabled,
+.control-shell select:disabled {
+  background: var(--disabled-bg);
+  color: var(--ink-soft);
+  cursor: not-allowed;
 }
 
 [dir="rtl"] .control-shell select {
@@ -446,6 +502,19 @@ input[type="search"]::-webkit-search-cancel-button {
 .primary:active:not(:disabled),
 .secondary:active:not(:disabled) {
   transform: translateY(1px);
+}
+
+.icon-button:active:not(:disabled) {
+  background: var(--button-dark-hover);
+}
+
+.primary:active:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+.secondary:active:not(:disabled) {
+  background: var(--pressed-bg);
+  color: var(--ink);
 }
 
 .icon-button {
@@ -542,6 +611,16 @@ button.is-busy svg {
 .check-row:hover {
   border-color: var(--checkbox-border-hover);
   background: var(--checkbox-hover);
+}
+
+.check-row:has(input:checked) {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.check-row:active {
+  background: var(--pressed-bg);
 }
 
 .check-row input {
@@ -965,6 +1044,7 @@ button.is-busy svg {
   font-size: 12px;
   font-weight: 720;
   text-align: start;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
 .settings-nav-item svg {
@@ -977,6 +1057,20 @@ button.is-busy svg {
   border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
   background: var(--accent-soft);
   color: var(--accent-strong);
+}
+
+.settings-nav-item:hover:not(.is-active) {
+  border-color: var(--border);
+  background: var(--control-hover-bg);
+  color: var(--ink);
+}
+
+.settings-section[hidden] {
+  display: none;
+}
+
+.settings-field {
+  width: min(100%, 380px);
 }
 
 .settings-content {
@@ -1377,9 +1471,14 @@ button.is-busy svg {
   transition: background 130ms ease, box-shadow 130ms ease;
 }
 
-.result-row:hover {
+.result-row:hover,
+.result-row:focus-within {
   background: var(--row-hover);
   box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.result-row:active {
+  background: var(--pressed-bg);
 }
 
 .file-icon {
@@ -1461,7 +1560,8 @@ button.is-busy svg {
   transform: translateX(2px);
 }
 
-[dir="rtl"] .result-row:hover {
+[dir="rtl"] .result-row:hover,
+[dir="rtl"] .result-row:focus-within {
   box-shadow: inset -3px 0 0 var(--accent);
 }
 

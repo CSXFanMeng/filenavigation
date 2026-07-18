@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "Pengaturan",
     settingsCategories: "Kategori pengaturan",
     appearanceCategory: "Tampilan",
+    languageDescription: "Pilih bahasa antarmuka.",
     themeTitle: "Tema",
     themeDescription: "Pilih tampilan prasetel untuk FileNavigation.",
     lightTheme: "Terang",

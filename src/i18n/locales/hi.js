@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "सेटिंग",
     settingsCategories: "सेटिंग श्रेणियाँ",
     appearanceCategory: "दिखावट",
+    languageDescription: "इंटरफ़ेस की भाषा चुनें।",
     themeTitle: "थीम",
     themeDescription: "FileNavigation के लिए पूर्वनिर्धारित दिखावट चुनें।",
     lightTheme: "हल्का",

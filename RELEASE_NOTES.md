@@ -1,199 +1,159 @@
 <!-- lang:en -->
-## FileNavigation v0.1.6
+## FileNavigation v0.1.7
 
-- Moved update checking to a GitHub icon in the title bar and added a responsive update window with independently scrollable localized release notes.
-- Added a settings window with category navigation and persistent light and dark theme presets.
-- Added signed automatic updates that select the compatible operating-system and CPU-architecture package, then download, install, and restart the app.
-- Completed every interface translation key across all 20 supported languages.
-- Users on v0.1.5 must install v0.1.6 manually once; automatic updates apply to subsequent signed releases.
-<!-- /lang -->
-
-<!-- lang:zh-CN -->
-## FileNavigation v0.1.6
-
-- 将更新检查移至标题栏 GitHub 图标，并新增响应式更新窗口；本地化更新日志拥有独立滚动区域。
-- 新增带分类导航的设置窗口，以及可持久保存的浅色和深色预设主题。
-- 新增签名自动更新，可按操作系统和 CPU 架构选择兼容安装包，然后自动下载、安装并重启应用。
-- 补齐全部 20 种支持语言的所有界面翻译键。
-- v0.1.5 用户需要手动安装一次 v0.1.6；后续签名版本即可使用自动更新。
-<!-- /lang -->
-
-<!-- lang:zh-TW -->
-## FileNavigation v0.1.6
-
-- 將更新檢查移至標題列 GitHub 圖示，並新增響應式更新視窗；本地化更新日誌擁有獨立捲動區域。
-- 新增含分類導覽的設定視窗，以及可持久儲存的淺色與深色預設主題。
-- 新增簽章自動更新，可依作業系統和 CPU 架構選擇相容安裝套件，接著自動下載、安裝並重新啟動應用程式。
-- 補齊全部 20 種支援語言的所有介面翻譯鍵。
-- v0.1.5 使用者需要手動安裝一次 v0.1.6；後續簽章版本即可使用自動更新。
-<!-- /lang -->
-
-<!-- lang:es -->
-## FileNavigation v0.1.6
-
-- La comprobación de actualizaciones se movió a un icono de GitHub en la barra de título y se añadió una ventana adaptable con notas localizadas y desplazamiento independiente.
-- Se añadió una ventana de ajustes con categorías y temas claro y oscuro persistentes.
-- Se añadieron actualizaciones automáticas firmadas que eligen el paquete compatible con el sistema operativo y la arquitectura, lo descargan, instalan y reinician la aplicación.
-- Se completaron todas las claves de interfaz en los 20 idiomas compatibles.
-- Los usuarios de v0.1.5 deben instalar v0.1.6 manualmente una vez; las versiones firmadas posteriores se actualizarán automáticamente.
-<!-- /lang -->
-
-<!-- lang:fr -->
-## FileNavigation v0.1.6
-
-- La recherche de mises à jour a été déplacée vers une icône GitHub dans la barre de titre, avec une fenêtre adaptative et des notes localisées défilant indépendamment.
-- Ajout d'une fenêtre de paramètres avec navigation par catégories et thèmes clair et sombre persistants.
-- Ajout de mises à jour automatiques signées qui choisissent le paquet compatible avec le système et l'architecture, puis téléchargent, installent et redémarrent l'application.
-- Toutes les clés d'interface sont maintenant traduites dans les 20 langues prises en charge.
-- Les utilisateurs de v0.1.5 doivent installer v0.1.6 manuellement une fois ; les versions signées suivantes seront automatiques.
-<!-- /lang -->
-
-<!-- lang:de -->
-## FileNavigation v0.1.6
-
-- Die Update-Prüfung befindet sich jetzt als GitHub-Symbol in der Titelleiste; das responsive Update-Fenster besitzt separat scrollbare lokalisierte Versionshinweise.
-- Neues Einstellungsfenster mit Kategorienavigation und dauerhaft gespeicherten hellen und dunklen Designs.
-- Signierte automatische Updates wählen das passende Paket für Betriebssystem und CPU-Architektur, laden es herunter, installieren es und starten die App neu.
-- Sämtliche Oberflächentexte sind nun in allen 20 unterstützten Sprachen vollständig.
-- Nutzer von v0.1.5 müssen v0.1.6 einmal manuell installieren; spätere signierte Versionen werden automatisch aktualisiert.
-<!-- /lang -->
-
-<!-- lang:ja -->
-## FileNavigation v0.1.6
-
-- 更新確認をタイトルバーの GitHub アイコンへ移動し、ローカライズされた更新ログを個別にスクロールできるレスポンシブな更新ウィンドウを追加しました。
-- カテゴリーナビゲーションを備えた設定ウィンドウと、保存されるライト・ダークテーマを追加しました。
-- OS と CPU アーキテクチャに対応する署名済みパッケージを選択し、ダウンロード、インストール、再起動する自動更新を追加しました。
-- 対応する 20 言語すべてで全 UI 翻訳キーを完成させました。
-- v0.1.5 の利用者は v0.1.6 を一度手動でインストールする必要があります。以降の署名済みリリースは自動更新できます。
-<!-- /lang -->
-
-<!-- lang:ko -->
-## FileNavigation v0.1.6
-
-- 업데이트 확인을 제목 표시줄의 GitHub 아이콘으로 옮기고, 현지화된 릴리스 노트를 별도로 스크롤할 수 있는 반응형 업데이트 창을 추가했습니다.
-- 카테고리 탐색이 있는 설정 창과 저장되는 라이트 및 다크 테마를 추가했습니다.
-- 운영체제와 CPU 아키텍처에 맞는 서명된 패키지를 선택해 다운로드, 설치 후 앱을 다시 시작하는 자동 업데이트를 추가했습니다.
-- 지원되는 20개 언어의 모든 UI 번역 키를 완성했습니다.
-- v0.1.5 사용자는 v0.1.6을 한 번 수동 설치해야 하며, 이후 서명된 릴리스부터 자동 업데이트됩니다.
-<!-- /lang -->
-
-<!-- lang:pt-BR -->
-## FileNavigation v0.1.6
-
-- A verificação de atualizações foi movida para um ícone do GitHub na barra de título, com uma janela responsiva e notas localizadas de rolagem independente.
-- Adicionada janela de configurações com navegação por categorias e temas claro e escuro persistentes.
-- Adicionadas atualizações automáticas assinadas que escolhem o pacote compatível com o sistema e a arquitetura, baixam, instalam e reiniciam o aplicativo.
-- Todas as chaves da interface foram concluídas nos 20 idiomas compatíveis.
-- Usuários da v0.1.5 precisam instalar a v0.1.6 manualmente uma vez; versões assinadas posteriores serão atualizadas automaticamente.
-<!-- /lang -->
-
-<!-- lang:ru -->
-## FileNavigation v0.1.6
-
-- Проверка обновлений перенесена на значок GitHub в строке заголовка; добавлено адаптивное окно с отдельно прокручиваемыми локализованными примечаниями.
-- Добавлено окно настроек с категориями и сохраняемыми светлой и тёмной темами.
-- Подписанные автоматические обновления выбирают пакет для ОС и архитектуры процессора, скачивают и устанавливают его, затем перезапускают приложение.
-- Полностью переведены все ключи интерфейса для 20 поддерживаемых языков.
-- Пользователям v0.1.5 нужно один раз установить v0.1.6 вручную; последующие подписанные версии будут обновляться автоматически.
-<!-- /lang -->
-
-<!-- lang:ar -->
-## FileNavigation v0.1.6
-
-- نُقل فحص التحديثات إلى أيقونة GitHub في شريط العنوان، وأضيفت نافذة متجاوبة مع سجل إصدار مترجم قابل للتمرير بشكل مستقل.
-- أضيفت نافذة إعدادات مع تنقل بالفئات وسمات فاتحة وداكنة محفوظة.
-- أضيفت تحديثات تلقائية موقعة تختار الحزمة المتوافقة مع نظام التشغيل ومعمارية المعالج، ثم تنزلها وتثبتها وتعيد تشغيل التطبيق.
-- اكتملت جميع مفاتيح واجهة المستخدم في اللغات العشرين المدعومة.
-- يجب على مستخدمي v0.1.5 تثبيت v0.1.6 يدويا مرة واحدة؛ وستعمل التحديثات التلقائية مع الإصدارات الموقعة اللاحقة.
-<!-- /lang -->
-
-<!-- lang:hi -->
-## FileNavigation v0.1.6
-
-- अपडेट जाँच को शीर्षक पट्टी के GitHub आइकन में ले जाया गया और अलग स्क्रॉल वाली स्थानीयकृत रिलीज़ टिप्पणियों की रिस्पॉन्सिव विंडो जोड़ी गई।
-- श्रेणी नेविगेशन वाली सेटिंग विंडो और सहेजे जाने वाले हल्के व गहरे थीम जोड़े गए।
-- हस्ताक्षरित स्वचालित अपडेट सिस्टम और CPU आर्किटेक्चर के अनुकूल पैकेज चुनकर उसे डाउनलोड, इंस्टॉल और ऐप को पुनः आरंभ करते हैं।
-- सभी 20 समर्थित भाषाओं में हर UI अनुवाद कुंजी पूरी की गई।
-- v0.1.5 उपयोगकर्ताओं को v0.1.6 एक बार मैन्युअल रूप से इंस्टॉल करना होगा; बाद के हस्ताक्षरित रिलीज़ स्वतः अपडेट होंगे।
-<!-- /lang -->
-
-<!-- lang:it -->
-## FileNavigation v0.1.6
-
-- Il controllo aggiornamenti è stato spostato su un'icona GitHub nella barra del titolo, con una finestra reattiva e note localizzate a scorrimento indipendente.
-- Aggiunta una finestra delle impostazioni con categorie e temi chiaro e scuro persistenti.
-- Gli aggiornamenti automatici firmati scelgono il pacchetto compatibile con sistema e architettura, lo scaricano, installano e riavviano l'app.
-- Completate tutte le chiavi dell'interfaccia nelle 20 lingue supportate.
-- Gli utenti della v0.1.5 devono installare manualmente la v0.1.6 una volta; le versioni firmate successive si aggiorneranno automaticamente.
-<!-- /lang -->
-
-<!-- lang:nl -->
-## FileNavigation v0.1.6
-
-- De updatecontrole staat nu als GitHub-pictogram in de titelbalk, met een responsief venster en afzonderlijk schuifbare gelokaliseerde release-opmerkingen.
-- Een instellingenvenster met categorienavigatie en blijvend opgeslagen lichte en donkere thema's is toegevoegd.
-- Ondertekende automatische updates kiezen het juiste pakket voor besturingssysteem en CPU-architectuur, downloaden en installeren het en herstarten de app.
-- Alle interfacevertalingen zijn voltooid voor de 20 ondersteunde talen.
-- Gebruikers van v0.1.5 moeten v0.1.6 eenmalig handmatig installeren; latere ondertekende releases worden automatisch bijgewerkt.
-<!-- /lang -->
-
-<!-- lang:tr -->
-## FileNavigation v0.1.6
-
-- Güncelleme denetimi başlık çubuğundaki GitHub simgesine taşındı; yerelleştirilmiş sürüm notları ayrı kaydırılabilen duyarlı bir pencere eklendi.
-- Kategori gezinmeli ayarlar penceresi ve kalıcı açık ile koyu temalar eklendi.
-- İmzalı otomatik güncellemeler işletim sistemi ve CPU mimarisine uygun paketi seçer, indirir, yükler ve uygulamayı yeniden başlatır.
-- Desteklenen 20 dilde tüm arayüz çeviri anahtarları tamamlandı.
-- v0.1.5 kullanıcıları v0.1.6'yı bir kez elle yüklemelidir; sonraki imzalı sürümler otomatik güncellenir.
-<!-- /lang -->
-
-<!-- lang:vi -->
-## FileNavigation v0.1.6
-
-- Kiểm tra cập nhật được chuyển lên biểu tượng GitHub trên thanh tiêu đề, kèm cửa sổ đáp ứng và ghi chú phát hành bản địa hóa có vùng cuộn riêng.
-- Thêm cửa sổ cài đặt có điều hướng danh mục và hai chủ đề sáng, tối được lưu lại.
-- Cập nhật tự động có chữ ký chọn gói phù hợp với hệ điều hành và kiến trúc CPU, sau đó tải xuống, cài đặt và khởi động lại ứng dụng.
-- Hoàn tất mọi khóa dịch giao diện trong cả 20 ngôn ngữ được hỗ trợ.
-- Người dùng v0.1.5 cần cài v0.1.6 thủ công một lần; các bản phát hành có chữ ký sau đó sẽ tự động cập nhật.
+- Made update checks resilient by preferring the static signed updater manifest, retrying transient failures, caching successful results, and using the rate-limited GitHub API only as a fallback.
+- Moved language selection into its own Settings category with responsive and keyboard-accessible category navigation.
+- Completed light and dark color adaptation for selectors, selected options, checkboxes, buttons, result rows, disabled controls, and interaction states.
 <!-- /lang -->
 
 <!-- lang:id -->
-## FileNavigation v0.1.6
+## FileNavigation v0.1.7
 
-- Pemeriksaan pembaruan dipindahkan ke ikon GitHub pada bilah judul, dengan jendela responsif dan catatan rilis lokal yang memiliki area gulir tersendiri.
-- Menambahkan jendela pengaturan dengan navigasi kategori serta tema terang dan gelap yang tersimpan.
-- Pembaruan otomatis bertanda tangan memilih paket sesuai sistem operasi dan arsitektur CPU, lalu mengunduh, memasang, dan memulai ulang aplikasi.
-- Semua kunci terjemahan antarmuka telah dilengkapi untuk 20 bahasa yang didukung.
-- Pengguna v0.1.5 harus memasang v0.1.6 secara manual satu kali; rilis bertanda tangan berikutnya akan diperbarui otomatis.
+- Pemeriksaan pembaruan kini mengutamakan manifes statis bertanda tangan, mencoba kembali kegagalan sementara, menyimpan hasil yang berhasil, dan hanya memakai API GitHub yang dibatasi sebagai jalur cadangan.
+- Pemilihan bahasa dipindahkan ke kategori tersendiri di Pengaturan dengan tata letak responsif dan navigasi papan ketik.
+- Penyesuaian warna terang dan gelap kini mencakup pemilih, opsi terpilih, kotak centang, tombol, baris hasil, kontrol nonaktif, dan status interaksi.
 <!-- /lang -->
 
 <!-- lang:th -->
-## FileNavigation v0.1.6
+## FileNavigation v0.1.7
 
-- ย้ายการตรวจสอบอัปเดตไปยังไอคอน GitHub บนแถบชื่อ พร้อมหน้าต่างแบบตอบสนองและบันทึกประจำรุ่นหลายภาษาที่เลื่อนแยกได้
-- เพิ่มหน้าต่างการตั้งค่าพร้อมหมวดหมู่ และธีมสว่างกับมืดที่จดจำค่าไว้
-- การอัปเดตอัตโนมัติแบบลงนามจะเลือกแพ็กเกจที่ตรงกับระบบปฏิบัติการและสถาปัตยกรรม CPU แล้วดาวน์โหลด ติดตั้ง และเริ่มแอปใหม่
-- แปลข้อความส่วนติดต่อครบทุกคีย์ใน 20 ภาษาที่รองรับ
-- ผู้ใช้ v0.1.5 ต้องติดตั้ง v0.1.6 ด้วยตนเองหนึ่งครั้ง จากนั้นรุ่นที่ลงนามภายหลังจะอัปเดตอัตโนมัติ
+- การตรวจสอบอัปเดตจะใช้ไฟล์รายการอัปเดตแบบคงที่ที่ลงลายมือชื่อก่อน ลองใหม่เมื่อเกิดข้อผิดพลาดชั่วคราว เก็บผลลัพธ์ที่สำเร็จไว้ในแคช และใช้ GitHub API ที่จำกัดจำนวนคำขอเป็นทางสำรองเท่านั้น
+- ย้ายการเลือกภาษาไปยังหมวดหมู่แยกในหน้าการตั้งค่า พร้อมรูปแบบตอบสนองและการนำทางด้วยแป้นพิมพ์
+- ปรับสีธีมสว่างและมืดครบถ้วนสำหรับตัวเลือก ตัวเลือกที่เลือก ช่องทำเครื่องหมาย ปุ่ม แถวผลลัพธ์ ตัวควบคุมที่ปิดใช้งาน และสถานะการโต้ตอบ
 <!-- /lang -->
 
 <!-- lang:pl -->
-## FileNavigation v0.1.6
+## FileNavigation v0.1.7
 
-- Sprawdzanie aktualizacji przeniesiono do ikony GitHub na pasku tytułu; dodano responsywne okno z osobno przewijanymi, zlokalizowanymi informacjami o wydaniu.
-- Dodano okno ustawień z kategoriami oraz zapisywanymi jasnym i ciemnym motywem.
-- Podpisane aktualizacje automatyczne wybierają pakiet dla systemu i architektury CPU, pobierają go, instalują i ponownie uruchamiają aplikację.
-- Uzupełniono wszystkie klucze interfejsu we wszystkich 20 obsługiwanych językach.
-- Użytkownicy v0.1.5 muszą raz ręcznie zainstalować v0.1.6; kolejne podpisane wydania będą aktualizowane automatycznie.
+- Sprawdzanie aktualizacji korzysta teraz przede wszystkim ze statycznego podpisanego manifestu, ponawia chwilowo nieudane żądania, przechowuje poprawne wyniki i używa limitowanego API GitHub tylko jako rozwiązania zapasowego.
+- Wybór języka przeniesiono do osobnej kategorii ustawień z responsywnym układem i obsługą klawiatury.
+- Jasne i ciemne kolory są teraz w pełni dostosowane dla list wyboru, wybranych opcji, pól wyboru, przycisków, wierszy wyników, wyłączonych kontrolek i stanów interakcji.
 <!-- /lang -->
 
 <!-- lang:uk -->
-## FileNavigation v0.1.6
+## FileNavigation v0.1.7
 
-- Перевірку оновлень перенесено на піктограму GitHub у заголовку; додано адаптивне вікно з окремим прокручуванням локалізованих приміток до випуску.
-- Додано вікно налаштувань із категоріями та збереженням світлої й темної тем.
-- Підписані автоматичні оновлення вибирають пакет для операційної системи й архітектури CPU, завантажують і встановлюють його та перезапускають застосунок.
-- Доповнено всі ключі інтерфейсу для всіх 20 підтримуваних мов.
-- Користувачам v0.1.5 потрібно один раз вручну встановити v0.1.6; наступні підписані випуски оновлюватимуться автоматично.
+- Перевірка оновлень тепер насамперед використовує статичний підписаний маніфест, повторює тимчасово невдалі запити, кешує успішні результати й звертається до обмеженого API GitHub лише як до резервного варіанта.
+- Вибір мови перенесено в окрему категорію налаштувань з адаптивним компонуванням і навігацією з клавіатури.
+- Світла й темна теми тепер повністю враховуються у списках, вибраних варіантах, прапорцях, кнопках, рядках результатів, вимкнених елементах та інтерактивних станах.
+<!-- /lang -->
+
+<!-- lang:it -->
+## FileNavigation v0.1.7
+
+- Il controllo degli aggiornamenti ora preferisce il manifesto statico firmato, riprova gli errori temporanei, conserva in cache i risultati validi e usa l'API GitHub con limiti solo come alternativa.
+- La scelta della lingua è stata spostata in una categoria dedicata delle impostazioni, con layout reattivo e navigazione da tastiera.
+- L'adattamento chiaro e scuro ora copre selettori, opzioni scelte, caselle, pulsanti, righe dei risultati, controlli disabilitati e stati di interazione.
+<!-- /lang -->
+
+<!-- lang:nl -->
+## FileNavigation v0.1.7
+
+- De updatecontrole gebruikt nu bij voorkeur het statische ondertekende manifest, probeert tijdelijke fouten opnieuw, bewaart succesvolle resultaten en gebruikt de beperkte GitHub-API alleen als terugvaloptie.
+- De taalkeuze staat nu in een eigen instellingencategorie met responsieve indeling en toetsenbordnavigatie.
+- Lichte en donkere kleuren zijn nu volledig aangepast voor keuzelijsten, geselecteerde opties, selectievakjes, knoppen, resultaatrijen, uitgeschakelde bedieningselementen en interactiestaten.
+<!-- /lang -->
+
+<!-- lang:tr -->
+## FileNavigation v0.1.7
+
+- Güncelleme denetimi artık öncelikle statik imzalı bildirimi kullanıyor, geçici hatalarda yeniden deniyor, başarılı sonuçları önbelleğe alıyor ve sınırlı GitHub API'sini yalnızca yedek yol olarak kullanıyor.
+- Dil seçimi, duyarlı düzen ve klavye gezintisiyle Ayarlar içinde bağımsız bir kategoriye taşındı.
+- Seçiciler, seçili seçenekler, onay kutuları, düğmeler, sonuç satırları, devre dışı denetimler ve etkileşim durumları için açık ve koyu renk uyarlaması tamamlandı.
+<!-- /lang -->
+
+<!-- lang:vi -->
+## FileNavigation v0.1.7
+
+- Kiểm tra cập nhật giờ ưu tiên tệp kê khai tĩnh đã ký, thử lại khi lỗi tạm thời, lưu đệm kết quả thành công và chỉ dùng API GitHub bị giới hạn làm phương án dự phòng.
+- Lựa chọn ngôn ngữ đã được chuyển vào một nhóm riêng trong Cài đặt, có bố cục thích ứng và hỗ trợ điều hướng bằng bàn phím.
+- Màu sáng và tối đã được điều chỉnh đầy đủ cho hộp chọn, tùy chọn đang chọn, ô kiểm, nút, hàng kết quả, điều khiển bị vô hiệu hóa và các trạng thái tương tác.
+<!-- /lang -->
+
+<!-- lang:pt-BR -->
+## FileNavigation v0.1.7
+
+- A verificação de atualizações agora prioriza o manifesto estático assinado, repete falhas temporárias, mantém resultados válidos em cache e usa a API limitada do GitHub apenas como alternativa.
+- A seleção de idioma foi movida para uma categoria própria em Configurações, com layout responsivo e navegação por teclado.
+- A adaptação clara e escura agora cobre seletores, opções escolhidas, caixas de seleção, botões, linhas de resultados, controles desativados e estados de interação.
+<!-- /lang -->
+
+<!-- lang:ru -->
+## FileNavigation v0.1.7
+
+- Проверка обновлений теперь в первую очередь использует статический подписанный манифест, повторяет временно неудачные запросы, кеширует успешные результаты и обращается к ограниченному API GitHub только как к резервному варианту.
+- Выбор языка перенесён в отдельную категорию настроек с адаптивной компоновкой и навигацией с клавиатуры.
+- Светлая и тёмная темы теперь полностью учитываются в списках, выбранных вариантах, флажках, кнопках, строках результатов, отключённых элементах и интерактивных состояниях.
+<!-- /lang -->
+
+<!-- lang:ar -->
+## FileNavigation v0.1.7
+
+- أصبح فحص التحديثات يفضّل بيان التحديث الثابت والموقّع، ويعيد المحاولة عند الأعطال المؤقتة، ويخزّن النتائج الناجحة مؤقتًا، ولا يستخدم واجهة GitHub المحدودة إلا كخيار احتياطي.
+- نُقل اختيار اللغة إلى فئة مستقلة في الإعدادات مع تخطيط متجاوب وتنقّل بلوحة المفاتيح.
+- اكتمل تكييف الوضعين الفاتح والداكن للقوائم والخيارات المحددة ومربعات الاختيار والأزرار وصفوف النتائج والعناصر المعطلة وحالات التفاعل.
+<!-- /lang -->
+
+<!-- lang:hi -->
+## FileNavigation v0.1.7
+
+- अपडेट जाँच अब पहले स्थिर हस्ताक्षरित अपडेट मैनिफेस्ट का उपयोग करती है, अस्थायी विफलताओं पर दोबारा प्रयास करती है, सफल परिणाम कैश करती है और सीमित GitHub API को केवल वैकल्पिक मार्ग के रूप में उपयोग करती है।
+- भाषा चयन को उत्तरदायी लेआउट और कीबोर्ड नेविगेशन के साथ सेटिंग्स की अलग श्रेणी में ले जाया गया है।
+- चयन सूची, चुने गए विकल्प, चेकबॉक्स, बटन, परिणाम पंक्तियाँ, निष्क्रिय नियंत्रण और इंटरैक्शन स्थितियाँ अब हल्की और गहरी दोनों थीम के अनुकूल हैं।
+<!-- /lang -->
+
+<!-- lang:fr -->
+## FileNavigation v0.1.7
+
+- La recherche de mises à jour privilégie désormais le manifeste statique signé, réessaie les échecs temporaires, met en cache les résultats valides et n'utilise l'API GitHub limitée qu'en secours.
+- Le choix de la langue dispose maintenant de sa propre catégorie dans les paramètres, avec une mise en page adaptative et une navigation au clavier.
+- L'adaptation claire et sombre couvre désormais les sélecteurs, options choisies, cases à cocher, boutons, lignes de résultats, contrôles désactivés et états interactifs.
+<!-- /lang -->
+
+<!-- lang:de -->
+## FileNavigation v0.1.7
+
+- Die Update-Prüfung verwendet bevorzugt das statische signierte Manifest, wiederholt vorübergehende Fehler, speichert erfolgreiche Ergebnisse und nutzt die begrenzte GitHub-API nur als Ausweichlösung.
+- Die Sprachauswahl befindet sich jetzt in einer eigenen Einstellungskategorie mit responsivem Layout und Tastaturnavigation.
+- Helle und dunkle Farben sind nun für Auswahlfelder, gewählte Optionen, Kontrollkästchen, Schaltflächen, Ergebniszeilen, deaktivierte Steuerelemente und Interaktionszustände vollständig angepasst.
+<!-- /lang -->
+
+<!-- lang:ja -->
+## FileNavigation v0.1.7
+
+- 更新確認は静的な署名付き更新マニフェストを優先し、一時的な失敗を再試行して成功結果をキャッシュします。レート制限のある GitHub API は予備経路としてのみ使用します。
+- 言語選択を設定内の独立したカテゴリへ移動し、レスポンシブ表示とキーボード操作に対応しました。
+- セレクター、選択項目、チェックボックス、ボタン、結果行、無効なコントロール、操作状態のライト・ダーク配色を全面的に調整しました。
+<!-- /lang -->
+
+<!-- lang:ko -->
+## FileNavigation v0.1.7
+
+- 업데이트 확인은 정적 서명 업데이트 매니페스트를 우선 사용하고, 일시적 실패를 재시도하며 성공 결과를 캐시합니다. 호출 제한이 있는 GitHub API는 대체 경로로만 사용합니다.
+- 언어 선택을 설정의 독립된 카테고리로 이동하고 반응형 레이아웃과 키보드 탐색을 지원합니다.
+- 선택 상자, 선택된 옵션, 체크박스, 버튼, 결과 행, 비활성 컨트롤 및 상호작용 상태의 밝은 테마와 어두운 테마 색상을 모두 조정했습니다.
+<!-- /lang -->
+
+<!-- lang:zh-CN -->
+## FileNavigation v0.1.7
+
+- 更新检查优先读取静态签名更新清单，并加入瞬时失败重试、成功结果缓存；仅在清单不可用时回退到有频率限制的 GitHub API。
+- 将语言选择迁移到独立的“设置 > 语言”分类，并支持响应式布局与键盘导航。
+- 完成选择器、选中选项、复选框、按钮、结果行、禁用控件和交互状态的深浅色适配。
+<!-- /lang -->
+
+<!-- lang:zh-TW -->
+## FileNavigation v0.1.7
+
+- 更新檢查優先讀取靜態簽章更新清單，並加入暫時性失敗重試與成功結果快取；僅在清單無法使用時才改用有限流的 GitHub API。
+- 將語言選擇移至獨立的「設定 > 語言」分類，並支援響應式版面與鍵盤導覽。
+- 完成選擇器、已選選項、核取方塊、按鈕、結果列、停用控制項與互動狀態的明暗色彩適配。
+<!-- /lang -->
+
+<!-- lang:es -->
+## FileNavigation v0.1.7
+
+- La búsqueda de actualizaciones ahora prioriza el manifiesto estático firmado, reintenta fallos transitorios, conserva resultados correctos y usa la API limitada de GitHub solo como alternativa.
+- La selección de idioma se trasladó a una categoría propia de Ajustes, con diseño adaptable y navegación por teclado.
+- Se completó la adaptación clara y oscura de selectores, opciones elegidas, casillas, botones, filas de resultados, controles deshabilitados y estados interactivos.
 <!-- /lang -->

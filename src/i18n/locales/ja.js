@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "設定",
     settingsCategories: "設定カテゴリー",
     appearanceCategory: "外観",
+    languageDescription: "インターフェースの表示言語を選択します。",
     themeTitle: "テーマ",
     themeDescription: "FileNavigation のプリセット外観を選択します。",
     lightTheme: "ライト",

@@ -83,6 +83,7 @@ const messages = {
     settingsTitle: "설정",
     settingsCategories: "설정 카테고리",
     appearanceCategory: "모양",
+    languageDescription: "인터페이스 표시 언어를 선택하세요.",
     themeTitle: "테마",
     themeDescription: "FileNavigation의 사전 설정 모양을 선택하세요.",
     lightTheme: "라이트",
