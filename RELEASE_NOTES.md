@@ -1,159 +1,159 @@
 <!-- lang:en -->
-## FileNavigation v0.1.7
+## FileNavigation v0.1.8
 
-- Made update checks resilient by preferring the static signed updater manifest, retrying transient failures, caching successful results, and using the rate-limited GitHub API only as a fallback.
-- Moved language selection into its own Settings category with responsive and keyboard-accessible category navigation.
-- Completed light and dark color adaptation for selectors, selected options, checkboxes, buttons, result rows, disabled controls, and interaction states.
-<!-- /lang -->
-
-<!-- lang:id -->
-## FileNavigation v0.1.7
-
-- Pemeriksaan pembaruan kini mengutamakan manifes statis bertanda tangan, mencoba kembali kegagalan sementara, menyimpan hasil yang berhasil, dan hanya memakai API GitHub yang dibatasi sebagai jalur cadangan.
-- Pemilihan bahasa dipindahkan ke kategori tersendiri di Pengaturan dengan tata letak responsif dan navigasi papan ketik.
-- Penyesuaian warna terang dan gelap kini mencakup pemilih, opsi terpilih, kotak centang, tombol, baris hasil, kontrol nonaktif, dan status interaksi.
-<!-- /lang -->
-
-<!-- lang:th -->
-## FileNavigation v0.1.7
-
-- การตรวจสอบอัปเดตจะใช้ไฟล์รายการอัปเดตแบบคงที่ที่ลงลายมือชื่อก่อน ลองใหม่เมื่อเกิดข้อผิดพลาดชั่วคราว เก็บผลลัพธ์ที่สำเร็จไว้ในแคช และใช้ GitHub API ที่จำกัดจำนวนคำขอเป็นทางสำรองเท่านั้น
-- ย้ายการเลือกภาษาไปยังหมวดหมู่แยกในหน้าการตั้งค่า พร้อมรูปแบบตอบสนองและการนำทางด้วยแป้นพิมพ์
-- ปรับสีธีมสว่างและมืดครบถ้วนสำหรับตัวเลือก ตัวเลือกที่เลือก ช่องทำเครื่องหมาย ปุ่ม แถวผลลัพธ์ ตัวควบคุมที่ปิดใช้งาน และสถานะการโต้ตอบ
-<!-- /lang -->
-
-<!-- lang:pl -->
-## FileNavigation v0.1.7
-
-- Sprawdzanie aktualizacji korzysta teraz przede wszystkim ze statycznego podpisanego manifestu, ponawia chwilowo nieudane żądania, przechowuje poprawne wyniki i używa limitowanego API GitHub tylko jako rozwiązania zapasowego.
-- Wybór języka przeniesiono do osobnej kategorii ustawień z responsywnym układem i obsługą klawiatury.
-- Jasne i ciemne kolory są teraz w pełni dostosowane dla list wyboru, wybranych opcji, pól wyboru, przycisków, wierszy wyników, wyłączonych kontrolek i stanów interakcji.
-<!-- /lang -->
-
-<!-- lang:uk -->
-## FileNavigation v0.1.7
-
-- Перевірка оновлень тепер насамперед використовує статичний підписаний маніфест, повторює тимчасово невдалі запити, кешує успішні результати й звертається до обмеженого API GitHub лише як до резервного варіанта.
-- Вибір мови перенесено в окрему категорію налаштувань з адаптивним компонуванням і навігацією з клавіатури.
-- Світла й темна теми тепер повністю враховуються у списках, вибраних варіантах, прапорцях, кнопках, рядках результатів, вимкнених елементах та інтерактивних станах.
-<!-- /lang -->
-
-<!-- lang:it -->
-## FileNavigation v0.1.7
-
-- Il controllo degli aggiornamenti ora preferisce il manifesto statico firmato, riprova gli errori temporanei, conserva in cache i risultati validi e usa l'API GitHub con limiti solo come alternativa.
-- La scelta della lingua è stata spostata in una categoria dedicata delle impostazioni, con layout reattivo e navigazione da tastiera.
-- L'adattamento chiaro e scuro ora copre selettori, opzioni scelte, caselle, pulsanti, righe dei risultati, controlli disabilitati e stati di interazione.
-<!-- /lang -->
-
-<!-- lang:nl -->
-## FileNavigation v0.1.7
-
-- De updatecontrole gebruikt nu bij voorkeur het statische ondertekende manifest, probeert tijdelijke fouten opnieuw, bewaart succesvolle resultaten en gebruikt de beperkte GitHub-API alleen als terugvaloptie.
-- De taalkeuze staat nu in een eigen instellingencategorie met responsieve indeling en toetsenbordnavigatie.
-- Lichte en donkere kleuren zijn nu volledig aangepast voor keuzelijsten, geselecteerde opties, selectievakjes, knoppen, resultaatrijen, uitgeschakelde bedieningselementen en interactiestaten.
-<!-- /lang -->
-
-<!-- lang:tr -->
-## FileNavigation v0.1.7
-
-- Güncelleme denetimi artık öncelikle statik imzalı bildirimi kullanıyor, geçici hatalarda yeniden deniyor, başarılı sonuçları önbelleğe alıyor ve sınırlı GitHub API'sini yalnızca yedek yol olarak kullanıyor.
-- Dil seçimi, duyarlı düzen ve klavye gezintisiyle Ayarlar içinde bağımsız bir kategoriye taşındı.
-- Seçiciler, seçili seçenekler, onay kutuları, düğmeler, sonuç satırları, devre dışı denetimler ve etkileşim durumları için açık ve koyu renk uyarlaması tamamlandı.
+- Update checks now race GitHub Release, Raw, and jsDelivr manifests and no longer call the rate-limited GitHub API.
+- Windows requests use the system TLS certificate store, while successful checks persist across restarts as an offline fallback.
+- Release automation now keeps the signed updater manifest mirror synchronized after every release.
 <!-- /lang -->
 
 <!-- lang:vi -->
-## FileNavigation v0.1.7
+## FileNavigation v0.1.8
 
-- Kiểm tra cập nhật giờ ưu tiên tệp kê khai tĩnh đã ký, thử lại khi lỗi tạm thời, lưu đệm kết quả thành công và chỉ dùng API GitHub bị giới hạn làm phương án dự phòng.
-- Lựa chọn ngôn ngữ đã được chuyển vào một nhóm riêng trong Cài đặt, có bố cục thích ứng và hỗ trợ điều hướng bằng bàn phím.
-- Màu sáng và tối đã được điều chỉnh đầy đủ cho hộp chọn, tùy chọn đang chọn, ô kiểm, nút, hàng kết quả, điều khiển bị vô hiệu hóa và các trạng thái tương tác.
+- Kiểm tra cập nhật yêu cầu song song các tệp kê khai GitHub Release, Raw và jsDelivr, đồng thời không còn dùng API GitHub bị giới hạn.
+- Trên Windows, yêu cầu dùng kho chứng chỉ TLS của hệ thống và kết quả thành công được giữ lại qua lần khởi động lại để dự phòng ngoại tuyến.
+- Quy trình phát hành tự động đồng bộ bản sao tệp kê khai đã ký sau mỗi bản phát hành.
 <!-- /lang -->
 
-<!-- lang:pt-BR -->
-## FileNavigation v0.1.7
+<!-- lang:id -->
+## FileNavigation v0.1.8
 
-- A verificação de atualizações agora prioriza o manifesto estático assinado, repete falhas temporárias, mantém resultados válidos em cache e usa a API limitada do GitHub apenas como alternativa.
-- A seleção de idioma foi movida para uma categoria própria em Configurações, com layout responsivo e navegação por teclado.
-- A adaptação clara e escura agora cobre seletores, opções escolhidas, caixas de seleção, botões, linhas de resultados, controles desativados e estados de interação.
+- Pemeriksaan pembaruan meminta manifes GitHub Release, Raw, dan jsDelivr secara paralel serta tidak lagi memakai API GitHub yang dibatasi.
+- Di Windows, permintaan memakai penyimpanan sertifikat TLS sistem dan hasil yang berhasil tetap tersedia setelah mulai ulang sebagai cadangan luring.
+- Otomatisasi rilis menyinkronkan cermin manifes bertanda tangan setelah setiap rilis.
 <!-- /lang -->
 
-<!-- lang:ru -->
-## FileNavigation v0.1.7
+<!-- lang:th -->
+## FileNavigation v0.1.8
 
-- Проверка обновлений теперь в первую очередь использует статический подписанный манифест, повторяет временно неудачные запросы, кеширует успешные результаты и обращается к ограниченному API GitHub только как к резервному варианту.
-- Выбор языка перенесён в отдельную категорию настроек с адаптивной компоновкой и навигацией с клавиатуры.
-- Светлая и тёмная темы теперь полностью учитываются в списках, выбранных вариантах, флажках, кнопках, строках результатов, отключённых элементах и интерактивных состояниях.
+- การตรวจสอบอัปเดตเรียกไฟล์รายการจาก GitHub Release, Raw และ jsDelivr พร้อมกัน และไม่ใช้ GitHub API ที่จำกัดจำนวนคำขออีกต่อไป
+- บน Windows คำขอจะใช้คลังใบรับรอง TLS ของระบบ และเก็บผลลัพธ์ที่สำเร็จไว้ข้ามการเริ่มใหม่เพื่อใช้สำรองแบบออฟไลน์
+- ระบบเผยแพร่จะซิงค์ไฟล์รายการอัปเดตที่ลงลายมือชื่อไปยังแหล่งสำรองหลังทุกรีลีส
+<!-- /lang -->
+
+<!-- lang:pl -->
+## FileNavigation v0.1.8
+
+- Sprawdzanie aktualizacji równolegle pobiera manifesty GitHub Release, Raw i jsDelivr oraz nie używa już limitowanego API GitHub.
+- W Windows żądania korzystają z systemowego magazynu certyfikatów TLS, a poprawne wyniki pozostają po ponownym uruchomieniu jako zapas offline.
+- Automatyzacja synchronizuje lustro podpisanego manifestu po każdym wydaniu.
+<!-- /lang -->
+
+<!-- lang:uk -->
+## FileNavigation v0.1.8
+
+- Перевірка паралельно запитує маніфести GitHub Release, Raw і jsDelivr та більше не використовує обмежений API GitHub.
+- У Windows запити використовують системне сховище сертифікатів TLS, а успішні результати зберігаються після перезапуску як автономний резерв.
+- Автоматизація синхронізує дзеркало підписаного маніфесту після кожного випуску.
 <!-- /lang -->
 
 <!-- lang:ar -->
-## FileNavigation v0.1.7
+## FileNavigation v0.1.8
 
-- أصبح فحص التحديثات يفضّل بيان التحديث الثابت والموقّع، ويعيد المحاولة عند الأعطال المؤقتة، ويخزّن النتائج الناجحة مؤقتًا، ولا يستخدم واجهة GitHub المحدودة إلا كخيار احتياطي.
-- نُقل اختيار اللغة إلى فئة مستقلة في الإعدادات مع تخطيط متجاوب وتنقّل بلوحة المفاتيح.
-- اكتمل تكييف الوضعين الفاتح والداكن للقوائم والخيارات المحددة ومربعات الاختيار والأزرار وصفوف النتائج والعناصر المعطلة وحالات التفاعل.
+- يفحص التطبيق بيانات GitHub Release وRaw وjsDelivr بالتوازي ولم يعد يستخدم واجهة GitHub المحدودة.
+- تستخدم طلبات Windows مخزن شهادات TLS للنظام، وتبقى النتائج الناجحة بعد إعادة التشغيل كخيار احتياطي دون اتصال.
+- تزامن أتمتة الإصدار مرآة بيان التحديث الموقّع بعد كل إصدار.
 <!-- /lang -->
 
 <!-- lang:hi -->
-## FileNavigation v0.1.7
+## FileNavigation v0.1.8
 
-- अपडेट जाँच अब पहले स्थिर हस्ताक्षरित अपडेट मैनिफेस्ट का उपयोग करती है, अस्थायी विफलताओं पर दोबारा प्रयास करती है, सफल परिणाम कैश करती है और सीमित GitHub API को केवल वैकल्पिक मार्ग के रूप में उपयोग करती है।
-- भाषा चयन को उत्तरदायी लेआउट और कीबोर्ड नेविगेशन के साथ सेटिंग्स की अलग श्रेणी में ले जाया गया है।
-- चयन सूची, चुने गए विकल्प, चेकबॉक्स, बटन, परिणाम पंक्तियाँ, निष्क्रिय नियंत्रण और इंटरैक्शन स्थितियाँ अब हल्की और गहरी दोनों थीम के अनुकूल हैं।
+- अपडेट जाँच अब GitHub Release, Raw और jsDelivr मैनिफेस्ट को समानांतर अनुरोध करती है और सीमित GitHub API का उपयोग नहीं करती।
+- Windows अनुरोध सिस्टम TLS प्रमाणपत्र भंडार का उपयोग करते हैं और सफल परिणाम पुनः आरंभ के बाद ऑफलाइन विकल्प के रूप में सुरक्षित रहते हैं।
+- रिलीज़ स्वचालन हर रिलीज़ के बाद हस्ताक्षरित अपडेट मैनिफेस्ट मिरर को समन्वित करता है।
 <!-- /lang -->
 
-<!-- lang:fr -->
-## FileNavigation v0.1.7
+<!-- lang:it -->
+## FileNavigation v0.1.8
 
-- La recherche de mises à jour privilégie désormais le manifeste statique signé, réessaie les échecs temporaires, met en cache les résultats valides et n'utilise l'API GitHub limitée qu'en secours.
-- Le choix de la langue dispose maintenant de sa propre catégorie dans les paramètres, avec une mise en page adaptative et une navigation au clavier.
-- L'adaptation claire et sombre couvre désormais les sélecteurs, options choisies, cases à cocher, boutons, lignes de résultats, contrôles désactivés et états interactifs.
+- Il controllo interroga in parallelo i manifesti GitHub Release, Raw e jsDelivr e non usa più l'API GitHub con limiti.
+- Su Windows le richieste usano l'archivio certificati TLS di sistema e i risultati validi persistono dopo il riavvio come alternativa offline.
+- L'automazione sincronizza il mirror del manifesto firmato dopo ogni versione.
 <!-- /lang -->
 
-<!-- lang:de -->
-## FileNavigation v0.1.7
+<!-- lang:nl -->
+## FileNavigation v0.1.8
 
-- Die Update-Prüfung verwendet bevorzugt das statische signierte Manifest, wiederholt vorübergehende Fehler, speichert erfolgreiche Ergebnisse und nutzt die begrenzte GitHub-API nur als Ausweichlösung.
-- Die Sprachauswahl befindet sich jetzt in einer eigenen Einstellungskategorie mit responsivem Layout und Tastaturnavigation.
-- Helle und dunkle Farben sind nun für Auswahlfelder, gewählte Optionen, Kontrollkästchen, Schaltflächen, Ergebniszeilen, deaktivierte Steuerelemente und Interaktionszustände vollständig angepasst.
+- De updatecontrole vraagt GitHub Release-, Raw- en jsDelivr-manifesten parallel op en gebruikt de beperkte GitHub-API niet meer.
+- Op Windows gebruiken verzoeken het TLS-certificaatarchief van het systeem en blijven succesvolle resultaten na herstart beschikbaar als offline terugval.
+- De release-automatisering synchroniseert na elke uitgave de spiegel van het ondertekende manifest.
 <!-- /lang -->
 
-<!-- lang:ja -->
-## FileNavigation v0.1.7
+<!-- lang:tr -->
+## FileNavigation v0.1.8
 
-- 更新確認は静的な署名付き更新マニフェストを優先し、一時的な失敗を再試行して成功結果をキャッシュします。レート制限のある GitHub API は予備経路としてのみ使用します。
-- 言語選択を設定内の独立したカテゴリへ移動し、レスポンシブ表示とキーボード操作に対応しました。
-- セレクター、選択項目、チェックボックス、ボタン、結果行、無効なコントロール、操作状態のライト・ダーク配色を全面的に調整しました。
-<!-- /lang -->
-
-<!-- lang:ko -->
-## FileNavigation v0.1.7
-
-- 업데이트 확인은 정적 서명 업데이트 매니페스트를 우선 사용하고, 일시적 실패를 재시도하며 성공 결과를 캐시합니다. 호출 제한이 있는 GitHub API는 대체 경로로만 사용합니다.
-- 언어 선택을 설정의 독립된 카테고리로 이동하고 반응형 레이아웃과 키보드 탐색을 지원합니다.
-- 선택 상자, 선택된 옵션, 체크박스, 버튼, 결과 행, 비활성 컨트롤 및 상호작용 상태의 밝은 테마와 어두운 테마 색상을 모두 조정했습니다.
-<!-- /lang -->
-
-<!-- lang:zh-CN -->
-## FileNavigation v0.1.7
-
-- 更新检查优先读取静态签名更新清单，并加入瞬时失败重试、成功结果缓存；仅在清单不可用时回退到有频率限制的 GitHub API。
-- 将语言选择迁移到独立的“设置 > 语言”分类，并支持响应式布局与键盘导航。
-- 完成选择器、选中选项、复选框、按钮、结果行、禁用控件和交互状态的深浅色适配。
-<!-- /lang -->
-
-<!-- lang:zh-TW -->
-## FileNavigation v0.1.7
-
-- 更新檢查優先讀取靜態簽章更新清單，並加入暫時性失敗重試與成功結果快取；僅在清單無法使用時才改用有限流的 GitHub API。
-- 將語言選擇移至獨立的「設定 > 語言」分類，並支援響應式版面與鍵盤導覽。
-- 完成選擇器、已選選項、核取方塊、按鈕、結果列、停用控制項與互動狀態的明暗色彩適配。
+- Güncelleme denetimi GitHub Release, Raw ve jsDelivr bildirimlerini paralel sorguluyor ve sınırlı GitHub API'sini artık kullanmıyor.
+- Windows istekleri sistem TLS sertifika deposunu kullanıyor ve başarılı sonuçlar yeniden başlatma sonrasında çevrimdışı yedek olarak saklanıyor.
+- Sürüm otomasyonu her yayından sonra imzalı güncelleme bildirimi yansısını eşitliyor.
 <!-- /lang -->
 
 <!-- lang:es -->
-## FileNavigation v0.1.7
+## FileNavigation v0.1.8
 
-- La búsqueda de actualizaciones ahora prioriza el manifiesto estático firmado, reintenta fallos transitorios, conserva resultados correctos y usa la API limitada de GitHub solo como alternativa.
-- La selección de idioma se trasladó a una categoría propia de Ajustes, con diseño adaptable y navegación por teclado.
-- Se completó la adaptación clara y oscura de selectores, opciones elegidas, casillas, botones, filas de resultados, controles deshabilitados y estados interactivos.
+- La comprobación consulta en paralelo los manifiestos de GitHub Release, Raw y jsDelivr, y deja de usar la API de GitHub con límites.
+- En Windows se usa el almacén de certificados TLS del sistema y los resultados correctos persisten entre reinicios como alternativa sin conexión.
+- La automatización sincroniza el espejo del manifiesto firmado después de cada versión.
+<!-- /lang -->
+
+<!-- lang:fr -->
+## FileNavigation v0.1.8
+
+- La vérification interroge en parallèle les manifestes GitHub Release, Raw et jsDelivr et n'utilise plus l'API GitHub limitée.
+- Sous Windows, les requêtes utilisent le magasin de certificats TLS du système et les résultats valides persistent après redémarrage comme secours hors ligne.
+- L'automatisation synchronise le miroir du manifeste signé après chaque version.
+<!-- /lang -->
+
+<!-- lang:de -->
+## FileNavigation v0.1.8
+
+- Die Update-Prüfung fragt GitHub Release, Raw und jsDelivr parallel ab und verwendet die begrenzte GitHub-API nicht mehr.
+- Unter Windows wird der TLS-Zertifikatsspeicher des Systems genutzt; erfolgreiche Ergebnisse bleiben nach Neustarts als Offline-Rückfall erhalten.
+- Die Release-Automatisierung synchronisiert den Spiegel des signierten Manifests nach jeder Veröffentlichung.
+<!-- /lang -->
+
+<!-- lang:pt-BR -->
+## FileNavigation v0.1.8
+
+- A verificação consulta em paralelo os manifestos do GitHub Release, Raw e jsDelivr e não usa mais a API limitada do GitHub.
+- No Windows, as solicitações usam o repositório de certificados TLS do sistema e os resultados válidos persistem após reinícios como alternativa offline.
+- A automação sincroniza o espelho do manifesto assinado após cada versão.
+<!-- /lang -->
+
+<!-- lang:ru -->
+## FileNavigation v0.1.8
+
+- Проверка параллельно запрашивает манифесты GitHub Release, Raw и jsDelivr и больше не использует ограниченный API GitHub.
+- В Windows используется системное хранилище сертификатов TLS, а успешные результаты сохраняются после перезапуска как автономный резерв.
+- Автоматизация синхронизирует зеркало подписанного манифеста после каждого выпуска.
+<!-- /lang -->
+
+<!-- lang:zh-CN -->
+## FileNavigation v0.1.8
+
+- 更新检查现在并发请求 GitHub Release、Raw 和 jsDelivr 清单，不再调用有频率限制的 GitHub API。
+- Windows 请求改用系统 TLS 证书库，成功结果会跨重启持久缓存并可在离线时回退。
+- 发布流程会在每次 Release 后自动同步签名更新清单镜像。
+<!-- /lang -->
+
+<!-- lang:zh-TW -->
+## FileNavigation v0.1.8
+
+- 更新檢查現在並行請求 GitHub Release、Raw 與 jsDelivr 清單，不再呼叫有限流的 GitHub API。
+- Windows 請求改用系統 TLS 憑證庫，成功結果會跨重新啟動持久快取並可在離線時備援。
+- 發布流程會在每次 Release 後自動同步簽章更新清單鏡像。
+<!-- /lang -->
+
+<!-- lang:ja -->
+## FileNavigation v0.1.8
+
+- 更新確認は GitHub Release、Raw、jsDelivr のマニフェストへ並行して接続し、レート制限のある GitHub API は使用しなくなりました。
+- Windows ではシステムの TLS 証明書ストアを使用し、成功した結果を再起動後もオフライン用に保持します。
+- リリース後に署名付き更新マニフェストのミラーを自動同期するようになりました。
+<!-- /lang -->
+
+<!-- lang:ko -->
+## FileNavigation v0.1.8
+
+- 업데이트 확인이 GitHub Release, Raw, jsDelivr 매니페스트를 동시에 요청하며 호출 제한이 있는 GitHub API를 더 이상 사용하지 않습니다.
+- Windows 요청은 시스템 TLS 인증서 저장소를 사용하고 성공 결과를 재시작 후에도 오프라인 대체용으로 보관합니다.
+- 릴리스 후 서명된 업데이트 매니페스트 미러가 자동으로 동기화됩니다.
 <!-- /lang -->

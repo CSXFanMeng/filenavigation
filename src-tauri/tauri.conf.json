@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "FileNavigation",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "identifier": "dev.filenavigation.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -60,7 +60,9 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZEMjQzNkY2Q0MwNDZCMEYKUldRUGF3VE05allrL2FpZEt2ZkRjZ1VTc3diSjdYSXpmeXZmbVhSSVoxWUdpN1dVNXVib295T0IK",
       "endpoints": [
-        "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json"
+        "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json",
+        "https://raw.githubusercontent.com/CSXFanMeng/filenavigation/master/updates/latest.json",
+        "https://cdn.jsdelivr.net/gh/CSXFanMeng/filenavigation@master/updates/latest.json"
       ],
       "windows": {
         "installMode": "passive"

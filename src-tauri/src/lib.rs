@@ -8,21 +8,23 @@ use std::{
         Arc, Mutex,
         atomic::{AtomicBool, Ordering},
     },
-    time::{Duration, Instant, SystemTime},
+    time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
 use chrono::{DateTime, Local};
 use semver::Version;
 use serde::{Deserialize, Serialize};
-use tauri::Emitter;
+use tauri::{Emitter, Manager};
 
-const LATEST_RELEASE_URL: &str =
-    "https://api.github.com/repos/CSXFanMeng/filenavigation/releases/latest";
-const UPDATER_MANIFEST_URL: &str =
-    "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json";
+const UPDATER_MANIFEST_URLS: [&str; 3] = [
+    "https://cdn.jsdelivr.net/gh/CSXFanMeng/filenavigation@master/updates/latest.json",
+    "https://raw.githubusercontent.com/CSXFanMeng/filenavigation/master/updates/latest.json",
+    "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json",
+];
 const RELEASE_TAG_URL: &str = "https://github.com/CSXFanMeng/filenavigation/releases/tag";
 const RELEASE_USER_AGENT: &str = "FileNavigation update checker";
 const RELEASE_CACHE_TTL: Duration = Duration::from_secs(15 * 60);
+const RELEASE_CACHE_FILE: &str = "update-release-cache.json";
 
 #[derive(Debug, Deserialize)]
 struct SearchRequest {
@@ -99,11 +101,11 @@ impl Default for UpdateChecker {
 }
 
 struct CachedRelease {
-    fetched_at: Instant,
+    fetched_at: SystemTime,
     release: ReleaseInfo,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize, Deserialize)]
 struct ReleaseInfo {
     latest_version: String,
     release_name: String,
@@ -113,25 +115,7 @@ struct ReleaseInfo {
     assets: Vec<UpdateAsset>,
 }
 
-#[derive(Debug, Deserialize)]
-struct GitHubRelease {
-    tag_name: String,
-    name: Option<String>,
-    body: Option<String>,
-    html_url: String,
-    published_at: Option<String>,
-    assets: Vec<GitHubAsset>,
-}
-
-#[derive(Debug, Deserialize)]
-struct GitHubAsset {
-    name: String,
-    size: u64,
-    browser_download_url: String,
-    digest: Option<String>,
-}
-
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct UpdaterManifest {
     version: String,
     #[serde(default)]
@@ -141,7 +125,7 @@ struct UpdaterManifest {
     platforms: HashMap<String, UpdaterPlatform>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct UpdaterPlatform {
     url: String,
     signature: String,
@@ -160,12 +144,18 @@ struct UpdateResponse {
     assets: Vec<UpdateAsset>,
 }
 
-#[derive(Debug, Serialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct UpdateAsset {
     name: String,
     size: u64,
     download_url: String,
     digest: Option<String>,
+}
+
+#[derive(Serialize, Deserialize)]
+struct PersistedRelease {
+    fetched_at_unix: u64,
+    release: ReleaseInfo,
 }
 
 #[tauri::command]
@@ -218,9 +208,12 @@ async fn open_path(path: String) -> Result<(), String> {
 
 #[tauri::command]
 async fn check_for_updates(
+    app: tauri::AppHandle,
     state: tauri::State<'_, UpdateChecker>,
     language: String,
 ) -> Result<UpdateResponse, String> {
+    hydrate_update_cache(&app, &state).await;
+
     if let Some(release) = cached_release(&state, Some(RELEASE_CACHE_TTL))? {
         return build_update_response(&release, &language);
     }
@@ -233,9 +226,10 @@ async fn check_for_updates(
                 .cached_release
                 .lock()
                 .map_err(|_| "updateCheckFailed".to_string())? = Some(CachedRelease {
-                fetched_at: Instant::now(),
-                release,
+                fetched_at: SystemTime::now(),
+                release: release.clone(),
             });
+            persist_update_cache(&app, &release).await;
             Ok(response)
         }
         Err(error) => stale_release
@@ -256,45 +250,109 @@ fn cached_release(
         .map_err(|_| "updateCheckFailed".to_string())?;
 
     Ok(cache.as_ref().and_then(|cached| {
-        let fresh_enough = max_age.is_none_or(|age| cached.fetched_at.elapsed() <= age);
+        let elapsed = SystemTime::now()
+            .duration_since(cached.fetched_at)
+            .unwrap_or_default();
+        let fresh_enough = max_age.is_none_or(|age| elapsed <= age);
         fresh_enough.then(|| cached.release.clone())
     }))
 }
 
-async fn fetch_release_info(client: &reqwest::Client) -> Result<ReleaseInfo, String> {
-    let manifest_error = match fetch_updater_manifest(client).await {
-        Ok(manifest) => return Ok(release_info_from_manifest(manifest)),
-        Err(error) => error,
+async fn hydrate_update_cache(app: &tauri::AppHandle, state: &UpdateChecker) {
+    if cached_release(state, None).ok().flatten().is_some() {
+        return;
+    }
+
+    let Some(cached) = load_persisted_update_cache(app).await else {
+        return;
     };
 
-    fetch_github_release(client).await.map_err(|api_error| {
-        if manifest_error == "updateNetworkFailed" {
-            manifest_error
-        } else {
-            api_error
-        }
+    if let Ok(mut memory_cache) = state.cached_release.lock()
+        && memory_cache.is_none()
+    {
+        *memory_cache = Some(cached);
+    }
+}
+
+async fn load_persisted_update_cache(app: &tauri::AppHandle) -> Option<CachedRelease> {
+    let path = update_cache_path(app).ok()?;
+    let bytes = tokio::fs::read(path).await.ok()?;
+    let persisted = serde_json::from_slice::<PersistedRelease>(&bytes).ok()?;
+
+    Some(CachedRelease {
+        fetched_at: UNIX_EPOCH + Duration::from_secs(persisted.fetched_at_unix),
+        release: persisted.release,
     })
+}
+
+async fn persist_update_cache(app: &tauri::AppHandle, release: &ReleaseInfo) {
+    let Ok(path) = update_cache_path(app) else {
+        return;
+    };
+    let Some(parent) = path.parent() else {
+        return;
+    };
+    let fetched_at_unix = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or_default()
+        .as_secs();
+    let persisted = PersistedRelease {
+        fetched_at_unix,
+        release: release.clone(),
+    };
+    let Ok(bytes) = serde_json::to_vec(&persisted) else {
+        return;
+    };
+
+    if tokio::fs::create_dir_all(parent).await.is_ok() {
+        let _ = tokio::fs::write(path, bytes).await;
+    }
+}
+
+fn update_cache_path(app: &tauri::AppHandle) -> Result<PathBuf, String> {
+    app.path()
+        .app_cache_dir()
+        .map(|directory| directory.join(RELEASE_CACHE_FILE))
+        .map_err(|_| "updateCheckFailed".to_string())
+}
+
+async fn fetch_release_info(client: &reqwest::Client) -> Result<ReleaseInfo, String> {
+    fetch_updater_manifest(client)
+        .await
+        .map(release_info_from_manifest)
 }
 
 async fn fetch_updater_manifest(client: &reqwest::Client) -> Result<UpdaterManifest, String> {
     let mut last_error = "updateCheckFailed".to_string();
     for attempt in 0..2 {
-        match fetch_updater_manifest_once(client).await {
-            Ok(manifest) => return Ok(manifest),
-            Err(error) => last_error = error,
+        let mut requests = tokio::task::JoinSet::new();
+        for url in UPDATER_MANIFEST_URLS {
+            let request_client = client.clone();
+            requests.spawn(async move { fetch_updater_manifest_once(&request_client, url).await });
+        }
+
+        while let Some(result) = requests.join_next().await {
+            match result {
+                Ok(Ok(manifest)) => return Ok(manifest),
+                Ok(Err(error)) => last_error = error,
+                Err(_) => last_error = "updateNetworkFailed".to_string(),
+            }
         }
 
         if attempt == 0 {
-            tokio::time::sleep(Duration::from_millis(300)).await;
+            tokio::time::sleep(Duration::from_millis(500)).await;
         }
     }
 
     Err(last_error)
 }
 
-async fn fetch_updater_manifest_once(client: &reqwest::Client) -> Result<UpdaterManifest, String> {
+async fn fetch_updater_manifest_once(
+    client: &reqwest::Client,
+    url: &'static str,
+) -> Result<UpdaterManifest, String> {
     let response = client
-        .get(UPDATER_MANIFEST_URL)
+        .get(url)
         .send()
         .await
         .map_err(|_| "updateNetworkFailed".to_string())?;
@@ -309,50 +367,6 @@ async fn fetch_updater_manifest_once(client: &reqwest::Client) -> Result<Updater
         .json::<UpdaterManifest>()
         .await
         .map_err(|_| "updateCheckFailed".to_string())
-}
-
-async fn fetch_github_release(client: &reqwest::Client) -> Result<ReleaseInfo, String> {
-    let response = client
-        .get(LATEST_RELEASE_URL)
-        .send()
-        .await
-        .map_err(|_| "updateNetworkFailed".to_string())?;
-
-    if matches!(
-        response.status(),
-        reqwest::StatusCode::FORBIDDEN | reqwest::StatusCode::TOO_MANY_REQUESTS
-    ) {
-        return Err("updateRateLimited".to_string());
-    }
-
-    if response.status() == reqwest::StatusCode::NOT_FOUND {
-        return Err("updateNotFound".to_string());
-    }
-
-    let release = response
-        .error_for_status()
-        .map_err(|_| "updateCheckFailed".to_string())?
-        .json::<GitHubRelease>()
-        .await
-        .map_err(|_| "updateCheckFailed".to_string())?;
-
-    Ok(ReleaseInfo {
-        latest_version: release.tag_name.trim_start_matches('v').to_string(),
-        release_name: release.name.unwrap_or_else(|| release.tag_name.clone()),
-        raw_notes: release.body.unwrap_or_default(),
-        release_url: release.html_url,
-        published_at: release.published_at,
-        assets: release
-            .assets
-            .into_iter()
-            .map(|asset| UpdateAsset {
-                name: asset.name,
-                size: asset.size,
-                download_url: asset.browser_download_url,
-                digest: asset.digest,
-            })
-            .collect(),
-    })
 }
 
 fn release_info_from_manifest(manifest: UpdaterManifest) -> ReleaseInfo {
@@ -428,10 +442,10 @@ fn localized_release_notes(body: &str, language: &str) -> (String, String) {
 
 fn release_language_candidates(language: &str) -> Vec<String> {
     let mut candidates = vec![language.to_string()];
-    if let Some(base) = language.split('-').next() {
-        if base != language {
-            candidates.push(base.to_string());
-        }
+    if let Some(base) = language.split('-').next()
+        && base != language
+    {
+        candidates.push(base.to_string());
     }
 
     match language {
@@ -681,7 +695,8 @@ mod tests {
     use std::collections::HashMap;
 
     use super::{
-        UpdaterManifest, UpdaterPlatform, build_update_response, localized_release_notes,
+        UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
+        build_update_response, fetch_updater_manifest_once, localized_release_notes,
         release_info_from_manifest,
     };
 
@@ -758,6 +773,24 @@ English notes.
         assert_eq!(
             response.assets[0].digest.as_deref(),
             Some("minisign:signature")
+        );
+    }
+
+    #[tokio::test]
+    #[ignore = "requires network access"]
+    async fn live_updater_mirrors_are_reachable() {
+        let client = UpdateChecker::default().client;
+        let mut reachable = 0;
+
+        for url in UPDATER_MANIFEST_URLS {
+            if fetch_updater_manifest_once(&client, url).await.is_ok() {
+                reachable += 1;
+            }
+        }
+
+        assert!(
+            reachable >= 2,
+            "only {reachable} updater mirror was reachable"
         );
     }
 }
