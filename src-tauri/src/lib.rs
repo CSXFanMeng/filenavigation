@@ -12,6 +12,7 @@ use std::{
 };
 
 use chrono::{DateTime, Local};
+use regex::{Regex, RegexBuilder};
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use tauri::{Emitter, Manager};
@@ -32,6 +33,8 @@ struct SearchRequest {
     root: String,
     query: String,
     case_sensitive: bool,
+    #[serde(default)]
+    use_regex: bool,
     include_hidden: bool,
     max_results: usize,
 }
@@ -156,6 +159,41 @@ struct UpdateAsset {
 struct PersistedRelease {
     fetched_at_unix: u64,
     release: ReleaseInfo,
+}
+
+enum NameMatcher {
+    Plain {
+        needle: String,
+        case_sensitive: bool,
+    },
+    Regex(Regex),
+}
+
+impl NameMatcher {
+    fn new(query: &str, case_sensitive: bool, use_regex: bool) -> Result<Self, String> {
+        if use_regex {
+            return RegexBuilder::new(query)
+                .case_insensitive(!case_sensitive)
+                .build()
+                .map(Self::Regex)
+                .map_err(|_| "invalidRegex".to_string());
+        }
+
+        Ok(Self::Plain {
+            needle: normalize(query, case_sensitive),
+            case_sensitive,
+        })
+    }
+
+    fn is_match(&self, file_name: &str) -> bool {
+        match self {
+            Self::Plain {
+                needle,
+                case_sensitive,
+            } => normalize(file_name, *case_sensitive).contains(needle),
+            Self::Regex(regex) => regex.is_match(file_name),
+        }
+    }
 }
 
 #[tauri::command]
@@ -516,7 +554,11 @@ fn perform_search(
     let max_results = request.max_results.clamp(10, 5_000);
     let search_id = request.search_id.clone();
     let started = Instant::now();
-    let needle = normalize(&request.query, request.case_sensitive);
+    let matcher = NameMatcher::new(
+        request.query.trim(),
+        request.case_sensitive,
+        request.use_regex,
+    )?;
     let mut queue = VecDeque::from([root]);
     let mut results = Vec::new();
     let mut files_scanned = 0;
@@ -569,8 +611,7 @@ fn perform_search(
                 files_scanned += 1;
             }
 
-            let haystack = normalize(&file_name, request.case_sensitive);
-            if haystack.contains(&needle) {
+            if matcher.is_match(&file_name) {
                 results.push(to_result(path.clone(), file_name, metadata, is_dir));
                 if results.len() >= max_results {
                     truncated = true;
@@ -724,7 +765,7 @@ mod tests {
     use std::collections::HashMap;
 
     use super::{
-        UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
+        NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
         build_update_response, fetch_updater_manifest_once, localized_release_notes,
         manifest_version, release_info_from_manifest,
     };
@@ -815,6 +856,35 @@ English notes.
         };
 
         assert!(manifest_version(&manifest("0.1.10")) > manifest_version(&manifest("0.1.9")));
+    }
+
+    #[test]
+    fn plain_file_name_search_treats_regex_tokens_literally() {
+        let matcher = NameMatcher::new("report.*", false, false).expect("plain matcher");
+
+        assert!(matcher.is_match("REPORT.*.txt"));
+        assert!(!matcher.is_match("report-2026.txt"));
+    }
+
+    #[test]
+    fn regex_file_name_search_respects_case_setting() {
+        let insensitive =
+            NameMatcher::new(r"^report_\d{4}\.pdf$", false, true).expect("case-insensitive regex");
+        let sensitive =
+            NameMatcher::new(r"^report_\d{4}\.pdf$", true, true).expect("case-sensitive regex");
+
+        assert!(insensitive.is_match("REPORT_2026.PDF"));
+        assert!(!sensitive.is_match("REPORT_2026.PDF"));
+    }
+
+    #[test]
+    fn invalid_regex_is_rejected_before_scanning() {
+        assert_eq!(
+            NameMatcher::new("[unfinished", false, true)
+                .err()
+                .as_deref(),
+            Some("invalidRegex")
+        );
     }
 
     #[tokio::test]

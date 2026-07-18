@@ -1,159 +1,119 @@
 <!-- lang:en -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Update checks now race GitHub Release, Raw, and Statically manifests and no longer call the rate-limited GitHub API.
-- Windows requests use the system TLS certificate store, while successful checks persist across restarts as an offline fallback.
-- Release automation now keeps the signed updater manifest mirror synchronized after every release.
+- File-name searches now support Rust regular expressions, including case-sensitive or case-insensitive matching. Invalid expressions are rejected with a localized message before directory scanning starts.
 <!-- /lang -->
 
 <!-- lang:vi -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Kiểm tra cập nhật yêu cầu song song các tệp kê khai GitHub Release, Raw và Statically, đồng thời không còn dùng API GitHub bị giới hạn.
-- Trên Windows, yêu cầu dùng kho chứng chỉ TLS của hệ thống và kết quả thành công được giữ lại qua lần khởi động lại để dự phòng ngoại tuyến.
-- Quy trình phát hành tự động đồng bộ bản sao tệp kê khai đã ký sau mỗi bản phát hành.
+- Tìm kiếm tên tệp giờ hỗ trợ biểu thức chính quy Rust với tùy chọn phân biệt hoa thường. Biểu thức không hợp lệ sẽ hiển thị lỗi đã bản địa hóa trước khi quét thư mục.
 <!-- /lang -->
 
 <!-- lang:id -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Pemeriksaan pembaruan meminta manifes GitHub Release, Raw, dan Statically secara paralel serta tidak lagi memakai API GitHub yang dibatasi.
-- Di Windows, permintaan memakai penyimpanan sertifikat TLS sistem dan hasil yang berhasil tetap tersedia setelah mulai ulang sebagai cadangan luring.
-- Otomatisasi rilis menyinkronkan cermin manifes bertanda tangan setelah setiap rilis.
+- Pencarian nama file kini mendukung ekspresi reguler Rust dengan pilihan peka atau tidak peka huruf besar/kecil. Ekspresi tidak valid menampilkan galat lokal sebelum pemindaian folder.
 <!-- /lang -->
 
 <!-- lang:th -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- การตรวจสอบอัปเดตเรียกไฟล์รายการจาก GitHub Release, Raw และ Statically พร้อมกัน และไม่ใช้ GitHub API ที่จำกัดจำนวนคำขออีกต่อไป
-- บน Windows คำขอจะใช้คลังใบรับรอง TLS ของระบบ และเก็บผลลัพธ์ที่สำเร็จไว้ข้ามการเริ่มใหม่เพื่อใช้สำรองแบบออฟไลน์
-- ระบบเผยแพร่จะซิงค์ไฟล์รายการอัปเดตที่ลงลายมือชื่อไปยังแหล่งสำรองหลังทุกรีลีส
+- การค้นหาชื่อไฟล์รองรับนิพจน์ทั่วไปของ Rust พร้อมตัวเลือกแยกหรือไม่แยกตัวพิมพ์ใหญ่เล็ก นิพจน์ที่ไม่ถูกต้องจะแสดงข้อผิดพลาดตามภาษาก่อนเริ่มสแกนโฟลเดอร์
 <!-- /lang -->
 
 <!-- lang:pl -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Sprawdzanie aktualizacji równolegle pobiera manifesty GitHub Release, Raw i Statically oraz nie używa już limitowanego API GitHub.
-- W Windows żądania korzystają z systemowego magazynu certyfikatów TLS, a poprawne wyniki pozostają po ponownym uruchomieniu jako zapas offline.
-- Automatyzacja synchronizuje lustro podpisanego manifestu po każdym wydaniu.
+- Wyszukiwanie nazw obsługuje teraz wyrażenia regularne Rust z opcjonalnym rozróżnianiem wielkości liter. Nieprawidłowe wyrażenie wyświetla zlokalizowany błąd przed skanowaniem folderów.
 <!-- /lang -->
 
 <!-- lang:uk -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Перевірка паралельно запитує маніфести GitHub Release, Raw і Statically та більше не використовує обмежений API GitHub.
-- У Windows запити використовують системне сховище сертифікатів TLS, а успішні результати зберігаються після перезапуску як автономний резерв.
-- Автоматизація синхронізує дзеркало підписаного маніфесту після кожного випуску.
+- Пошук за іменем тепер підтримує регулярні вирази Rust з урахуванням або без урахування регістру. Недійсний вираз показує локалізовану помилку до початку сканування папок.
 <!-- /lang -->
 
 <!-- lang:ar -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- يفحص التطبيق بيانات GitHub Release وRaw وStatically بالتوازي ولم يعد يستخدم واجهة GitHub المحدودة.
-- تستخدم طلبات Windows مخزن شهادات TLS للنظام، وتبقى النتائج الناجحة بعد إعادة التشغيل كخيار احتياطي دون اتصال.
-- تزامن أتمتة الإصدار مرآة بيان التحديث الموقّع بعد كل إصدار.
+- يدعم البحث باسم الملف الآن تعبيرات Rust النمطية مع خيار مطابقة حالة الأحرف أو تجاهلها. تظهر رسالة خطأ مترجمة للتعبير غير الصالح قبل بدء فحص المجلدات.
 <!-- /lang -->
 
 <!-- lang:hi -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- अपडेट जाँच अब GitHub Release, Raw और Statically मैनिफेस्ट को समानांतर अनुरोध करती है और सीमित GitHub API का उपयोग नहीं करती।
-- Windows अनुरोध सिस्टम TLS प्रमाणपत्र भंडार का उपयोग करते हैं और सफल परिणाम पुनः आरंभ के बाद ऑफलाइन विकल्प के रूप में सुरक्षित रहते हैं।
-- रिलीज़ स्वचालन हर रिलीज़ के बाद हस्ताक्षरित अपडेट मैनिफेस्ट मिरर को समन्वित करता है।
+- फ़ाइल नाम खोज अब Rust रेगुलर एक्सप्रेशन और केस-संवेदी या असंवेदी मिलान का समर्थन करती है। अमान्य एक्सप्रेशन पर फ़ोल्डर स्कैन शुरू होने से पहले स्थानीयकृत त्रुटि दिखाई जाती है।
 <!-- /lang -->
 
 <!-- lang:it -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Il controllo interroga in parallelo i manifesti GitHub Release, Raw e Statically e non usa più l'API GitHub con limiti.
-- Su Windows le richieste usano l'archivio certificati TLS di sistema e i risultati validi persistono dopo il riavvio come alternativa offline.
-- L'automazione sincronizza il mirror del manifesto firmato dopo ogni versione.
+- La ricerca per nome ora supporta espressioni regolari Rust con o senza distinzione tra maiuscole. Le espressioni non valide mostrano un errore localizzato prima della scansione delle cartelle.
 <!-- /lang -->
 
 <!-- lang:nl -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- De updatecontrole vraagt GitHub Release-, Raw- en Statically-manifesten parallel op en gebruikt de beperkte GitHub-API niet meer.
-- Op Windows gebruiken verzoeken het TLS-certificaatarchief van het systeem en blijven succesvolle resultaten na herstart beschikbaar als offline terugval.
-- De release-automatisering synchroniseert na elke uitgave de spiegel van het ondertekende manifest.
+- Zoeken op bestandsnaam ondersteunt nu reguliere Rust-expressies met of zonder hoofdlettergevoeligheid. Ongeldige expressies geven vóór het scannen een gelokaliseerde foutmelding.
 <!-- /lang -->
 
 <!-- lang:tr -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Güncelleme denetimi GitHub Release, Raw ve Statically bildirimlerini paralel sorguluyor ve sınırlı GitHub API'sini artık kullanmıyor.
-- Windows istekleri sistem TLS sertifika deposunu kullanıyor ve başarılı sonuçlar yeniden başlatma sonrasında çevrimdışı yedek olarak saklanıyor.
-- Sürüm otomasyonu her yayından sonra imzalı güncelleme bildirimi yansısını eşitliyor.
+- Dosya adı araması artık büyük/küçük harf duyarlı veya duyarsız Rust düzenli ifadelerini destekliyor. Geçersiz ifadeler klasör taraması başlamadan yerelleştirilmiş bir hatayla reddediliyor.
 <!-- /lang -->
 
 <!-- lang:es -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- La comprobación consulta en paralelo los manifiestos de GitHub Release, Raw y Statically, y deja de usar la API de GitHub con límites.
-- En Windows se usa el almacén de certificados TLS del sistema y los resultados correctos persisten entre reinicios como alternativa sin conexión.
-- La automatización sincroniza el espejo del manifiesto firmado después de cada versión.
+- La búsqueda por nombre admite expresiones regulares de Rust y permite distinguir o ignorar mayúsculas. Las expresiones no válidas muestran un error localizado antes de explorar las carpetas.
 <!-- /lang -->
 
 <!-- lang:fr -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- La vérification interroge en parallèle les manifestes GitHub Release, Raw et Statically et n'utilise plus l'API GitHub limitée.
-- Sous Windows, les requêtes utilisent le magasin de certificats TLS du système et les résultats valides persistent après redémarrage comme secours hors ligne.
-- L'automatisation synchronise le miroir du manifeste signé après chaque version.
+- La recherche de noms prend en charge les expressions régulières Rust avec ou sans distinction de casse. Une expression invalide affiche une erreur localisée avant l'analyse des dossiers.
 <!-- /lang -->
 
 <!-- lang:de -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Die Update-Prüfung fragt GitHub Release, Raw und Statically parallel ab und verwendet die begrenzte GitHub-API nicht mehr.
-- Unter Windows wird der TLS-Zertifikatsspeicher des Systems genutzt; erfolgreiche Ergebnisse bleiben nach Neustarts als Offline-Rückfall erhalten.
-- Die Release-Automatisierung synchronisiert den Spiegel des signierten Manifests nach jeder Veröffentlichung.
+- Die Dateinamensuche unterstützt jetzt reguläre Rust-Ausdrücke mit optionaler Groß-/Kleinschreibung. Ungültige Ausdrücke werden vor dem Ordnerscan mit einer lokalisierten Meldung abgewiesen.
 <!-- /lang -->
 
 <!-- lang:pt-BR -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- A verificação consulta em paralelo os manifestos do GitHub Release, Raw e Statically e não usa mais a API limitada do GitHub.
-- No Windows, as solicitações usam o repositório de certificados TLS do sistema e os resultados válidos persistem após reinícios como alternativa offline.
-- A automação sincroniza o espelho do manifesto assinado após cada versão.
+- A pesquisa por nome agora aceita expressões regulares Rust com ou sem diferenciação de maiúsculas. Expressões inválidas exibem um erro localizado antes da varredura das pastas.
 <!-- /lang -->
 
 <!-- lang:ru -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- Проверка параллельно запрашивает манифесты GitHub Release, Raw и Statically и больше не использует ограниченный API GitHub.
-- В Windows используется системное хранилище сертификатов TLS, а успешные результаты сохраняются после перезапуска как автономный резерв.
-- Автоматизация синхронизирует зеркало подписанного манифеста после каждого выпуска.
+- Поиск по имени теперь поддерживает регулярные выражения Rust с учётом или без учёта регистра. Недопустимое выражение вызывает локализованную ошибку до начала сканирования папок.
 <!-- /lang -->
 
 <!-- lang:zh-CN -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- 更新检查现在并发请求 GitHub Release、Raw 和 Statically 清单，不再调用有频率限制的 GitHub API。
-- Windows 请求改用系统 TLS 证书库，成功结果会跨重启持久缓存并可在离线时回退。
-- 发布流程会在每次 Release 后自动同步签名更新清单镜像。
+- 文件名搜索现已支持 Rust 正则表达式，并可选择区分或忽略大小写。无效表达式会在目录扫描开始前显示本地化错误提示。
 <!-- /lang -->
 
 <!-- lang:zh-TW -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- 更新檢查現在並行請求 GitHub Release、Raw 與 Statically 清單，不再呼叫有限流的 GitHub API。
-- Windows 請求改用系統 TLS 憑證庫，成功結果會跨重新啟動持久快取並可在離線時備援。
-- 發布流程會在每次 Release 後自動同步簽章更新清單鏡像。
+- 檔名搜尋現已支援 Rust 正規表示式，並可選擇區分或忽略大小寫。無效表示式會在目錄掃描開始前顯示本地化錯誤提示。
 <!-- /lang -->
 
 <!-- lang:ja -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- 更新確認は GitHub Release、Raw、Statically のマニフェストへ並行して接続し、レート制限のある GitHub API は使用しなくなりました。
-- Windows ではシステムの TLS 証明書ストアを使用し、成功した結果を再起動後もオフライン用に保持します。
-- リリース後に署名付き更新マニフェストのミラーを自動同期するようになりました。
+- ファイル名検索で Rust の正規表現を使用でき、大文字小文字の区別も選択できます。無効な式はディレクトリ走査前にローカライズされたエラーとして表示されます。
 <!-- /lang -->
 
 <!-- lang:ko -->
-## FileNavigation v0.1.9
+## FileNavigation v0.1.10
 
-- 업데이트 확인이 GitHub Release, Raw, Statically 매니페스트를 동시에 요청하며 호출 제한이 있는 GitHub API를 더 이상 사용하지 않습니다.
-- Windows 요청은 시스템 TLS 인증서 저장소를 사용하고 성공 결과를 재시작 후에도 오프라인 대체용으로 보관합니다.
-- 릴리스 후 서명된 업데이트 매니페스트 미러가 자동으로 동기화됩니다.
+- 파일 이름 검색에서 Rust 정규식을 지원하며 대소문자 구분 여부를 선택할 수 있습니다. 잘못된 표현식은 디렉터리 스캔 전에 현지화된 오류로 표시됩니다.
 <!-- /lang -->

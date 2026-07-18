@@ -94,6 +94,7 @@ const elements = {
   pickDir: document.querySelector("#pick-dir"),
   caseSensitive: document.querySelector("#case-sensitive"),
   includeHidden: document.querySelector("#include-hidden"),
+  useRegex: document.querySelector("#use-regex"),
   maxResults: document.querySelector("#max-results"),
   language: document.querySelector("#language"),
   search: document.querySelector("#search"),
@@ -264,6 +265,10 @@ elements.query.addEventListener("input", () => scheduleSearch());
 elements.rootPath.addEventListener("input", () => scheduleSearch());
 elements.caseSensitive.addEventListener("change", () => scheduleSearch());
 elements.includeHidden.addEventListener("change", () => scheduleSearch());
+elements.useRegex.addEventListener("change", () => {
+  updateQueryMode();
+  scheduleSearch();
+});
 elements.maxResults.addEventListener("change", () => scheduleSearch());
 elements.resultFilter.addEventListener("input", () => applyResultView());
 elements.typeFilter.addEventListener("change", () => applyResultView());
@@ -426,6 +431,12 @@ function scheduleSearch() {
   debounceTimer = window.setTimeout(() => runSearch(), 280);
 }
 
+function updateQueryMode() {
+  const placeholderKey = elements.useRegex.checked ? "regexPlaceholder" : "queryPlaceholder";
+  elements.query.dataset.i18nPlaceholder = placeholderKey;
+  elements.query.placeholder = translate(placeholderKey);
+}
+
 async function runSearch() {
   const root = elements.rootPath.value.trim();
   const query = elements.query.value.trim();
@@ -456,6 +467,7 @@ async function runSearch() {
         root,
         query,
         case_sensitive: elements.caseSensitive.checked,
+        use_regex: elements.useRegex.checked,
         include_hidden: elements.includeHidden.checked,
         max_results: Number(elements.maxResults.value || 500)
       }

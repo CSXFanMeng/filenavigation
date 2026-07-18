@@ -590,6 +590,10 @@ button.is-busy svg {
   gap: 8px;
 }
 
+.regex-option {
+  grid-column: 1 / -1;
+}
+
 .check-row {
   position: relative;
   display: flex;

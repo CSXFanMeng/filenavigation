@@ -7,6 +7,7 @@ FileNavigation ist eine mit Rust und Tauri entwickelte Desktop-Anwendung zum Suc
 ## Funktionen
 
 - Lokale Datei- und Ordnersuche
+- Wörtliche oder reguläre Dateinamen-Suche mit Steuerung der Groß-/Kleinschreibung
 - Vollständig asynchrones Rust/Tauri-Backend mit Abbruch und Live-Fortschritt
 - Filterung, Sortierung und schrittweises Rendern der Ergebnisse
 - Moderne responsive Oberfläche mit Lucide-Symbolen und zugänglichem Fokus

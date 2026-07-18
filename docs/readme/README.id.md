@@ -7,6 +7,7 @@ FileNavigation adalah aplikasi desktop Rust + Tauri untuk menemukan file dan fol
 ## Fitur
 
 - Pencarian file dan folder lokal
+- Pencocokan nama file literal atau ekspresi reguler dengan kontrol huruf besar/kecil
 - Backend Rust/Tauri sepenuhnya asinkron dengan pembatalan dan progres langsung
 - Filter hasil, filter jenis, pengurutan, dan rendering bertahap
 - Antarmuka responsif modern dengan ikon Lucide dan fokus yang mudah diakses
