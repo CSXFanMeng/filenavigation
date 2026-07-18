@@ -781,7 +781,7 @@ dependencies = [
 
 [[package]]
 name = "filenavigation"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "reqwest 0.12.28",

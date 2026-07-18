@@ -17,7 +17,7 @@ use serde::{Deserialize, Serialize};
 use tauri::{Emitter, Manager};
 
 const UPDATER_MANIFEST_URLS: [&str; 3] = [
-    "https://cdn.jsdelivr.net/gh/CSXFanMeng/filenavigation@master/updates/latest.json",
+    "https://cdn.statically.io/gh/CSXFanMeng/filenavigation/master/updates/latest.json",
     "https://raw.githubusercontent.com/CSXFanMeng/filenavigation/master/updates/latest.json",
     "https://github.com/CSXFanMeng/filenavigation/releases/latest/download/latest.json",
 ];
@@ -331,12 +331,36 @@ async fn fetch_updater_manifest(client: &reqwest::Client) -> Result<UpdaterManif
             requests.spawn(async move { fetch_updater_manifest_once(&request_client, url).await });
         }
 
-        while let Some(result) = requests.join_next().await {
+        let mut best_manifest: Option<UpdaterManifest> = None;
+        loop {
+            let wait = if best_manifest.is_some() {
+                Duration::from_secs(2)
+            } else {
+                Duration::from_secs(11)
+            };
+            let Ok(next_result) = tokio::time::timeout(wait, requests.join_next()).await else {
+                break;
+            };
+            let Some(result) = next_result else {
+                break;
+            };
+
             match result {
-                Ok(Ok(manifest)) => return Ok(manifest),
+                Ok(Ok(manifest)) => {
+                    let replace = best_manifest
+                        .as_ref()
+                        .is_none_or(|best| manifest_version(&manifest) > manifest_version(best));
+                    if replace {
+                        best_manifest = Some(manifest);
+                    }
+                }
                 Ok(Err(error)) => last_error = error,
                 Err(_) => last_error = "updateNetworkFailed".to_string(),
             }
+        }
+
+        if let Some(manifest) = best_manifest {
+            return Ok(manifest);
         }
 
         if attempt == 0 {
@@ -345,6 +369,11 @@ async fn fetch_updater_manifest(client: &reqwest::Client) -> Result<UpdaterManif
     }
 
     Err(last_error)
+}
+
+fn manifest_version(manifest: &UpdaterManifest) -> Version {
+    Version::parse(manifest.version.trim_start_matches('v'))
+        .unwrap_or_else(|_| Version::new(0, 0, 0))
 }
 
 async fn fetch_updater_manifest_once(
@@ -697,7 +726,7 @@ mod tests {
     use super::{
         UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
         build_update_response, fetch_updater_manifest_once, localized_release_notes,
-        release_info_from_manifest,
+        manifest_version, release_info_from_manifest,
     };
 
     #[test]
@@ -774,6 +803,18 @@ English notes.
             response.assets[0].digest.as_deref(),
             Some("minisign:signature")
         );
+    }
+
+    #[test]
+    fn compares_mirror_versions_semantically() {
+        let manifest = |version: &str| UpdaterManifest {
+            version: version.to_string(),
+            notes: String::new(),
+            pub_date: None,
+            platforms: HashMap::new(),
+        };
+
+        assert!(manifest_version(&manifest("0.1.10")) > manifest_version(&manifest("0.1.9")));
     }
 
     #[tokio::test]
