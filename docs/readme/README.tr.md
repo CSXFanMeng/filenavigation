@@ -10,6 +10,8 @@ FileNavigation, seçilen yerel dizindeki dosya ve klasörleri bulmak için Rust 
 - Büyük/küçük harf denetimli düz metin veya düzenli ifade dosya adı eşleştirmesi
 - İptal ve canlı ilerleme destekli tamamen asenkron Rust/Tauri arka ucu
 - Sonuç filtreleme, tür filtresi, sıralama ve aşamalı işleme
+- Katlanabilir klasörler, klasör öncelikli sıralama ve toplam klasör boyutlarıyla göreli çok düzeyli sonuç ağacı
+- Anahtar sözcük girmeden seçilen klasördeki görünür öğelere göz atma
 - Lucide simgeleri ve erişilebilir odak durumlarıyla modern duyarlı arayüz
 - Uygulamanın çizdiği kenarlık ve yerelleştirilmiş denetimlerle çerçevesiz pencere
 - Sabit çalışma alanı ve bağımsız kayan sonuç listesi

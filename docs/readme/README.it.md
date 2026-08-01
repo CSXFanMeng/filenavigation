@@ -10,6 +10,8 @@ FileNavigation è un’app desktop Rust + Tauri per trovare file e cartelle in u
 - Corrispondenza letterale o tramite espressione regolare dei nomi con controllo maiuscole
 - Backend Rust/Tauri completamente asincrono con annullamento e avanzamento in tempo reale
 - Filtri, ordinamento e rendering progressivo dei risultati
+- Albero relativo multilivello con cartelle comprimibili, cartelle in cima e dimensioni aggregate
+- Esplorazione delle voci visibili nella cartella selezionata senza parola chiave
 - Interfaccia moderna e responsive con icone Lucide e focus accessibile
 - Finestra senza cornice disegnata dall’app con controlli localizzati
 - Area di lavoro fissa e lista risultati con scorrimento indipendente

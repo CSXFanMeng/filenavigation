@@ -20,6 +20,8 @@ AI was used during development only. FileNavigation does not call OpenAI service
 
 - Fully asynchronous, cancellable local file search with live progress
 - Literal or regular-expression file-name matching with case control
+- Relative multi-level result trees with collapsible folders, folder-first sorting, and aggregated folder sizes
+- Browse every visible entry under a selected directory without entering a keyword
 - Responsive frameless interface with independent result and release-note scrolling
 - 20 complete interface languages stored in independent locale files
 - Persistent light and dark themes in a category-based settings window

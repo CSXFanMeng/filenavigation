@@ -1466,13 +1466,40 @@ button.is-busy svg {
 
 .result-row {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) 20px;
-  gap: 12px;
+  grid-template-columns: 22px 38px minmax(0, 1fr) 20px;
+  gap: 8px;
   align-items: center;
-  padding: 11px 10px;
+  padding: 11px 10px 11px calc(8px + var(--tree-indent, 0px));
   border-bottom: 1px solid var(--row-border);
   border-radius: 6px;
   transition: background 130ms ease, box-shadow 130ms ease;
+}
+
+.tree-toggle,
+.tree-toggle-placeholder {
+  display: grid;
+  width: 22px;
+  height: 30px;
+  place-items: center;
+}
+
+.tree-toggle {
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background 130ms ease, color 130ms ease;
+}
+
+.tree-toggle:hover,
+.tree-toggle:focus-visible {
+  background: var(--control-hover-bg);
+  color: var(--accent-strong);
+}
+
+.tree-toggle:active {
+  background: var(--pressed-bg);
 }
 
 .result-row:hover,
@@ -1656,9 +1683,9 @@ button.is-busy svg {
   }
 
   .result-row {
-    grid-template-columns: 38px minmax(0, 1fr);
-    gap: 10px;
-    padding: 10px 8px;
+    grid-template-columns: 20px 36px minmax(0, 1fr);
+    gap: 7px;
+    padding: 10px 8px 10px calc(6px + var(--tree-indent, 0px));
   }
 
   .file-icon {

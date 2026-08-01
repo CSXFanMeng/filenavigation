@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   Check,
   ChevronDown,
+  ChevronRight,
   Download,
   ExternalLink,
   File as FileIcon,
@@ -46,6 +47,13 @@ import {
   createIcons
 } from "lucide";
 import { languageOptions, resolveLanguage as resolveLocaleLanguage, translateForLanguage } from "./i18n/index.js";
+import {
+  buildResultTree,
+  countVisibleResults,
+  filterResultTree,
+  flattenResultTree,
+  sortResultTree
+} from "./result-tree.js";
 import "./styles.css";
 
 const uiIcons = {
@@ -139,7 +147,9 @@ let isSearching = false;
 let renderToken = 0;
 let currentLanguage = resolveLanguage(localStorage.getItem("filenavigation.language") || "auto");
 let lastResults = [];
+let lastResultTree = [];
 let lastVisibleResults = [];
+const collapsedPaths = new Set();
 let lastStats = { files: 0, dirs: 0, skipped: 0, elapsedMs: 0 };
 let lastStatusKey = "waiting";
 let lastStatusCount = 0;
@@ -441,9 +451,11 @@ async function runSearch() {
   const root = elements.rootPath.value.trim();
   const query = elements.query.value.trim();
 
-  if (!root || !query) {
+  if (!root) {
     lastResults = [];
+    lastResultTree = [];
     lastVisibleResults = [];
+    collapsedPaths.clear();
     setStatus("waiting", 0, 0, 0);
     elements.progressDetail.textContent = translate("progressIdle");
     renderEmpty("emptyTitle", "emptyText");
@@ -478,6 +490,8 @@ async function runSearch() {
     }
 
     lastResults = response.results;
+    lastResultTree = buildResultTree(response.results, root);
+    collapsedPaths.clear();
     setStatus(
       response.cancelled ? "searchCancelled" : "found",
       response.stats.files_scanned,
@@ -492,14 +506,16 @@ async function runSearch() {
       : translate("visibleResultCount", formatNumber(response.results.length), formatNumber(response.results.length));
 
     if (response.results.length === 0) {
-      renderEmpty("noResultsTitle", "noResultsText");
+      renderEmpty(query ? "noResultsTitle" : "emptyFolderTitle", query ? "noResultsText" : "emptyFolderText");
     } else {
       applyResultView();
     }
   } catch (error) {
     if (searchId === activeSearchId) {
       lastResults = [];
+      lastResultTree = [];
       lastVisibleResults = [];
+      collapsedPaths.clear();
       setStatus("searchFailed", 0, 0, 0);
       elements.progressDetail.textContent = mapError(error);
       renderEmpty("cannotComplete", mapError(error));
@@ -651,29 +667,19 @@ function applyResultView() {
   const type = elements.typeFilter.value;
   const sort = elements.sortResults.value;
 
-  lastVisibleResults = lastResults
-    .filter((result) => {
-      if (type !== "all" && result.kind !== type) {
-        return false;
-      }
-
-      if (!query) {
-        return true;
-      }
-
-      return `${result.name}\n${result.path}`.toLocaleLowerCase().includes(query);
-    })
-    .sort((left, right) => compareResults(left, right, sort));
+  lastVisibleResults = sortResultTree(filterResultTree(lastResultTree, query, type), sort, currentLanguage);
+  const visibleCount = countVisibleResults(lastVisibleResults);
+  const totalCount = lastResults.length;
 
   if (lastResults.length > 0) {
     elements.progressDetail.textContent = translate(
       "visibleResultCount",
-      formatNumber(lastVisibleResults.length),
-      formatNumber(lastResults.length)
+      formatNumber(visibleCount),
+      formatNumber(totalCount)
     );
   }
 
-  if (lastResults.length > 0 && lastVisibleResults.length === 0) {
+  if (lastResults.length > 0 && visibleCount === 0) {
     renderEmpty("noVisibleResultsTitle", "noVisibleResultsText");
     return;
   }
@@ -681,29 +687,12 @@ function applyResultView() {
   renderResults(lastVisibleResults);
 }
 
-function compareResults(left, right, sort) {
-  if (sort === "name-desc") {
-    return right.name.localeCompare(left.name, currentLanguage);
-  }
-
-  if (sort === "modified-desc" || sort === "modified-asc") {
-    const leftTime = Date.parse(left.modified || "") || 0;
-    const rightTime = Date.parse(right.modified || "") || 0;
-    return sort === "modified-desc" ? rightTime - leftTime : leftTime - rightTime;
-  }
-
-  if (sort === "size-desc" || sort === "size-asc") {
-    return sort === "size-desc" ? right.size - left.size : left.size - right.size;
-  }
-
-  return left.name.localeCompare(right.name, currentLanguage);
-}
-
-function renderResults(results) {
+function renderResults(tree) {
   renderToken += 1;
   const token = renderToken;
   elements.emptyState.hidden = true;
   elements.resultList.innerHTML = "";
+  const results = flattenResultTree(tree, collapsedPaths);
 
   let index = 0;
   const renderChunk = () => {
@@ -730,16 +719,45 @@ function renderResults(results) {
 function createResultRow(result) {
   const row = document.createElement("article");
   row.className = "result-row";
+  row.style.setProperty("--tree-indent", `${Math.min(result.depth, 12) * 18}px`);
+  row.title = result.path;
+
+  const hasChildren = result.is_dir && result.children.length > 0;
+  const treeControl = document.createElement(hasChildren ? "button" : "span");
+  treeControl.className = hasChildren ? "tree-toggle" : "tree-toggle-placeholder";
+  if (hasChildren) {
+    treeControl.type = "button";
+    treeControl.setAttribute("aria-expanded", String(!result.collapsed));
+    treeControl.setAttribute("aria-label", `${translate(result.collapsed ? "expandFolder" : "collapseFolder")}: ${result.name}`);
+    treeControl.append(
+      createIconElement(result.collapsed ? ChevronRight : ChevronDown, {
+        width: 16,
+        height: 16,
+        "stroke-width": 2
+      })
+    );
+    treeControl.addEventListener("click", () => {
+      if (result.collapsed) {
+        collapsedPaths.delete(result.relative_path);
+      } else {
+        collapsedPaths.add(result.relative_path);
+      }
+      renderResults(lastVisibleResults);
+    });
+  }
 
   const icon = document.createElement("div");
   icon.className = `file-icon${result.is_dir ? " directory" : ""}`;
   icon.setAttribute("aria-hidden", "true");
   icon.append(
-    createIconElement(result.is_dir ? FolderIcon : FileIcon, {
-      width: 19,
-      height: 19,
-      "stroke-width": 1.8
-    })
+    createIconElement(
+      result.is_dir && hasChildren && !result.collapsed ? FolderOpen : result.is_dir ? FolderIcon : FileIcon,
+      {
+        width: 19,
+        height: 19,
+        "stroke-width": 1.8
+      }
+    )
   );
 
   const content = document.createElement("div");
@@ -753,7 +771,7 @@ function createResultRow(result) {
 
   const path = document.createElement("p");
   path.className = "result-path";
-  path.textContent = result.path;
+  path.textContent = result.relative_path;
 
   const meta = document.createElement("p");
   meta.className = "result-meta";
@@ -770,7 +788,7 @@ function createResultRow(result) {
   });
 
   content.append(name, path, meta);
-  row.append(icon, content, openIndicator);
+  row.append(treeControl, icon, content, openIndicator);
   return row;
 }
 

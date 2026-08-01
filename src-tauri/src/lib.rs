@@ -60,6 +60,7 @@ struct SearchStats {
 struct SearchResult {
     name: String,
     path: String,
+    relative_path: String,
     kind: String,
     is_dir: bool,
     size: u64,
@@ -559,6 +560,7 @@ fn perform_search(
         request.case_sensitive,
         request.use_regex,
     )?;
+    let search_root = root.clone();
     let mut queue = VecDeque::from([root]);
     let mut results = Vec::new();
     let mut files_scanned = 0;
@@ -612,7 +614,13 @@ fn perform_search(
             }
 
             if matcher.is_match(&file_name) {
-                results.push(to_result(path.clone(), file_name, metadata, is_dir));
+                results.push(to_result(
+                    &search_root,
+                    path.clone(),
+                    file_name,
+                    metadata,
+                    is_dir,
+                ));
                 if results.len() >= max_results {
                     truncated = true;
                     break;
@@ -680,15 +688,31 @@ fn normalize(value: &str, case_sensitive: bool) -> String {
     }
 }
 
-fn to_result(path: PathBuf, name: String, metadata: fs::Metadata, is_dir: bool) -> SearchResult {
+fn to_result(
+    root: &Path,
+    path: PathBuf,
+    name: String,
+    metadata: fs::Metadata,
+    is_dir: bool,
+) -> SearchResult {
     SearchResult {
         name,
         path: path.to_string_lossy().to_string(),
+        relative_path: relative_path(root, &path),
         kind: if is_dir { "directory" } else { "file" }.to_string(),
         is_dir,
         size: if is_dir { 0 } else { metadata.len() },
         modified: metadata.modified().ok().map(format_system_time),
     }
+}
+
+fn relative_path(root: &Path, path: &Path) -> String {
+    path.strip_prefix(root)
+        .unwrap_or(path)
+        .components()
+        .map(|component| component.as_os_str().to_string_lossy())
+        .collect::<Vec<_>>()
+        .join("/")
 }
 
 fn format_system_time(time: SystemTime) -> String {
@@ -767,7 +791,7 @@ mod tests {
     use super::{
         NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
         build_update_response, fetch_updater_manifest_once, localized_release_notes,
-        manifest_version, release_info_from_manifest,
+        manifest_version, relative_path, release_info_from_manifest,
     };
 
     #[test]
@@ -885,6 +909,22 @@ English notes.
                 .as_deref(),
             Some("invalidRegex")
         );
+    }
+
+    #[test]
+    fn empty_plain_query_matches_every_file_name() {
+        let matcher = NameMatcher::new("", false, false).expect("empty plain matcher");
+
+        assert!(matcher.is_match("report.pdf"));
+        assert!(matcher.is_match("nested-folder"));
+    }
+
+    #[test]
+    fn result_paths_are_relative_to_the_selected_root() {
+        let root = std::path::PathBuf::from("search-root");
+        let nested = root.join("xx").join("123").join("abc").join("report.pdf");
+
+        assert_eq!(relative_path(&root, &nested), "xx/123/abc/report.pdf");
     }
 
     #[tokio::test]
