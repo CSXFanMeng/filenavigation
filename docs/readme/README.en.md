@@ -10,8 +10,8 @@ FileNavigation is a Rust + Tauri desktop application for finding files and folde
 - Literal or regular-expression file-name matching with case control
 - Fully asynchronous Rust/Tauri backend with cancellation and live progress
 - Result filtering, type filtering, sorting, and progressive rendering
-- Relative multi-level result trees with collapsible folders, folder-first sorting, and aggregated folder sizes
-- Browse every visible entry under a selected directory without entering a keyword
+- Relative multi-level result trees with folders collapsed by default, folder-first sorting, and aggregated folder sizes
+- Browse every visible entry under a selected directory without entering a keyword or applying a result cap
 - Modern responsive interface with Lucide icons and accessible focus states
 - Frameless app-drawn window with draggable, localized controls
 - Fixed workspace with an independently scrolling results list

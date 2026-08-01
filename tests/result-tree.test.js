@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 
 import {
   buildResultTree,
+  collectExpandableFolderPaths,
   countResultTree,
   countVisibleResults,
   filterResultTree,
@@ -78,4 +79,12 @@ test("filtering keeps ancestor folders and collapsing hides descendants", () => 
   assert.equal(countVisibleResults(filtered), 1);
   assert.deepEqual(flattenResultTree(filtered, new Set()).map((node) => node.name), ["123", "abc", "large.bin"]);
   assert.deepEqual(flattenResultTree(filtered, new Set(["123"])).map((node) => node.name), ["123"]);
+});
+
+test("all expandable folders can be collapsed by default", () => {
+  const tree = buildResultTree(results, "D:\\xx");
+  const collapsed = collectExpandableFolderPaths(tree);
+
+  assert.deepEqual([...collapsed], ["123", "123/abc"]);
+  assert.deepEqual(flattenResultTree(tree, collapsed).map((node) => node.name), ["123", "top.txt"]);
 });

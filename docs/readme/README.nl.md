@@ -10,8 +10,8 @@ FileNavigation is een Rust + Tauri-desktopapp om bestanden en mappen in een geko
 - Letterlijke of reguliere-expressiezoekopdracht voor bestandsnamen met hoofdlettercontrole
 - Volledig asynchrone Rust/Tauri-backend met annuleren en live voortgang
 - Resultaatfilters, typefilters, sortering en geleidelijke weergave
-- Relatieve resultaatboom met meerdere niveaus, inklapbare mappen, mappen bovenaan en opgetelde mapgroottes
-- Zichtbare items in een gekozen map bekijken zonder trefwoord
+- Relatieve resultaatboom met standaard ingeklapte mappen, mappen bovenaan en opgetelde mapgroottes
+- Alle zichtbare items bekijken zonder trefwoord of resultatenlimiet
 - Moderne responsieve interface met Lucide-pictogrammen en toegankelijke focus
 - Randloos, door de app getekend venster met vertaalde bediening
 - Vaste werkruimte met onafhankelijk scrollende resultatenlijst

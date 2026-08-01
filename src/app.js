@@ -25,8 +25,6 @@ import {
   GitBranch,
   HardDrive,
   Languages,
-  ListFilter,
-  ListOrdered,
   Maximize2,
   Minus,
   Moon,
@@ -49,6 +47,7 @@ import {
 import { languageOptions, resolveLanguage as resolveLocaleLanguage, translateForLanguage } from "./i18n/index.js";
 import {
   buildResultTree,
+  collectExpandableFolderPaths,
   countVisibleResults,
   filterResultTree,
   flattenResultTree,
@@ -72,8 +71,6 @@ const uiIcons = {
   GitBranch,
   HardDrive,
   Languages,
-  ListFilter,
-  ListOrdered,
   Maximize2,
   Minus,
   Moon,
@@ -103,7 +100,6 @@ const elements = {
   caseSensitive: document.querySelector("#case-sensitive"),
   includeHidden: document.querySelector("#include-hidden"),
   useRegex: document.querySelector("#use-regex"),
-  maxResults: document.querySelector("#max-results"),
   language: document.querySelector("#language"),
   search: document.querySelector("#search"),
   cancelSearch: document.querySelector("#cancel-search"),
@@ -153,7 +149,6 @@ const collapsedPaths = new Set();
 let lastStats = { files: 0, dirs: 0, skipped: 0, elapsedMs: 0 };
 let lastStatusKey = "waiting";
 let lastStatusCount = 0;
-let lastStatusTruncated = false;
 let lastUpdate = null;
 let lastUpdateStatus = "updateIdle";
 let lastUpdateError = "";
@@ -253,7 +248,6 @@ elements.language.addEventListener("change", () => {
     lastStats.dirs,
     lastStats.elapsedMs,
     lastStatusCount,
-    lastStatusTruncated,
     lastStats.skipped
   );
   applyResultView();
@@ -279,7 +273,6 @@ elements.useRegex.addEventListener("change", () => {
   updateQueryMode();
   scheduleSearch();
 });
-elements.maxResults.addEventListener("change", () => scheduleSearch());
 elements.resultFilter.addEventListener("input", () => applyResultView());
 elements.typeFilter.addEventListener("change", () => applyResultView());
 elements.sortResults.addEventListener("change", () => applyResultView());
@@ -425,7 +418,6 @@ async function initializeProgressListener() {
       progress.directories_scanned,
       progress.elapsed_ms,
       progress.matches,
-      false,
       progress.skipped_entries
     );
     elements.progressDetail.textContent = translate(
@@ -480,8 +472,7 @@ async function runSearch() {
         query,
         case_sensitive: elements.caseSensitive.checked,
         use_regex: elements.useRegex.checked,
-        include_hidden: elements.includeHidden.checked,
-        max_results: Number(elements.maxResults.value || 500)
+        include_hidden: elements.includeHidden.checked
       }
     });
 
@@ -492,13 +483,13 @@ async function runSearch() {
     lastResults = response.results;
     lastResultTree = buildResultTree(response.results, root);
     collapsedPaths.clear();
+    collectExpandableFolderPaths(lastResultTree).forEach((path) => collapsedPaths.add(path));
     setStatus(
       response.cancelled ? "searchCancelled" : "found",
       response.stats.files_scanned,
       response.stats.directories_scanned,
       response.stats.elapsed_ms,
       response.results.length,
-      response.truncated,
       response.stats.skipped_entries
     );
     elements.progressDetail.textContent = response.cancelled
@@ -632,14 +623,13 @@ function renderUpdateInstallStatus() {
   }
 }
 
-function setStatus(statusKey, files, dirs, elapsedMs, count = 0, truncated = false, skipped = 0) {
+function setStatus(statusKey, files, dirs, elapsedMs, count = 0, skipped = 0) {
   lastStatusKey = statusKey;
   lastStatusCount = count;
-  lastStatusTruncated = truncated;
   lastStats = { files, dirs, skipped, elapsedMs };
 
   if (statusKey === "found") {
-    elements.title.textContent = translate(truncated ? "foundTruncated" : "found", count);
+    elements.title.textContent = translate("found", count);
   } else {
     elements.title.textContent = translate(statusKey);
   }

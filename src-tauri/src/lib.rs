@@ -36,7 +36,6 @@ struct SearchRequest {
     #[serde(default)]
     use_regex: bool,
     include_hidden: bool,
-    max_results: usize,
 }
 
 #[derive(Debug, Serialize)]
@@ -44,7 +43,6 @@ struct SearchResponse {
     search_id: String,
     results: Vec<SearchResult>,
     stats: SearchStats,
-    truncated: bool,
     cancelled: bool,
 }
 
@@ -552,7 +550,6 @@ fn perform_search(
         return Err("invalidDirectory".to_string());
     }
 
-    let max_results = request.max_results.clamp(10, 5_000);
     let search_id = request.search_id.clone();
     let started = Instant::now();
     let matcher = NameMatcher::new(
@@ -566,7 +563,6 @@ fn perform_search(
     let mut files_scanned = 0;
     let mut directories_scanned = 0;
     let mut skipped_entries = 0;
-    let mut truncated = false;
     let mut cancelled = false;
     let mut last_emit = Instant::now();
 
@@ -621,10 +617,6 @@ fn perform_search(
                     metadata,
                     is_dir,
                 ));
-                if results.len() >= max_results {
-                    truncated = true;
-                    break;
-                }
             }
 
             if last_emit.elapsed().as_millis() >= 120 {
@@ -644,7 +636,7 @@ fn perform_search(
             }
         }
 
-        if truncated || cancelled {
+        if cancelled {
             break;
         }
     }
@@ -671,7 +663,6 @@ fn perform_search(
             skipped_entries,
             elapsed_ms: started.elapsed().as_millis(),
         },
-        truncated,
         cancelled,
     })
 }

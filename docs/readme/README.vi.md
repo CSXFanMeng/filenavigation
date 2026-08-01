@@ -10,8 +10,8 @@ FileNavigation là ứng dụng máy tính Rust + Tauri để tìm tệp và th�
 - Khớp tên tệp theo chuỗi thường hoặc biểu thức chính quy với tùy chọn phân biệt hoa thường
 - Backend Rust/Tauri hoàn toàn bất đồng bộ, hỗ trợ hủy và tiến trình trực tiếp
 - Lọc, sắp xếp và hiển thị kết quả tăng dần
-- Cây kết quả tương đối nhiều cấp với thư mục có thể thu gọn, thư mục xếp trước và kích thước tổng hợp
-- Duyệt các mục hiển thị trong thư mục đã chọn mà không cần từ khóa
+- Cây kết quả tương đối nhiều cấp với thư mục thu gọn theo mặc định, thư mục xếp trước và kích thước tổng hợp
+- Duyệt mọi mục hiển thị mà không cần từ khóa hoặc giới hạn số kết quả
 - Giao diện đáp ứng hiện đại với biểu tượng Lucide và trạng thái tiêu điểm dễ truy cập
 - Cửa sổ không khung do ứng dụng vẽ với nút điều khiển được bản địa hóa
 - Không gian làm việc cố định và danh sách kết quả cuộn độc lập

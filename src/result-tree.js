@@ -163,6 +163,18 @@ export function flattenResultTree(nodes, collapsedPaths, depth = 0) {
   return rows;
 }
 
+export function collectExpandableFolderPaths(nodes) {
+  const paths = new Set();
+  const visit = (node) => {
+    if (node.is_dir && node.children.length > 0) {
+      paths.add(node.relative_path);
+    }
+    node.children.forEach(visit);
+  };
+  nodes.forEach(visit);
+  return paths;
+}
+
 export function countResultTree(nodes) {
   return nodes.reduce((total, node) => total + 1 + countResultTree(node.children), 0);
 }
