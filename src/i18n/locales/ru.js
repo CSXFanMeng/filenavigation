@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Загрузка завершена. Установка...",
     restartingUpdate: "Установка завершена. Перезапуск...",
     automaticUpdateFailed: "Не удалось выполнить автоматическое обновление.",
-    updaterUnavailable: "Для этой системы нет совместимого пакета обновления."
+    updaterUnavailable: "Для этой системы нет совместимого пакета обновления.",
+    toolsLabel: "Инструменты", toolSearch: "Поиск", toolIntegrity: "Целостность",
+    integritySourceLabel: "Источник", integritySourceFile: "Один файл", integritySourceFolder: "Вся папка", integritySourceCurrent: "Текущая папка поиска", integritySourceFiltered: "Отфильтрованные результаты",
+    integrityTargetLabel: "Файл или папка", integrityTargetPlaceholder: "Выберите файл или папку", pickIntegrityTarget: "Выбрать файл или папку", pickIntegrityFolder: "Выбрать папку для проверки", pickIntegrityFile: "Выбрать файл для проверки",
+    integrityAlgorithmLabel: "Алгоритм", expectedHashLabel: "Ожидаемый отпечаток (необязательно)", expectedHashPlaceholder: "Вставьте прежний отпечаток для сравнения", verifyIntegrityButton: "Проверить",
+    integrityEyebrow: "Целостность", integrityReady: "Готово к проверке", integrityFiles: "Файлы", integrityBytes: "Прочитано",
+    integrityProgressIdle: "Выберите источник для вычисления отпечатка.", integrityEmptyTitle: "Локальная проверка файлов", integrityEmptyText: "Вычислите отпечаток файла, папки или отфильтрованных результатов.",
+    integrityReading: "Вычисление отпечатков", integrityComplete: "Проверка завершена", integrityCompleteDetail: "Все файлы прочитаны, общий отпечаток готов.",
+    integrityCancelled: "Проверка отменена", integrityCancelledDetail: "Операция остановлена до проверки всех файлов.", integrityFailed: "Ошибка проверки",
+    integrityCompleteTitle: "Отпечаток вычислен", integrityCompleteText: "Сохраните общий отпечаток для повторной проверки набора.",
+    integrityMatchTitle: "Целостность подтверждена", integrityMatchText: "Вычисленный отпечаток совпадает с ожидаемым.", integrityMismatchTitle: "Несоответствие целостности", integrityMismatchText: "Содержимое, пути или набор файлов отличаются от ожидаемого.",
+    aggregateFingerprint: "Общий отпечаток", copyFingerprint: "Копировать отпечаток", fingerprintCopied: "Отпечаток скопирован.", copyFailed: "Не удалось скопировать отпечаток.", fileFingerprints: "Отпечатки файлов",
+    invalidFile: "Выберите допустимый файл.", invalidExpectedHash: "Ожидаемый отпечаток неверен для выбранного алгоритма.", unsupportedHashAlgorithm: "Алгоритм хеширования не поддерживается.",
+    integrityTaskFailed: "Не удалось завершить проверку целостности.", fileReadFailed: "Не удалось прочитать файл.", fileChangedDuringCheck: "Файл изменился во время проверки. Запустите её снова.",
+    folderReadFailed: "Не удалось полностью прочитать папку. Отпечаток не создан.", noFilteredFiles: "В отфильтрованных результатах нет файлов.", invalidIntegritySource: "Выберите допустимый источник."
 };
 
 export default messages;

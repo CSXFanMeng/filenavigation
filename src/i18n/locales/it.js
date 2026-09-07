@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Download completato. Installazione...",
     restartingUpdate: "Installazione completata. Riavvio...",
     automaticUpdateFailed: "Aggiornamento automatico non riuscito.",
-    updaterUnavailable: "Nessun pacchetto di aggiornamento compatibile con questo sistema."
+    updaterUnavailable: "Nessun pacchetto di aggiornamento compatibile con questo sistema.",
+    toolsLabel: "Strumenti", toolSearch: "Ricerca", toolIntegrity: "Integrità",
+    integritySourceLabel: "Origine", integritySourceFile: "Singolo file", integritySourceFolder: "Intera cartella", integritySourceCurrent: "Cartella di ricerca attuale", integritySourceFiltered: "Risultati filtrati",
+    integrityTargetLabel: "File o cartella", integrityTargetPlaceholder: "Scegli un file o una cartella", pickIntegrityTarget: "Scegli file o cartella", pickIntegrityFolder: "Scegli la cartella da verificare", pickIntegrityFile: "Scegli il file da verificare",
+    integrityAlgorithmLabel: "Algoritmo", expectedHashLabel: "Impronta prevista (facoltativa)", expectedHashPlaceholder: "Incolla un'impronta precedente da confrontare", verifyIntegrityButton: "Verifica",
+    integrityEyebrow: "Integrità", integrityReady: "Pronto per la verifica", integrityFiles: "File", integrityBytes: "Letti",
+    integrityProgressIdle: "Scegli un'origine per calcolarne l'impronta.", integrityEmptyTitle: "Verifica i file localmente", integrityEmptyText: "Calcola l'impronta di un file, una cartella o dei risultati filtrati.",
+    integrityReading: "Calcolo delle impronte", integrityComplete: "Verifica completata", integrityCompleteDetail: "Tutti i file sono stati letti e l'impronta complessiva è pronta.",
+    integrityCancelled: "Verifica annullata", integrityCancelledDetail: "L'operazione è terminata prima della verifica di tutti i file.", integrityFailed: "Verifica non riuscita",
+    integrityCompleteTitle: "Impronta calcolata", integrityCompleteText: "Salva l'impronta complessiva per verificare nuovamente questo insieme.",
+    integrityMatchTitle: "Integrità verificata", integrityMatchText: "L'impronta calcolata corrisponde al valore previsto.", integrityMismatchTitle: "Integrità non corrispondente", integrityMismatchText: "Contenuti, percorsi o insieme di file differiscono dall'impronta prevista.",
+    aggregateFingerprint: "Impronta complessiva", copyFingerprint: "Copia impronta", fingerprintCopied: "Impronta copiata.", copyFailed: "Impossibile copiare l'impronta.", fileFingerprints: "Impronte dei file",
+    invalidFile: "Scegli un file valido.", invalidExpectedHash: "L'impronta prevista non è valida per l'algoritmo selezionato.", unsupportedHashAlgorithm: "L'algoritmo hash non è supportato.",
+    integrityTaskFailed: "Impossibile completare la verifica.", fileReadFailed: "Impossibile leggere un file.", fileChangedDuringCheck: "Un file è cambiato durante la verifica. Ripeti l'operazione.",
+    folderReadFailed: "Impossibile leggere completamente la cartella. Nessuna impronta creata.", noFilteredFiles: "I risultati filtrati non contengono file.", invalidIntegritySource: "Scegli un'origine valida."
 };
 
 export default messages;

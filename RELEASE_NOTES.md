@@ -1,139 +1,139 @@
 <!-- lang:en -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Removed the maximum result count. Search and folder browsing now continue until traversal finishes or the user cancels.
-- Result folders now start collapsed by default and can be expanded individually.
+- Added a responsive Integrity tool in the left sidebar. Calculate SHA-256 or SHA-512 for one file, an entire folder, or all files in the current filtered results, with live progress and cancellation.
+- Batch checks show every file fingerprint and a deterministic overall fingerprint. Paste an expected fingerprint to detect changed contents, paths, or file sets.
 <!-- /lang -->
 
 <!-- lang:vi -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Đã bỏ giới hạn số lượng kết quả tối đa. Tìm kiếm và duyệt thư mục tiếp tục cho đến khi hoàn tất hoặc người dùng hủy.
-- Các thư mục trong kết quả hiện được thu gọn mặc định và có thể mở rộng riêng lẻ.
+- Đã thêm công cụ Toàn vẹn đáp ứng ở thanh bên trái. Tính SHA-256 hoặc SHA-512 cho một tệp, toàn bộ thư mục hoặc mọi tệp trong kết quả đã lọc, kèm tiến trình trực tiếp và hủy.
+- Kiểm tra hàng loạt hiển thị dấu vân tay từng tệp và dấu vân tay tổng thể ổn định. Dán dấu vân tay mong đợi để phát hiện nội dung, đường dẫn hoặc tập tệp đã thay đổi.
 <!-- /lang -->
 
 <!-- lang:id -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Batas jumlah hasil maksimum telah dihapus. Pencarian dan penelusuran folder berlanjut hingga pemindaian selesai atau dibatalkan pengguna.
-- Folder hasil kini tertutup secara default dan dapat dibuka satu per satu.
+- Menambahkan alat Integritas responsif di bilah sisi kiri. Hitung SHA-256 atau SHA-512 untuk satu file, seluruh folder, atau semua file dalam hasil terfilter, dengan progres langsung dan pembatalan.
+- Pemeriksaan massal menampilkan sidik jari setiap file dan sidik jari keseluruhan yang deterministik. Tempel sidik jari yang diharapkan untuk mendeteksi perubahan isi, jalur, atau kumpulan file.
 <!-- /lang -->
 
 <!-- lang:th -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- ยกเลิกขีดจำกัดจำนวนผลลัพธ์สูงสุดแล้ว การค้นหาและเรียกดูโฟลเดอร์จะดำเนินต่อจนเสร็จหรือผู้ใช้ยกเลิก
-- โฟลเดอร์ในผลลัพธ์จะถูกพับไว้เป็นค่าเริ่มต้นและสามารถขยายทีละโฟลเดอร์ได้
+- เพิ่มเครื่องมือตรวจสอบความสมบูรณ์แบบตอบสนองในแถบซ้าย คำนวณ SHA-256 หรือ SHA-512 สำหรับไฟล์เดียว ทั้งโฟลเดอร์ หรือไฟล์ทั้งหมดในผลลัพธ์ที่กรอง พร้อมความคืบหน้าและการยกเลิก
+- การตรวจสอบแบบกลุ่มแสดงลายนิ้วมือของแต่ละไฟล์และลายนิ้วมือรวมที่แน่นอน วางลายนิ้วมือที่คาดไว้เพื่อตรวจจับเนื้อหา เส้นทาง หรือชุดไฟล์ที่เปลี่ยนไป
 <!-- /lang -->
 
 <!-- lang:pl -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Usunięto maksymalny limit wyników. Wyszukiwanie i przeglądanie folderów trwa do zakończenia skanowania lub anulowania przez użytkownika.
-- Foldery w wynikach są teraz domyślnie zwinięte i można je rozwijać pojedynczo.
+- Dodano responsywne narzędzie Integralność na lewym pasku. Oblicza SHA-256 lub SHA-512 dla pliku, całego folderu albo wszystkich plików w filtrowanych wynikach, z postępem i anulowaniem.
+- Kontrola zbiorcza pokazuje odcisk każdego pliku oraz deterministyczny odcisk całego zestawu. Wklej oczekiwany odcisk, aby wykryć zmiany zawartości, ścieżek lub zestawu plików.
 <!-- /lang -->
 
 <!-- lang:uk -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Максимальну кількість результатів скасовано. Пошук і перегляд папок тривають до завершення обходу або скасування користувачем.
-- Папки в результатах тепер типово згорнуті та розгортаються окремо.
+- На лівій панелі додано адаптивний інструмент Цілісність. Обчислюйте SHA-256 або SHA-512 для файла, цілої папки чи всіх файлів у відфільтрованих результатах із прогресом і скасуванням.
+- Пакетна перевірка показує відбиток кожного файла та детермінований загальний відбиток. Вставте очікуваний відбиток, щоб виявити зміни вмісту, шляхів або набору файлів.
 <!-- /lang -->
 
 <!-- lang:ar -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- تمت إزالة الحد الأقصى لعدد النتائج. يستمر البحث واستعراض المجلدات حتى اكتمال الفحص أو إلغائه من المستخدم.
-- أصبحت مجلدات النتائج مطوية افتراضيا ويمكن توسيع كل مجلد على حدة.
+- أضيفت أداة سلامة متجاوبة في الشريط الجانبي الأيسر. احسب SHA-256 أو SHA-512 لملف واحد أو مجلد كامل أو جميع ملفات النتائج المصفاة، مع تقدم مباشر وإلغاء.
+- تعرض عمليات الفحص الجماعي بصمة كل ملف وبصمة إجمالية حتمية. الصق بصمة متوقعة لاكتشاف تغير المحتوى أو المسارات أو مجموعة الملفات.
 <!-- /lang -->
 
 <!-- lang:hi -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- परिणामों की अधिकतम संख्या की सीमा हटा दी गई है। खोज और फ़ोल्डर ब्राउज़िंग स्कैन पूरा होने या उपयोगकर्ता द्वारा रद्द किए जाने तक जारी रहती है।
-- परिणाम फ़ोल्डर अब डिफ़ॉल्ट रूप से बंद रहते हैं और उन्हें अलग-अलग खोला जा सकता है।
+- बाएँ साइडबार में प्रतिक्रियाशील अखंडता उपकरण जोड़ा गया। लाइव प्रगति और रद्द करने के साथ एक फ़ाइल, पूरे फ़ोल्डर या फ़िल्टर किए परिणामों की सभी फ़ाइलों के लिए SHA-256 या SHA-512 निकालें।
+- बैच जाँच हर फ़ाइल का फ़िंगरप्रिंट और स्थिर समग्र फ़िंगरप्रिंट दिखाती है। बदली सामग्री, पथ या फ़ाइल समूह पहचानने के लिए अपेक्षित फ़िंगरप्रिंट चिपकाएँ।
 <!-- /lang -->
 
 <!-- lang:it -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Rimosso il limite massimo dei risultati. La ricerca e l'esplorazione delle cartelle proseguono fino al completamento o all'annullamento da parte dell'utente.
-- Le cartelle dei risultati ora sono compresse per impostazione predefinita e possono essere espanse singolarmente.
+- Aggiunto lo strumento responsivo Integrità nella barra laterale sinistra. Calcola SHA-256 o SHA-512 per un file, un'intera cartella o tutti i file nei risultati filtrati, con avanzamento e annullamento.
+- I controlli in blocco mostrano l'impronta di ogni file e un'impronta complessiva deterministica. Incolla l'impronta prevista per rilevare modifiche a contenuti, percorsi o insieme di file.
 <!-- /lang -->
 
 <!-- lang:nl -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- De limiet voor het maximumaantal resultaten is verwijderd. Zoeken en bladeren gaan door tot de scan klaar is of de gebruiker annuleert.
-- Resultaatmappen zijn nu standaard ingeklapt en kunnen afzonderlijk worden uitgeklapt.
+- Een responsief hulpmiddel Integriteit is toegevoegd aan de linkerzijbalk. Bereken SHA-256 of SHA-512 voor één bestand, een hele map of alle bestanden in de gefilterde resultaten, met voortgang en annuleren.
+- Batchcontroles tonen elke bestandsvingerafdruk en een deterministische totale vingerafdruk. Plak een verwachte vingerafdruk om wijzigingen in inhoud, paden of bestandenset te vinden.
 <!-- /lang -->
 
 <!-- lang:tr -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- En fazla sonuç sayısı sınırı kaldırıldı. Arama ve klasör tarama, işlem tamamlanana veya kullanıcı iptal edene kadar sürer.
-- Sonuç klasörleri artık varsayılan olarak daraltılmış başlar ve ayrı ayrı genişletilebilir.
+- Sol kenar çubuğuna duyarlı Bütünlük aracı eklendi. Canlı ilerleme ve iptal ile tek dosya, tüm klasör veya filtrelenmiş sonuçlardaki tüm dosyalar için SHA-256 ya da SHA-512 hesaplayın.
+- Toplu denetimler her dosyanın parmak izini ve deterministik genel parmak izini gösterir. İçerik, yol veya dosya kümesi değişikliklerini bulmak için beklenen parmak izini yapıştırın.
 <!-- /lang -->
 
 <!-- lang:es -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Se eliminó el límite máximo de resultados. La búsqueda y exploración de carpetas continúa hasta finalizar o hasta que el usuario la cancele.
-- Las carpetas de resultados ahora aparecen contraídas de forma predeterminada y pueden expandirse individualmente.
+- Se añadió una herramienta de Integridad adaptable en la barra lateral izquierda. Calcula SHA-256 o SHA-512 para un archivo, una carpeta completa o todos los archivos de los resultados filtrados, con progreso y cancelación.
+- Las comprobaciones por lotes muestran la huella de cada archivo y una huella global determinista. Pega una huella esperada para detectar cambios de contenido, rutas o conjunto de archivos.
 <!-- /lang -->
 
 <!-- lang:fr -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- La limite maximale de résultats a été supprimée. La recherche et la navigation continuent jusqu'à la fin du parcours ou jusqu'à l'annulation par l'utilisateur.
-- Les dossiers de résultats sont désormais repliés par défaut et peuvent être développés individuellement.
+- Ajout d’un outil Intégrité adaptatif dans la barre latérale gauche. Calculez SHA-256 ou SHA-512 pour un fichier, un dossier entier ou tous les fichiers des résultats filtrés, avec progression et annulation.
+- Les contrôles par lot affichent l’empreinte de chaque fichier et une empreinte globale déterministe. Collez une empreinte attendue pour détecter les changements de contenu, de chemins ou d’ensemble de fichiers.
 <!-- /lang -->
 
 <!-- lang:de -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Die maximale Ergebnisanzahl wurde entfernt. Suche und Ordnernavigation laufen bis zum Abschluss oder bis zum Abbruch durch den Benutzer.
-- Ergebnisordner sind jetzt standardmäßig eingeklappt und können einzeln erweitert werden.
+- In der linken Seitenleiste wurde ein responsives Integritätswerkzeug ergänzt. SHA-256 oder SHA-512 für eine Datei, einen ganzen Ordner oder alle Dateien der gefilterten Ergebnisse mit Fortschritt und Abbruch berechnen.
+- Stapelprüfungen zeigen jeden Datei-Fingerabdruck und einen deterministischen Gesamtfingerabdruck. Einen erwarteten Fingerabdruck einfügen, um geänderte Inhalte, Pfade oder Dateigruppen zu erkennen.
 <!-- /lang -->
 
 <!-- lang:pt-BR -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- O limite máximo de resultados foi removido. A pesquisa e a navegação por pastas continuam até o término ou até o cancelamento pelo usuário.
-- As pastas dos resultados agora começam recolhidas por padrão e podem ser expandidas individualmente.
+- Adicionada uma ferramenta responsiva de Integridade na barra lateral esquerda. Calcule SHA-256 ou SHA-512 para um arquivo, uma pasta inteira ou todos os arquivos dos resultados filtrados, com progresso e cancelamento.
+- Verificações em lote mostram a impressão de cada arquivo e uma impressão geral determinística. Cole uma impressão esperada para detectar mudanças no conteúdo, caminhos ou conjunto de arquivos.
 <!-- /lang -->
 
 <!-- lang:ru -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- Ограничение максимального числа результатов удалено. Поиск и просмотр папок продолжаются до завершения обхода или отмены пользователем.
-- Папки в результатах теперь по умолчанию свернуты и раскрываются по отдельности.
+- На левой панели добавлен адаптивный инструмент проверки целостности. Вычисляйте SHA-256 или SHA-512 для файла, целой папки или всех файлов в отфильтрованных результатах с прогрессом и отменой.
+- Пакетная проверка показывает отпечаток каждого файла и детерминированный общий отпечаток. Вставьте ожидаемый отпечаток, чтобы найти изменения содержимого, путей или набора файлов.
 <!-- /lang -->
 
 <!-- lang:zh-CN -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- 删除最大结果数量限制。搜索和文件夹浏览会持续到扫描完成或用户主动取消。
-- 结果中的文件夹现在默认折叠，可按需逐个展开。
+- 左侧栏新增响应式完整性校验工具。支持为单个文件、整个文件夹或当前筛选结果中的全部文件计算 SHA-256/SHA-512，并显示实时进度和支持取消。
+- 批量校验会显示每个文件的指纹和确定性的整体指纹；粘贴预期指纹即可检测文件内容、相对路径或文件集合是否变化。
 <!-- /lang -->
 
 <!-- lang:zh-TW -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- 移除最大結果數量限制。搜尋和資料夾瀏覽會持續到掃描完成或使用者主動取消。
-- 結果中的資料夾現在預設收合，可依需要逐一展開。
+- 左側欄新增響應式完整性驗證工具。支援為單一檔案、整個資料夾或目前篩選結果中的全部檔案計算 SHA-256/SHA-512，並顯示即時進度及支援取消。
+- 批次驗證會顯示每個檔案的指紋和確定性的整體指紋；貼上預期指紋即可偵測檔案內容、相對路徑或檔案集合是否變更。
 <!-- /lang -->
 
 <!-- lang:ja -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- 最大結果数の制限を削除しました。検索とフォルダー参照は、走査が完了するかユーザーがキャンセルするまで続行されます。
-- 結果内のフォルダーは既定で折りたたまれ、個別に展開できます。
+- 左サイドバーにレスポンシブな整合性検証ツールを追加しました。単一ファイル、フォルダー全体、現在の絞り込み結果内の全ファイルについて SHA-256/SHA-512 を計算し、進行状況とキャンセルに対応します。
+- 一括検証では各ファイルのフィンガープリントと決定的な全体フィンガープリントを表示します。期待値を貼り付けると、内容、相対パス、ファイル構成の変更を検出できます。
 <!-- /lang -->
 
 <!-- lang:ko -->
-## FileNavigation v0.1.12
+## FileNavigation v0.1.13
 
-- 최대 결과 수 제한을 제거했습니다. 검색과 폴더 탐색은 스캔이 완료되거나 사용자가 취소할 때까지 계속됩니다.
-- 결과 폴더는 이제 기본적으로 접힌 상태로 표시되며 개별적으로 펼칠 수 있습니다.
+- 왼쪽 사이드바에 반응형 무결성 검사 도구를 추가했습니다. 단일 파일, 전체 폴더 또는 현재 필터 결과의 모든 파일에 대해 SHA-256/SHA-512를 계산하며 실시간 진행과 취소를 지원합니다.
+- 일괄 검사는 각 파일 지문과 결정적인 전체 지문을 표시합니다. 예상 지문을 붙여넣으면 내용, 상대 경로 또는 파일 집합의 변경을 감지할 수 있습니다.
 <!-- /lang -->

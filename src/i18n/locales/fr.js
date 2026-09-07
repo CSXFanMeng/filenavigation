@@ -99,7 +99,22 @@ const messages = {
     installingUpdate: "Téléchargement terminé. Installation...",
     restartingUpdate: "Installation terminée. Redémarrage...",
     automaticUpdateFailed: "La mise à jour automatique a échoué.",
-    updaterUnavailable: "Aucun paquet de mise à jour compatible avec ce système."
+    updaterUnavailable: "Aucun paquet de mise à jour compatible avec ce système.",
+    toolsLabel: "Outils", toolSearch: "Recherche", toolIntegrity: "Intégrité",
+    integritySourceLabel: "Source", integritySourceFile: "Un fichier", integritySourceFolder: "Dossier entier", integritySourceCurrent: "Dossier de recherche actuel", integritySourceFiltered: "Résultats filtrés",
+    integrityTargetLabel: "Fichier ou dossier", integrityTargetPlaceholder: "Choisir un fichier ou dossier", pickIntegrityTarget: "Choisir un fichier ou dossier", pickIntegrityFolder: "Choisir le dossier à vérifier", pickIntegrityFile: "Choisir le fichier à vérifier",
+    integrityAlgorithmLabel: "Algorithme", expectedHashLabel: "Empreinte attendue (facultatif)", expectedHashPlaceholder: "Coller une ancienne empreinte à comparer", verifyIntegrityButton: "Vérifier",
+    integrityEyebrow: "Intégrité", integrityReady: "Prêt à vérifier", integrityFiles: "Fichiers", integrityBytes: "Lus",
+    integrityProgressIdle: "Choisissez une source pour calculer son empreinte.", integrityEmptyTitle: "Vérifier les fichiers localement", integrityEmptyText: "Calculez l’empreinte d’un fichier, d’un dossier ou des résultats filtrés.",
+    integrityReading: "Calcul des empreintes", integrityComplete: "Vérification terminée", integrityCompleteDetail: "Tous les fichiers ont été lus et l’empreinte globale est prête.",
+    integrityCancelled: "Vérification annulée", integrityCancelledDetail: "L’opération s’est arrêtée avant la vérification de tous les fichiers.", integrityFailed: "Échec de la vérification",
+    integrityCompleteTitle: "Empreinte calculée", integrityCompleteText: "Conservez l’empreinte globale pour vérifier à nouveau cet ensemble.",
+    integrityMatchTitle: "Intégrité vérifiée", integrityMatchText: "L’empreinte calculée correspond à la valeur attendue.",
+    integrityMismatchTitle: "Intégrité différente", integrityMismatchText: "Le contenu, les chemins ou l’ensemble des fichiers diffèrent de l’empreinte attendue.",
+    aggregateFingerprint: "Empreinte globale", copyFingerprint: "Copier l’empreinte", fingerprintCopied: "Empreinte copiée.", copyFailed: "Impossible de copier l’empreinte.", fileFingerprints: "Empreintes des fichiers",
+    invalidFile: "Choisissez un fichier valide.", invalidExpectedHash: "L’empreinte attendue est invalide pour l’algorithme choisi.", unsupportedHashAlgorithm: "Cet algorithme de hachage n’est pas pris en charge.",
+    integrityTaskFailed: "Impossible de terminer la vérification.", fileReadFailed: "Impossible de lire un fichier.", fileChangedDuringCheck: "Un fichier a changé pendant la vérification. Recommencez.",
+    folderReadFailed: "Le dossier n’a pas pu être entièrement lu. Aucune empreinte n’a été créée.", noFilteredFiles: "Les résultats filtrés ne contiennent aucun fichier.", invalidIntegritySource: "Choisissez une source valide."
 };
 
 export default messages;

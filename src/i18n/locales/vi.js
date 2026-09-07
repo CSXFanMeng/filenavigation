@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Đã tải xong. Đang cài đặt...",
     restartingUpdate: "Cài đặt hoàn tất. Đang khởi động lại...",
     automaticUpdateFailed: "Cập nhật tự động thất bại.",
-    updaterUnavailable: "Không có gói cập nhật tương thích cho hệ thống này."
+    updaterUnavailable: "Không có gói cập nhật tương thích cho hệ thống này.",
+    toolsLabel: "Công cụ", toolSearch: "Tìm kiếm", toolIntegrity: "Toàn vẹn",
+    integritySourceLabel: "Nguồn", integritySourceFile: "Một tệp", integritySourceFolder: "Toàn bộ thư mục", integritySourceCurrent: "Thư mục tìm kiếm hiện tại", integritySourceFiltered: "Kết quả đã lọc",
+    integrityTargetLabel: "Tệp hoặc thư mục", integrityTargetPlaceholder: "Chọn tệp hoặc thư mục", pickIntegrityTarget: "Chọn tệp hoặc thư mục", pickIntegrityFolder: "Chọn thư mục cần kiểm tra", pickIntegrityFile: "Chọn tệp cần kiểm tra",
+    integrityAlgorithmLabel: "Thuật toán", expectedHashLabel: "Dấu vân tay mong đợi (tùy chọn)", expectedHashPlaceholder: "Dán dấu vân tay trước đó để so sánh", verifyIntegrityButton: "Kiểm tra",
+    integrityEyebrow: "Toàn vẹn", integrityReady: "Sẵn sàng kiểm tra", integrityFiles: "Tệp", integrityBytes: "Đã đọc",
+    integrityProgressIdle: "Chọn nguồn để tính dấu vân tay.", integrityEmptyTitle: "Kiểm tra tệp cục bộ", integrityEmptyText: "Tính dấu vân tay cho một tệp, thư mục hoặc kết quả đã lọc.",
+    integrityReading: "Đang tính dấu vân tay", integrityComplete: "Kiểm tra hoàn tất", integrityCompleteDetail: "Đã đọc mọi tệp và dấu vân tay tổng thể đã sẵn sàng.",
+    integrityCancelled: "Đã hủy kiểm tra", integrityCancelledDetail: "Thao tác dừng trước khi kiểm tra hết tệp.", integrityFailed: "Kiểm tra thất bại",
+    integrityCompleteTitle: "Đã tính dấu vân tay", integrityCompleteText: "Lưu dấu vân tay tổng thể để kiểm tra lại tập tệp sau này.",
+    integrityMatchTitle: "Đã xác minh toàn vẹn", integrityMatchText: "Dấu vân tay tính được khớp với giá trị mong đợi.", integrityMismatchTitle: "Không khớp toàn vẹn", integrityMismatchText: "Nội dung, đường dẫn hoặc tập tệp khác với dấu vân tay mong đợi.",
+    aggregateFingerprint: "Dấu vân tay tổng thể", copyFingerprint: "Sao chép dấu vân tay", fingerprintCopied: "Đã sao chép dấu vân tay.", copyFailed: "Không thể sao chép dấu vân tay.", fileFingerprints: "Dấu vân tay tệp",
+    invalidFile: "Chọn một tệp hợp lệ.", invalidExpectedHash: "Dấu vân tay mong đợi không hợp lệ với thuật toán đã chọn.", unsupportedHashAlgorithm: "Thuật toán băm không được hỗ trợ.",
+    integrityTaskFailed: "Không thể hoàn tất kiểm tra toàn vẹn.", fileReadFailed: "Không thể đọc một tệp.", fileChangedDuringCheck: "Một tệp đã thay đổi khi kiểm tra. Hãy chạy lại.",
+    folderReadFailed: "Không thể đọc đầy đủ thư mục. Không tạo dấu vân tay.", noFilteredFiles: "Kết quả đã lọc không chứa tệp.", invalidIntegritySource: "Chọn nguồn hợp lệ."
 };
 
 export default messages;

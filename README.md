@@ -19,6 +19,7 @@ AI was used during development only. FileNavigation does not call OpenAI service
 ## Highlights
 
 - Fully asynchronous, cancellable local file search with live progress
+- Local SHA-256/SHA-512 integrity verification for single files, whole folders, and current filtered results
 - Literal or regular-expression file-name matching with case control
 - Relative multi-level result trees with folders collapsed by default, folder-first sorting, and aggregated folder sizes
 - Browse every visible entry under a selected directory without entering a keyword or applying a result cap

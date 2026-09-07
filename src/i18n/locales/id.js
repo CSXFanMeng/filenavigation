@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Unduhan selesai. Menginstal...",
     restartingUpdate: "Instalasi selesai. Memulai ulang...",
     automaticUpdateFailed: "Pembaruan otomatis gagal.",
-    updaterUnavailable: "Tidak ada paket pembaruan yang kompatibel untuk sistem ini."
+    updaterUnavailable: "Tidak ada paket pembaruan yang kompatibel untuk sistem ini.",
+    toolsLabel: "Alat", toolSearch: "Pencarian", toolIntegrity: "Integritas",
+    integritySourceLabel: "Sumber", integritySourceFile: "Satu file", integritySourceFolder: "Seluruh folder", integritySourceCurrent: "Folder pencarian saat ini", integritySourceFiltered: "Hasil terfilter",
+    integrityTargetLabel: "File atau folder", integrityTargetPlaceholder: "Pilih file atau folder", pickIntegrityTarget: "Pilih file atau folder", pickIntegrityFolder: "Pilih folder untuk diverifikasi", pickIntegrityFile: "Pilih file untuk diverifikasi",
+    integrityAlgorithmLabel: "Algoritma", expectedHashLabel: "Sidik jari yang diharapkan (opsional)", expectedHashPlaceholder: "Tempel sidik jari sebelumnya untuk dibandingkan", verifyIntegrityButton: "Verifikasi",
+    integrityEyebrow: "Integritas", integrityReady: "Siap diverifikasi", integrityFiles: "File", integrityBytes: "Dibaca",
+    integrityProgressIdle: "Pilih sumber untuk menghitung sidik jarinya.", integrityEmptyTitle: "Verifikasi file secara lokal", integrityEmptyText: "Hitung sidik jari satu file, folder, atau hasil terfilter.",
+    integrityReading: "Menghitung sidik jari", integrityComplete: "Verifikasi selesai", integrityCompleteDetail: "Semua file dibaca dan sidik jari keseluruhan siap.",
+    integrityCancelled: "Verifikasi dibatalkan", integrityCancelledDetail: "Operasi berhenti sebelum semua file diverifikasi.", integrityFailed: "Verifikasi gagal",
+    integrityCompleteTitle: "Sidik jari dihitung", integrityCompleteText: "Simpan sidik jari keseluruhan untuk memverifikasi kumpulan ini lagi.",
+    integrityMatchTitle: "Integritas terverifikasi", integrityMatchText: "Sidik jari yang dihitung cocok dengan nilai yang diharapkan.", integrityMismatchTitle: "Integritas tidak cocok", integrityMismatchText: "Isi, jalur, atau kumpulan file berbeda dari sidik jari yang diharapkan.",
+    aggregateFingerprint: "Sidik jari keseluruhan", copyFingerprint: "Salin sidik jari", fingerprintCopied: "Sidik jari disalin.", copyFailed: "Sidik jari tidak dapat disalin.", fileFingerprints: "Sidik jari file",
+    invalidFile: "Pilih file yang valid.", invalidExpectedHash: "Sidik jari yang diharapkan tidak valid untuk algoritma terpilih.", unsupportedHashAlgorithm: "Algoritma hash tidak didukung.",
+    integrityTaskFailed: "Verifikasi integritas tidak dapat diselesaikan.", fileReadFailed: "Sebuah file tidak dapat dibaca.", fileChangedDuringCheck: "File berubah saat verifikasi. Jalankan lagi.",
+    folderReadFailed: "Folder tidak dapat dibaca sepenuhnya. Sidik jari tidak dibuat.", noFilteredFiles: "Hasil terfilter tidak berisi file.", invalidIntegritySource: "Pilih sumber yang valid."
 };
 
 export default messages;

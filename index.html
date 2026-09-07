@@ -85,6 +85,34 @@
         <section class="workspace">
         <aside class="sidebar">
           <div class="sidebar-content">
+            <nav class="tool-switch" role="tablist" data-i18n-aria-label="toolsLabel" aria-label="Tools">
+              <button
+                id="tool-search"
+                class="tool-switch-button is-active"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="search-tool-panel"
+                data-tool-target="search"
+              >
+                <i data-lucide="search" aria-hidden="true"></i>
+                <span data-i18n="toolSearch">Search</span>
+              </button>
+              <button
+                id="tool-integrity"
+                class="tool-switch-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="integrity-tool-panel"
+                data-tool-target="integrity"
+              >
+                <i data-lucide="file-check-2" aria-hidden="true"></i>
+                <span data-i18n="toolIntegrity">Integrity</span>
+              </button>
+            </nav>
+
+            <section id="search-tool-panel" class="sidebar-tool-panel" role="tabpanel" aria-labelledby="tool-search" data-tool-panel="search">
             <div class="field">
               <label for="root-path">
                 <i data-lucide="folder-tree" aria-hidden="true"></i>
@@ -160,11 +188,102 @@
                 <span data-i18n="cancelSearchButton">Cancel</span>
               </button>
             </div>
+            </section>
+
+            <section id="integrity-tool-panel" class="sidebar-tool-panel" role="tabpanel" aria-labelledby="tool-integrity" data-tool-panel="integrity" hidden>
+              <div class="field">
+                <label for="integrity-source">
+                  <i data-lucide="layers-3" aria-hidden="true"></i>
+                  <span data-i18n="integritySourceLabel">Source</span>
+                </label>
+                <div class="control-shell select-shell">
+                  <select id="integrity-source">
+                    <option value="file" data-i18n="integritySourceFile">Single file</option>
+                    <option value="folder" data-i18n="integritySourceFolder">Entire folder</option>
+                    <option value="current" data-i18n="integritySourceCurrent">Current search folder</option>
+                    <option value="filtered" data-i18n="integritySourceFiltered">Filtered results</option>
+                  </select>
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div id="integrity-path-field" class="field">
+                <label for="integrity-path">
+                  <i data-lucide="file-input" aria-hidden="true"></i>
+                  <span data-i18n="integrityTargetLabel">File or folder</span>
+                </label>
+                <div class="path-row">
+                  <div class="control-shell input-shell">
+                    <i data-lucide="hard-drive" aria-hidden="true"></i>
+                    <input
+                      id="integrity-path"
+                      type="text"
+                      data-i18n-placeholder="integrityTargetPlaceholder"
+                      placeholder="Choose a file or folder"
+                      spellcheck="false"
+                    />
+                  </div>
+                  <button
+                    id="pick-integrity-target"
+                    class="icon-button"
+                    type="button"
+                    data-i18n-title="pickIntegrityTarget"
+                    data-i18n-aria-label="pickIntegrityTarget"
+                    title="Choose a file or folder"
+                    aria-label="Choose a file or folder"
+                  >
+                    <i data-lucide="folder-open" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="integrity-algorithm">
+                  <i data-lucide="hash" aria-hidden="true"></i>
+                  <span data-i18n="integrityAlgorithmLabel">Algorithm</span>
+                </label>
+                <div class="control-shell select-shell">
+                  <select id="integrity-algorithm">
+                    <option value="sha256">SHA-256</option>
+                    <option value="sha512">SHA-512</option>
+                  </select>
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="integrity-expected">
+                  <i data-lucide="fingerprint" aria-hidden="true"></i>
+                  <span data-i18n="expectedHashLabel">Expected fingerprint (optional)</span>
+                </label>
+                <div class="control-shell textarea-shell">
+                  <textarea
+                    id="integrity-expected"
+                    rows="3"
+                    data-i18n-placeholder="expectedHashPlaceholder"
+                    placeholder="Paste a previous fingerprint to compare"
+                    spellcheck="false"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="action-row">
+                <button id="verify-integrity" class="primary" type="button">
+                  <i data-lucide="shield-check" aria-hidden="true"></i>
+                  <span data-i18n="verifyIntegrityButton">Verify</span>
+                </button>
+                <button id="cancel-integrity" class="secondary icon-command" type="button" disabled>
+                  <i data-lucide="x" aria-hidden="true"></i>
+                  <span data-i18n="cancelSearchButton">Cancel</span>
+                </button>
+              </div>
+            </section>
           </div>
 
         </aside>
 
         <section class="results-panel">
+          <section id="search-tool-view" class="tool-view search-tool-view" data-tool-view="search">
           <header class="topbar">
             <div class="status-heading">
               <div class="status-icon" aria-hidden="true"><i data-lucide="radar"></i></div>
@@ -263,6 +382,92 @@
 
             <div id="result-list" class="result-list" aria-live="polite"></div>
           </div>
+          </section>
+
+          <section id="integrity-tool-view" class="tool-view integrity-tool-view" data-tool-view="integrity" hidden>
+            <header class="topbar">
+              <div class="status-heading">
+                <div class="status-icon" aria-hidden="true"><i data-lucide="shield-check"></i></div>
+                <div>
+                  <p class="eyebrow" data-i18n="integrityEyebrow">Integrity</p>
+                  <h2 id="integrity-status-title" data-i18n="integrityReady">Ready to verify</h2>
+                </div>
+              </div>
+              <div class="stats integrity-stats">
+                <div>
+                  <i data-lucide="files" aria-hidden="true"></i>
+                  <span id="integrity-stat-files">0</span>
+                  <small data-i18n="integrityFiles">Files</small>
+                </div>
+                <div>
+                  <i data-lucide="database" aria-hidden="true"></i>
+                  <span id="integrity-stat-bytes">0 B</span>
+                  <small data-i18n="integrityBytes">Read</small>
+                </div>
+                <div>
+                  <i data-lucide="timer" aria-hidden="true"></i>
+                  <span id="integrity-stat-ms">0 ms</span>
+                  <small data-i18n="statTime">Time</small>
+                </div>
+              </div>
+            </header>
+
+            <div class="progress-bar integrity-progress-summary">
+              <i data-lucide="scan-line" aria-hidden="true"></i>
+              <p id="integrity-progress-detail" class="progress-detail" data-i18n="integrityProgressIdle">
+                Choose a source to calculate its fingerprint.
+              </p>
+            </div>
+            <div class="integrity-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="integrity-meter-fill"></span>
+            </div>
+
+            <div class="integrity-body">
+              <div id="integrity-empty-state" class="empty-state">
+                <div class="empty-symbol" aria-hidden="true"><i data-lucide="file-lock-2"></i></div>
+                <h3 data-i18n="integrityEmptyTitle">Verify files locally</h3>
+                <p data-i18n="integrityEmptyText">Calculate a fingerprint for one file, a folder, or the current filtered results.</p>
+              </div>
+
+              <section id="integrity-result" class="integrity-result" aria-live="polite" hidden>
+                <div id="integrity-verdict" class="integrity-verdict">
+                  <span class="integrity-verdict-icon" aria-hidden="true"><i data-lucide="shield-check"></i></span>
+                  <div>
+                    <h3 id="integrity-verdict-title"></h3>
+                    <p id="integrity-verdict-detail"></p>
+                  </div>
+                </div>
+
+                <div class="fingerprint-section">
+                  <div class="fingerprint-heading">
+                    <div>
+                      <span data-i18n="aggregateFingerprint">Overall fingerprint</span>
+                      <small id="integrity-result-algorithm">SHA-256</small>
+                    </div>
+                    <button
+                      id="copy-integrity-hash"
+                      class="dialog-close"
+                      type="button"
+                      data-i18n-title="copyFingerprint"
+                      data-i18n-aria-label="copyFingerprint"
+                      title="Copy fingerprint"
+                      aria-label="Copy fingerprint"
+                    >
+                      <i data-lucide="copy" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                  <output id="integrity-hash" class="fingerprint-value"></output>
+                  <p id="integrity-copy-feedback" class="copy-feedback" aria-live="polite"></p>
+                </div>
+
+                <div class="integrity-file-list-heading">
+                  <h3 data-i18n="fileFingerprints">File fingerprints</h3>
+                  <span id="integrity-result-count">0</span>
+                </div>
+                <div id="integrity-file-list" class="integrity-file-list" tabindex="0"></div>
+              </section>
+            </div>
+          </section>
         </section>
         </section>
       </div>

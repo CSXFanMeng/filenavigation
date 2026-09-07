@@ -11,12 +11,18 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  Copy,
+  Database,
   Download,
   ExternalLink,
   File as FileIcon,
+  FileCheck2,
+  FileInput,
+  FileLock2,
   Files,
   FileType,
   Filter,
+  Fingerprint,
   Folder as FolderIcon,
   FolderOpen,
   FolderSearch,
@@ -24,7 +30,9 @@ import {
   FolderTree,
   GitBranch,
   HardDrive,
+  Hash,
   Languages,
+  Layers3,
   Maximize2,
   Minus,
   Moon,
@@ -38,6 +46,7 @@ import {
   SearchX,
   Settings2,
   ShieldAlert,
+  ShieldCheck,
   Sun,
   Timer,
   X,
@@ -48,6 +57,7 @@ import { languageOptions, resolveLanguage as resolveLocaleLanguage, translateFor
 import {
   buildResultTree,
   collectExpandableFolderPaths,
+  collectFilePaths,
   countVisibleResults,
   filterResultTree,
   flattenResultTree,
@@ -59,18 +69,26 @@ const uiIcons = {
   ArrowUpDown,
   Check,
   ChevronDown,
+  Copy,
+  Database,
   Download,
   ExternalLink,
   Files,
+  FileCheck2,
+  FileInput,
+  FileLock2,
   FileType,
   Filter,
+  Fingerprint,
   FolderOpen,
   FolderSearch,
   Folders,
   FolderTree,
   GitBranch,
   HardDrive,
+  Hash,
   Languages,
+  Layers3,
   Maximize2,
   Minus,
   Moon,
@@ -83,12 +101,16 @@ const uiIcons = {
   SearchX,
   Settings2,
   ShieldAlert,
+  ShieldCheck,
   Sun,
   Timer,
   X
 };
 
 const elements = {
+  toolButtons: [...document.querySelectorAll("[data-tool-target]")],
+  toolPanels: [...document.querySelectorAll("[data-tool-panel]")],
+  toolViews: [...document.querySelectorAll("[data-tool-view]")],
   openUpdates: document.querySelector("#open-updates"),
   openSettings: document.querySelector("#open-settings"),
   windowMinimize: document.querySelector("#window-minimize"),
@@ -100,6 +122,14 @@ const elements = {
   caseSensitive: document.querySelector("#case-sensitive"),
   includeHidden: document.querySelector("#include-hidden"),
   useRegex: document.querySelector("#use-regex"),
+  integritySource: document.querySelector("#integrity-source"),
+  integrityPathField: document.querySelector("#integrity-path-field"),
+  integrityPath: document.querySelector("#integrity-path"),
+  pickIntegrityTarget: document.querySelector("#pick-integrity-target"),
+  integrityAlgorithm: document.querySelector("#integrity-algorithm"),
+  integrityExpected: document.querySelector("#integrity-expected"),
+  verifyIntegrity: document.querySelector("#verify-integrity"),
+  cancelIntegrity: document.querySelector("#cancel-integrity"),
   language: document.querySelector("#language"),
   search: document.querySelector("#search"),
   cancelSearch: document.querySelector("#cancel-search"),
@@ -113,6 +143,24 @@ const elements = {
   statMs: document.querySelector("#stat-ms"),
   statSkipped: document.querySelector("#stat-skipped"),
   progressDetail: document.querySelector("#progress-detail"),
+  integrityTitle: document.querySelector("#integrity-status-title"),
+  integrityStatFiles: document.querySelector("#integrity-stat-files"),
+  integrityStatBytes: document.querySelector("#integrity-stat-bytes"),
+  integrityStatMs: document.querySelector("#integrity-stat-ms"),
+  integrityProgressDetail: document.querySelector("#integrity-progress-detail"),
+  integrityMeter: document.querySelector(".integrity-meter"),
+  integrityMeterFill: document.querySelector("#integrity-meter-fill"),
+  integrityEmptyState: document.querySelector("#integrity-empty-state"),
+  integrityResult: document.querySelector("#integrity-result"),
+  integrityVerdict: document.querySelector("#integrity-verdict"),
+  integrityVerdictTitle: document.querySelector("#integrity-verdict-title"),
+  integrityVerdictDetail: document.querySelector("#integrity-verdict-detail"),
+  integrityResultAlgorithm: document.querySelector("#integrity-result-algorithm"),
+  integrityHash: document.querySelector("#integrity-hash"),
+  copyIntegrityHash: document.querySelector("#copy-integrity-hash"),
+  integrityCopyFeedback: document.querySelector("#integrity-copy-feedback"),
+  integrityResultCount: document.querySelector("#integrity-result-count"),
+  integrityFileList: document.querySelector("#integrity-file-list"),
   emptyState: document.querySelector("#empty-state"),
   resultList: document.querySelector("#result-list"),
   updateStatus: document.querySelector("#update-status"),
@@ -141,6 +189,14 @@ let debounceTimer = 0;
 let activeSearchId = "";
 let isSearching = false;
 let renderToken = 0;
+let integrityRenderToken = 0;
+let activeTool = "search";
+let activeIntegrityId = "";
+let isCheckingIntegrity = false;
+let lastIntegrityStatus = "integrityReady";
+let lastIntegrityResult = null;
+let lastIntegrityError = "";
+let lastIntegrityProgress = { bytesRead: 0, totalBytes: 0, filesCompleted: 0, totalFiles: 0, elapsedMs: 0 };
 let currentLanguage = resolveLanguage(localStorage.getItem("filenavigation.language") || "auto");
 let lastResults = [];
 let lastResultTree = [];
@@ -164,6 +220,8 @@ initLanguageSelect();
 applyTheme(currentTheme, false);
 applyTranslations();
 initializeIcons();
+updateIntegritySource();
+renderIntegrity();
 if (appWindow) {
   initializeProgressListener();
 }
@@ -178,6 +236,25 @@ elements.openUpdates.addEventListener("click", () => {
   }
 });
 elements.openSettings.addEventListener("click", () => openDialog(elements.settingsDialog, elements.openSettings));
+
+elements.toolButtons.forEach((button, index) => {
+  button.addEventListener("click", () => setActiveTool(button.dataset.toolTarget));
+  button.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      return;
+    }
+    event.preventDefault();
+    const targetIndex = event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? elements.toolButtons.length - 1
+        : (index + (event.key === "ArrowRight" ? 1 : -1) + elements.toolButtons.length)
+          % elements.toolButtons.length;
+    const target = elements.toolButtons[targetIndex];
+    setActiveTool(target.dataset.toolTarget);
+    target.focus();
+  });
+});
 
 document.querySelectorAll("[data-dialog-close]").forEach((button) => {
   button.addEventListener("click", () => closeDialog(button.closest(".dialog-backdrop")));
@@ -238,6 +315,19 @@ elements.pickDir.addEventListener("click", async () => {
   }
 });
 
+elements.pickIntegrityTarget.addEventListener("click", async () => {
+  const folder = elements.integritySource.value === "folder";
+  const selected = await open({
+    directory: folder,
+    multiple: false,
+    title: translate(folder ? "pickIntegrityFolder" : "pickIntegrityFile")
+  });
+
+  if (typeof selected === "string") {
+    elements.integrityPath.value = selected;
+  }
+});
+
 elements.language.addEventListener("change", () => {
   localStorage.setItem("filenavigation.language", elements.language.value);
   currentLanguage = resolveLanguage(elements.language.value);
@@ -258,6 +348,7 @@ elements.language.addEventListener("change", () => {
   if (!elements.updatesDialog.hidden) {
     checkForUpdates();
   }
+  renderIntegrity();
 });
 
 elements.search.addEventListener("click", () => runSearch());
@@ -276,6 +367,10 @@ elements.useRegex.addEventListener("change", () => {
 elements.resultFilter.addEventListener("input", () => applyResultView());
 elements.typeFilter.addEventListener("change", () => applyResultView());
 elements.sortResults.addEventListener("change", () => applyResultView());
+elements.integritySource.addEventListener("change", () => updateIntegritySource());
+elements.verifyIntegrity.addEventListener("click", () => runIntegrityCheck());
+elements.cancelIntegrity.addEventListener("click", () => cancelActiveIntegrityCheck());
+elements.copyIntegrityHash.addEventListener("click", () => copyIntegrityFingerprint());
 
 function initLanguageSelect() {
   const saved = localStorage.getItem("filenavigation.language") || "auto";
@@ -310,6 +405,42 @@ function applyTheme(value, persist = true) {
 
   if (persist) {
     localStorage.setItem("filenavigation.theme", currentTheme);
+  }
+}
+
+function setActiveTool(target) {
+  if (target !== "search" && target !== "integrity") {
+    return;
+  }
+
+  activeTool = target;
+  window.clearTimeout(debounceTimer);
+  elements.toolButtons.forEach((button) => {
+    const selected = button.dataset.toolTarget === target;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", String(selected));
+    button.tabIndex = selected ? 0 : -1;
+  });
+  elements.toolPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.toolPanel !== target;
+  });
+  elements.toolViews.forEach((view) => {
+    view.hidden = view.dataset.toolView !== target;
+  });
+
+  if (target === "integrity") {
+    if (elements.integritySource.value === "folder" && !elements.integrityPath.value.trim()) {
+      elements.integrityPath.value = elements.rootPath.value.trim();
+    }
+    updateIntegritySource();
+  }
+}
+
+function updateIntegritySource() {
+  const source = elements.integritySource.value;
+  elements.integrityPathField.hidden = source === "filtered" || source === "current";
+  if (source === "folder" && !elements.integrityPath.value.trim()) {
+    elements.integrityPath.value = elements.rootPath.value.trim();
   }
 }
 
@@ -426,9 +557,30 @@ async function initializeProgressListener() {
       progress.current_path
     );
   });
+
+  await listen("integrity-progress", (event) => {
+    const progress = event.payload;
+    if (!progress || progress.operation_id !== activeIntegrityId || !isCheckingIntegrity) {
+      return;
+    }
+
+    lastIntegrityProgress = {
+      bytesRead: Number(progress.bytes_read || 0),
+      totalBytes: Number(progress.total_bytes || 0),
+      filesCompleted: Number(progress.files_completed || 0),
+      totalFiles: Number(progress.total_files || 0),
+      elapsedMs: Number(progress.elapsed_ms || 0),
+      currentPath: progress.current_path || ""
+    };
+    lastIntegrityStatus = "integrityReading";
+    renderIntegrity();
+  });
 }
 
 function scheduleSearch() {
+  if (activeTool !== "search") {
+    return;
+  }
   window.clearTimeout(debounceTimer);
   debounceTimer = window.setTimeout(() => runSearch(), 280);
 }
@@ -531,6 +683,235 @@ async function cancelActiveSearch() {
 
   elements.cancelSearch.disabled = true;
   await invoke("cancel_search", { searchId: activeSearchId });
+}
+
+async function runIntegrityCheck() {
+  if (isCheckingIntegrity) {
+    return;
+  }
+
+  const source = elements.integritySource.value;
+  const path = source === "current" ? elements.rootPath.value.trim() : elements.integrityPath.value.trim();
+  const paths = source === "filtered" ? collectFilePaths(lastVisibleResults) : [];
+  if (source === "filtered" && paths.length === 0) {
+    lastIntegrityStatus = "integrityFailed";
+    lastIntegrityError = translate("noFilteredFiles");
+    lastIntegrityResult = null;
+    renderIntegrity();
+    return;
+  }
+  if (source !== "filtered" && !path) {
+    lastIntegrityStatus = "integrityFailed";
+    lastIntegrityError = translate(
+      source === "folder" || source === "current" ? "invalidDirectory" : "invalidFile"
+    );
+    lastIntegrityResult = null;
+    renderIntegrity();
+    return;
+  }
+
+  const operationId = createSearchId();
+  activeIntegrityId = operationId;
+  isCheckingIntegrity = true;
+  lastIntegrityStatus = "integrityReading";
+  lastIntegrityResult = null;
+  lastIntegrityError = "";
+  lastIntegrityProgress = {
+    bytesRead: 0,
+    totalBytes: 0,
+    filesCompleted: 0,
+    totalFiles: paths.length,
+    elapsedMs: 0,
+    currentPath: path
+  };
+  setIntegrityControlsDisabled(true);
+  renderIntegrity();
+
+  try {
+    const response = await invoke("verify_file_integrity", {
+      request: {
+        operation_id: operationId,
+        source: source === "current" ? "folder" : source,
+        path: source === "filtered" ? elements.rootPath.value.trim() : path,
+        paths,
+        root: elements.rootPath.value.trim() || null,
+        algorithm: elements.integrityAlgorithm.value,
+        expected_hash: elements.integrityExpected.value || null
+      }
+    });
+
+    if (operationId !== activeIntegrityId) {
+      return;
+    }
+
+    lastIntegrityResult = response;
+    lastIntegrityProgress = {
+      bytesRead: Number(response.bytes_read || 0),
+      totalBytes: Number(response.total_bytes || 0),
+      filesCompleted: response.files.length,
+      totalFiles: Number(response.total_files || response.files.length),
+      elapsedMs: Number(response.elapsed_ms || 0),
+      currentPath: ""
+    };
+    lastIntegrityStatus = response.cancelled ? "integrityCancelled" : "integrityComplete";
+  } catch (error) {
+    if (operationId === activeIntegrityId) {
+      lastIntegrityResult = null;
+      lastIntegrityStatus = "integrityFailed";
+      lastIntegrityError = mapError(error);
+    }
+  } finally {
+    if (operationId === activeIntegrityId) {
+      isCheckingIntegrity = false;
+      setIntegrityControlsDisabled(false);
+      renderIntegrity();
+    }
+  }
+}
+
+async function cancelActiveIntegrityCheck() {
+  if (!activeIntegrityId || !isCheckingIntegrity) {
+    return;
+  }
+
+  elements.cancelIntegrity.disabled = true;
+  await invoke("cancel_integrity_check", { operationId: activeIntegrityId });
+}
+
+function setIntegrityControlsDisabled(disabled) {
+  elements.integritySource.disabled = disabled;
+  elements.integrityPath.disabled = disabled;
+  elements.pickIntegrityTarget.disabled = disabled;
+  elements.integrityAlgorithm.disabled = disabled;
+  elements.integrityExpected.disabled = disabled;
+  elements.verifyIntegrity.disabled = disabled;
+  elements.cancelIntegrity.disabled = !disabled;
+}
+
+function renderIntegrity() {
+  const progress = lastIntegrityProgress;
+  const completed = lastIntegrityResult?.files?.length ?? progress.filesCompleted;
+  elements.integrityTitle.textContent = translate(lastIntegrityStatus);
+  elements.integrityStatFiles.textContent = progress.totalFiles
+    ? `${formatNumber(completed)}/${formatNumber(progress.totalFiles)}`
+    : formatNumber(completed);
+  elements.integrityStatBytes.textContent = formatBytes(progress.bytesRead);
+  elements.integrityStatMs.textContent = `${formatNumber(progress.elapsedMs)} ms`;
+
+  const percentage = progress.totalBytes > 0
+    ? Math.min(100, Math.round((progress.bytesRead / progress.totalBytes) * 100))
+    : lastIntegrityStatus === "integrityComplete" ? 100 : 0;
+  elements.integrityMeterFill.style.width = `${percentage}%`;
+  elements.integrityMeter.setAttribute("aria-valuenow", String(percentage));
+
+  if (lastIntegrityStatus === "integrityReading") {
+    const fileProgress = progress.totalFiles
+      ? `${formatNumber(progress.filesCompleted)}/${formatNumber(progress.totalFiles)}`
+      : formatNumber(progress.filesCompleted);
+    elements.integrityProgressDetail.textContent =
+      `${translate("integrityReading")} · ${fileProgress} · ${formatBytes(progress.bytesRead)} / ${formatBytes(progress.totalBytes)}`;
+  } else if (lastIntegrityStatus === "integrityComplete") {
+    elements.integrityProgressDetail.textContent = translate("integrityCompleteDetail");
+  } else if (lastIntegrityStatus === "integrityFailed") {
+    elements.integrityProgressDetail.textContent = lastIntegrityError || translate("integrityTaskFailed");
+  } else {
+    elements.integrityProgressDetail.textContent = translate(
+      lastIntegrityStatus === "integrityCancelled" ? "integrityCancelledDetail" : "integrityProgressIdle"
+    );
+  }
+
+  const showResult = lastIntegrityStatus === "integrityComplete" && lastIntegrityResult;
+  elements.integrityEmptyState.hidden = Boolean(showResult);
+  elements.integrityResult.hidden = !showResult;
+  if (!showResult) {
+    const headingKey = lastIntegrityStatus === "integrityFailed"
+      ? "integrityFailed"
+      : lastIntegrityStatus === "integrityCancelled"
+        ? "integrityCancelled"
+        : lastIntegrityStatus === "integrityReading"
+          ? "integrityReading"
+          : "integrityEmptyTitle";
+    const detail = lastIntegrityStatus === "integrityFailed"
+      ? lastIntegrityError
+      : lastIntegrityStatus === "integrityCancelled"
+        ? translate("integrityCancelledDetail")
+        : lastIntegrityStatus === "integrityReading"
+          ? progress.currentPath || translate("integrityReading")
+          : translate("integrityEmptyText");
+    elements.integrityEmptyState.querySelector("h3").textContent = translate(headingKey);
+    elements.integrityEmptyState.querySelector("p").textContent = detail;
+    return;
+  }
+
+  renderIntegrityResult(lastIntegrityResult);
+}
+
+function renderIntegrityResult(result) {
+  const hasExpected = Boolean(result.expected_hash);
+  const mismatch = hasExpected && result.matches === false;
+  elements.integrityVerdict.classList.toggle("is-mismatch", mismatch);
+  elements.integrityVerdictTitle.textContent = hasExpected
+    ? translate(result.matches ? "integrityMatchTitle" : "integrityMismatchTitle")
+    : translate("integrityCompleteTitle");
+  elements.integrityVerdictDetail.textContent = hasExpected
+    ? translate(result.matches ? "integrityMatchText" : "integrityMismatchText")
+    : translate("integrityCompleteText");
+  elements.integrityResultAlgorithm.textContent = result.algorithm.toUpperCase().replace("SHA", "SHA-");
+  elements.integrityHash.textContent = result.aggregate_hash;
+  elements.integrityResultCount.textContent = formatNumber(result.files.length);
+  elements.integrityCopyFeedback.textContent = "";
+  renderIntegrityFiles(result.files);
+}
+
+function renderIntegrityFiles(files) {
+  integrityRenderToken += 1;
+  const token = integrityRenderToken;
+  elements.integrityFileList.replaceChildren();
+  let index = 0;
+
+  const renderChunk = () => {
+    if (token !== integrityRenderToken) {
+      return;
+    }
+    const fragment = document.createDocumentFragment();
+    const end = Math.min(index + 100, files.length);
+    for (; index < end; index += 1) {
+      const file = files[index];
+      const row = document.createElement("article");
+      row.className = "integrity-file-row";
+      const path = document.createElement("span");
+      path.className = "integrity-file-path";
+      path.textContent = file.relative_path || file.path;
+      path.title = file.path;
+      const size = document.createElement("span");
+      size.className = "integrity-file-size";
+      size.textContent = formatBytes(file.size);
+      const hash = document.createElement("code");
+      hash.className = "integrity-file-hash";
+      hash.textContent = file.hash;
+      row.append(path, size, hash);
+      fragment.append(row);
+    }
+    elements.integrityFileList.append(fragment);
+    if (index < files.length) {
+      window.requestAnimationFrame(renderChunk);
+    }
+  };
+  renderChunk();
+}
+
+async function copyIntegrityFingerprint() {
+  const value = lastIntegrityResult?.aggregate_hash;
+  if (!value) {
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(value);
+    elements.integrityCopyFeedback.textContent = translate("fingerprintCopied");
+  } catch {
+    elements.integrityCopyFeedback.textContent = translate("copyFailed");
+  }
 }
 
 async function checkForUpdates() {

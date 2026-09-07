@@ -175,6 +175,16 @@ export function collectExpandableFolderPaths(nodes) {
   return paths;
 }
 
+export function collectFilePaths(nodes, output = []) {
+  for (const node of nodes) {
+    if (!node.is_dir) {
+      output.push(node.path);
+    }
+    collectFilePaths(node.children, output);
+  }
+  return [...new Set(output)];
+}
+
 export function countResultTree(nodes) {
   return nodes.reduce((total, node) => total + 1 + countResultTree(node.children), 0);
 }

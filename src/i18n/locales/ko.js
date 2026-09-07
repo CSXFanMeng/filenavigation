@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "다운로드 완료. 설치 중...",
     restartingUpdate: "설치 완료. 다시 시작하는 중...",
     automaticUpdateFailed: "자동 업데이트에 실패했습니다.",
-    updaterUnavailable: "이 시스템과 호환되는 업데이트 패키지가 없습니다."
+    updaterUnavailable: "이 시스템과 호환되는 업데이트 패키지가 없습니다.",
+    toolsLabel: "도구", toolSearch: "파일 검색", toolIntegrity: "무결성 검사",
+    integritySourceLabel: "대상", integritySourceFile: "단일 파일", integritySourceFolder: "전체 폴더", integritySourceCurrent: "현재 검색 폴더", integritySourceFiltered: "현재 필터 결과",
+    integrityTargetLabel: "파일 또는 폴더", integrityTargetPlaceholder: "파일 또는 폴더 선택", pickIntegrityTarget: "파일 또는 폴더 선택", pickIntegrityFolder: "검사할 폴더 선택", pickIntegrityFile: "검사할 파일 선택",
+    integrityAlgorithmLabel: "해시 알고리즘", expectedHashLabel: "예상 지문(선택 사항)", expectedHashPlaceholder: "이전에 저장한 지문을 붙여넣어 비교", verifyIntegrityButton: "검사",
+    integrityEyebrow: "무결성", integrityReady: "검사 준비 완료", integrityFiles: "파일", integrityBytes: "읽음",
+    integrityProgressIdle: "대상을 선택하여 지문을 계산하세요.", integrityEmptyTitle: "로컬에서 파일 검사", integrityEmptyText: "단일 파일, 전체 폴더 또는 현재 필터 결과의 지문을 계산합니다.",
+    integrityReading: "파일 지문 계산 중", integrityComplete: "검사 완료", integrityCompleteDetail: "모든 파일을 읽고 전체 지문을 생성했습니다.",
+    integrityCancelled: "검사 취소됨", integrityCancelledDetail: "모든 파일을 검사하기 전에 작업이 중지되었습니다.", integrityFailed: "검사 실패",
+    integrityCompleteTitle: "지문 계산 완료", integrityCompleteText: "전체 지문을 저장하면 나중에 이 파일 집합을 다시 검사할 수 있습니다.",
+    integrityMatchTitle: "무결성 확인됨", integrityMatchText: "계산된 지문이 예상 값과 일치합니다.", integrityMismatchTitle: "무결성 불일치", integrityMismatchText: "파일 내용, 상대 경로 또는 파일 집합이 예상 지문과 다릅니다.",
+    aggregateFingerprint: "전체 지문", copyFingerprint: "지문 복사", fingerprintCopied: "지문을 복사했습니다.", copyFailed: "지문을 복사할 수 없습니다.", fileFingerprints: "파일별 지문",
+    invalidFile: "유효한 파일을 선택하세요.", invalidExpectedHash: "예상 지문 형식이 선택한 알고리즘과 맞지 않습니다.", unsupportedHashAlgorithm: "선택한 해시 알고리즘은 지원되지 않습니다.",
+    integrityTaskFailed: "무결성 검사 작업을 완료할 수 없습니다.", fileReadFailed: "파일을 읽을 수 없습니다.", fileChangedDuringCheck: "검사 중 파일이 변경되었습니다. 다시 실행하세요.",
+    folderReadFailed: "폴더를 완전히 읽을 수 없어 지문을 생성하지 않았습니다.", noFilteredFiles: "현재 필터 결과에 파일이 없습니다.", invalidIntegritySource: "유효한 검사 대상을 선택하세요."
 };
 
 export default messages;

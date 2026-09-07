@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "İndirme tamamlandı. Yükleniyor...",
     restartingUpdate: "Yükleme tamamlandı. Yeniden başlatılıyor...",
     automaticUpdateFailed: "Otomatik güncelleme başarısız oldu.",
-    updaterUnavailable: "Bu sistem için uyumlu bir güncelleme paketi yok."
+    updaterUnavailable: "Bu sistem için uyumlu bir güncelleme paketi yok.",
+    toolsLabel: "Araçlar", toolSearch: "Arama", toolIntegrity: "Bütünlük",
+    integritySourceLabel: "Kaynak", integritySourceFile: "Tek dosya", integritySourceFolder: "Tüm klasör", integritySourceCurrent: "Geçerli arama klasörü", integritySourceFiltered: "Filtrelenmiş sonuçlar",
+    integrityTargetLabel: "Dosya veya klasör", integrityTargetPlaceholder: "Dosya veya klasör seçin", pickIntegrityTarget: "Dosya veya klasör seç", pickIntegrityFolder: "Doğrulanacak klasörü seç", pickIntegrityFile: "Doğrulanacak dosyayı seç",
+    integrityAlgorithmLabel: "Algoritma", expectedHashLabel: "Beklenen parmak izi (isteğe bağlı)", expectedHashPlaceholder: "Karşılaştırmak için önceki parmak izini yapıştırın", verifyIntegrityButton: "Doğrula",
+    integrityEyebrow: "Bütünlük", integrityReady: "Doğrulamaya hazır", integrityFiles: "Dosyalar", integrityBytes: "Okunan",
+    integrityProgressIdle: "Parmak izini hesaplamak için bir kaynak seçin.", integrityEmptyTitle: "Dosyaları yerel olarak doğrula", integrityEmptyText: "Bir dosyanın, klasörün veya filtrelenmiş sonuçların parmak izini hesaplayın.",
+    integrityReading: "Parmak izleri hesaplanıyor", integrityComplete: "Doğrulama tamamlandı", integrityCompleteDetail: "Tüm dosyalar okundu ve genel parmak izi hazır.",
+    integrityCancelled: "Doğrulama iptal edildi", integrityCancelledDetail: "Tüm dosyalar doğrulanmadan işlem durdu.", integrityFailed: "Doğrulama başarısız",
+    integrityCompleteTitle: "Parmak izi hesaplandı", integrityCompleteText: "Bu dosya kümesini daha sonra doğrulamak için genel parmak izini saklayın.",
+    integrityMatchTitle: "Bütünlük doğrulandı", integrityMatchText: "Hesaplanan parmak izi beklenen değerle eşleşiyor.", integrityMismatchTitle: "Bütünlük eşleşmiyor", integrityMismatchText: "İçerik, yollar veya dosya kümesi beklenen parmak izinden farklı.",
+    aggregateFingerprint: "Genel parmak izi", copyFingerprint: "Parmak izini kopyala", fingerprintCopied: "Parmak izi kopyalandı.", copyFailed: "Parmak izi kopyalanamadı.", fileFingerprints: "Dosya parmak izleri",
+    invalidFile: "Geçerli bir dosya seçin.", invalidExpectedHash: "Beklenen parmak izi seçilen algoritma için geçersiz.", unsupportedHashAlgorithm: "Hash algoritması desteklenmiyor.",
+    integrityTaskFailed: "Bütünlük doğrulaması tamamlanamadı.", fileReadFailed: "Bir dosya okunamadı.", fileChangedDuringCheck: "Doğrulama sırasında bir dosya değişti. Yeniden çalıştırın.",
+    folderReadFailed: "Klasör tamamen okunamadı. Parmak izi oluşturulmadı.", noFilteredFiles: "Filtrelenmiş sonuçlarda dosya yok.", invalidIntegritySource: "Geçerli bir kaynak seçin."
 };
 
 export default messages;

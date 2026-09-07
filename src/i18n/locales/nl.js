@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Download voltooid. Installeren...",
     restartingUpdate: "Installatie voltooid. Herstarten...",
     automaticUpdateFailed: "Automatisch bijwerken is mislukt.",
-    updaterUnavailable: "Er is geen compatibel updatepakket voor dit systeem."
+    updaterUnavailable: "Er is geen compatibel updatepakket voor dit systeem.",
+    toolsLabel: "Hulpmiddelen", toolSearch: "Zoeken", toolIntegrity: "Integriteit",
+    integritySourceLabel: "Bron", integritySourceFile: "Eén bestand", integritySourceFolder: "Hele map", integritySourceCurrent: "Huidige zoekmap", integritySourceFiltered: "Gefilterde resultaten",
+    integrityTargetLabel: "Bestand of map", integrityTargetPlaceholder: "Kies een bestand of map", pickIntegrityTarget: "Bestand of map kiezen", pickIntegrityFolder: "Te controleren map kiezen", pickIntegrityFile: "Te controleren bestand kiezen",
+    integrityAlgorithmLabel: "Algoritme", expectedHashLabel: "Verwachte vingerafdruk (optioneel)", expectedHashPlaceholder: "Plak een eerdere vingerafdruk om te vergelijken", verifyIntegrityButton: "Controleren",
+    integrityEyebrow: "Integriteit", integrityReady: "Klaar voor controle", integrityFiles: "Bestanden", integrityBytes: "Gelezen",
+    integrityProgressIdle: "Kies een bron om de vingerafdruk te berekenen.", integrityEmptyTitle: "Bestanden lokaal controleren", integrityEmptyText: "Bereken de vingerafdruk van een bestand, map of gefilterde resultaten.",
+    integrityReading: "Vingerafdrukken berekenen", integrityComplete: "Controle voltooid", integrityCompleteDetail: "Alle bestanden zijn gelezen en de totale vingerafdruk is gereed.",
+    integrityCancelled: "Controle geannuleerd", integrityCancelledDetail: "De bewerking stopte voordat alle bestanden waren gecontroleerd.", integrityFailed: "Controle mislukt",
+    integrityCompleteTitle: "Vingerafdruk berekend", integrityCompleteText: "Bewaar de totale vingerafdruk om deze bestandenset later opnieuw te controleren.",
+    integrityMatchTitle: "Integriteit bevestigd", integrityMatchText: "De berekende vingerafdruk komt overeen met de verwachte waarde.", integrityMismatchTitle: "Integriteit wijkt af", integrityMismatchText: "Inhoud, paden of bestandenset wijken af van de verwachte vingerafdruk.",
+    aggregateFingerprint: "Totale vingerafdruk", copyFingerprint: "Vingerafdruk kopiëren", fingerprintCopied: "Vingerafdruk gekopieerd.", copyFailed: "Vingerafdruk kon niet worden gekopieerd.", fileFingerprints: "Bestandsvingerafdrukken",
+    invalidFile: "Kies een geldig bestand.", invalidExpectedHash: "De verwachte vingerafdruk is ongeldig voor het gekozen algoritme.", unsupportedHashAlgorithm: "Het hash-algoritme wordt niet ondersteund.",
+    integrityTaskFailed: "De integriteitscontrole kon niet worden voltooid.", fileReadFailed: "Een bestand kon niet worden gelezen.", fileChangedDuringCheck: "Een bestand wijzigde tijdens de controle. Voer deze opnieuw uit.",
+    folderReadFailed: "De map kon niet volledig worden gelezen. Er is geen vingerafdruk gemaakt.", noFilteredFiles: "De gefilterde resultaten bevatten geen bestanden.", invalidIntegritySource: "Kies een geldige bron."
 };
 
 export default messages;

@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Завантаження завершено. Встановлення...",
     restartingUpdate: "Встановлення завершено. Перезапуск...",
     automaticUpdateFailed: "Не вдалося виконати автоматичне оновлення.",
-    updaterUnavailable: "Для цієї системи немає сумісного пакета оновлення."
+    updaterUnavailable: "Для цієї системи немає сумісного пакета оновлення.",
+    toolsLabel: "Інструменти", toolSearch: "Пошук", toolIntegrity: "Цілісність",
+    integritySourceLabel: "Джерело", integritySourceFile: "Один файл", integritySourceFolder: "Уся папка", integritySourceCurrent: "Поточна папка пошуку", integritySourceFiltered: "Відфільтровані результати",
+    integrityTargetLabel: "Файл або папка", integrityTargetPlaceholder: "Виберіть файл або папку", pickIntegrityTarget: "Вибрати файл або папку", pickIntegrityFolder: "Вибрати папку для перевірки", pickIntegrityFile: "Вибрати файл для перевірки",
+    integrityAlgorithmLabel: "Алгоритм", expectedHashLabel: "Очікуваний відбиток (необов’язково)", expectedHashPlaceholder: "Вставте попередній відбиток для порівняння", verifyIntegrityButton: "Перевірити",
+    integrityEyebrow: "Цілісність", integrityReady: "Готово до перевірки", integrityFiles: "Файли", integrityBytes: "Прочитано",
+    integrityProgressIdle: "Виберіть джерело для обчислення відбитка.", integrityEmptyTitle: "Локальна перевірка файлів", integrityEmptyText: "Обчисліть відбиток файла, папки або відфільтрованих результатів.",
+    integrityReading: "Обчислення відбитків", integrityComplete: "Перевірку завершено", integrityCompleteDetail: "Усі файли прочитано, загальний відбиток готовий.",
+    integrityCancelled: "Перевірку скасовано", integrityCancelledDetail: "Операцію зупинено до перевірки всіх файлів.", integrityFailed: "Помилка перевірки",
+    integrityCompleteTitle: "Відбиток обчислено", integrityCompleteText: "Збережіть загальний відбиток для повторної перевірки набору.",
+    integrityMatchTitle: "Цілісність підтверджено", integrityMatchText: "Обчислений відбиток збігається з очікуваним.", integrityMismatchTitle: "Цілісність не збігається", integrityMismatchText: "Вміст, шляхи або набір файлів відрізняються від очікуваного відбитка.",
+    aggregateFingerprint: "Загальний відбиток", copyFingerprint: "Копіювати відбиток", fingerprintCopied: "Відбиток скопійовано.", copyFailed: "Не вдалося скопіювати відбиток.", fileFingerprints: "Відбитки файлів",
+    invalidFile: "Виберіть коректний файл.", invalidExpectedHash: "Очікуваний відбиток некоректний для вибраного алгоритму.", unsupportedHashAlgorithm: "Алгоритм хешування не підтримується.",
+    integrityTaskFailed: "Не вдалося завершити перевірку цілісності.", fileReadFailed: "Не вдалося прочитати файл.", fileChangedDuringCheck: "Файл змінився під час перевірки. Запустіть її знову.",
+    folderReadFailed: "Не вдалося повністю прочитати папку. Відбиток не створено.", noFilteredFiles: "У відфільтрованих результатах немає файлів.", invalidIntegritySource: "Виберіть коректне джерело."
 };
 
 export default messages;

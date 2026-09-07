@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "ดาวน์โหลดเสร็จแล้ว กำลังติดตั้ง...",
     restartingUpdate: "ติดตั้งเสร็จแล้ว กำลังเริ่มใหม่...",
     automaticUpdateFailed: "การอัปเดตอัตโนมัติล้มเหลว",
-    updaterUnavailable: "ไม่มีแพ็กเกจอัปเดตที่เข้ากันได้กับระบบนี้"
+    updaterUnavailable: "ไม่มีแพ็กเกจอัปเดตที่เข้ากันได้กับระบบนี้",
+    toolsLabel: "เครื่องมือ", toolSearch: "ค้นหา", toolIntegrity: "ความสมบูรณ์",
+    integritySourceLabel: "แหล่งข้อมูล", integritySourceFile: "ไฟล์เดียว", integritySourceFolder: "ทั้งโฟลเดอร์", integritySourceCurrent: "โฟลเดอร์ค้นหาปัจจุบัน", integritySourceFiltered: "ผลลัพธ์ที่กรอง",
+    integrityTargetLabel: "ไฟล์หรือโฟลเดอร์", integrityTargetPlaceholder: "เลือกไฟล์หรือโฟลเดอร์", pickIntegrityTarget: "เลือกไฟล์หรือโฟลเดอร์", pickIntegrityFolder: "เลือกโฟลเดอร์ที่จะตรวจสอบ", pickIntegrityFile: "เลือกไฟล์ที่จะตรวจสอบ",
+    integrityAlgorithmLabel: "อัลกอริทึม", expectedHashLabel: "ลายนิ้วมือที่คาดไว้ (ไม่บังคับ)", expectedHashPlaceholder: "วางลายนิ้วมือเดิมเพื่อเปรียบเทียบ", verifyIntegrityButton: "ตรวจสอบ",
+    integrityEyebrow: "ความสมบูรณ์", integrityReady: "พร้อมตรวจสอบ", integrityFiles: "ไฟล์", integrityBytes: "อ่านแล้ว",
+    integrityProgressIdle: "เลือกแหล่งข้อมูลเพื่อคำนวณลายนิ้วมือ", integrityEmptyTitle: "ตรวจสอบไฟล์ในเครื่อง", integrityEmptyText: "คำนวณลายนิ้วมือของไฟล์ โฟลเดอร์ หรือผลลัพธ์ที่กรอง",
+    integrityReading: "กำลังคำนวณลายนิ้วมือ", integrityComplete: "ตรวจสอบเสร็จแล้ว", integrityCompleteDetail: "อ่านไฟล์ทั้งหมดแล้วและลายนิ้วมือรวมพร้อมใช้งาน",
+    integrityCancelled: "ยกเลิกการตรวจสอบแล้ว", integrityCancelledDetail: "หยุดการทำงานก่อนตรวจสอบไฟล์ทั้งหมด", integrityFailed: "การตรวจสอบล้มเหลว",
+    integrityCompleteTitle: "คำนวณลายนิ้วมือแล้ว", integrityCompleteText: "บันทึกลายนิ้วมือรวมเพื่อตรวจสอบชุดไฟล์นี้ภายหลัง",
+    integrityMatchTitle: "ยืนยันความสมบูรณ์แล้ว", integrityMatchText: "ลายนิ้วมือที่คำนวณตรงกับค่าที่คาดไว้", integrityMismatchTitle: "ความสมบูรณ์ไม่ตรงกัน", integrityMismatchText: "เนื้อหา เส้นทาง หรือชุดไฟล์ต่างจากลายนิ้วมือที่คาดไว้",
+    aggregateFingerprint: "ลายนิ้วมือรวม", copyFingerprint: "คัดลอกลายนิ้วมือ", fingerprintCopied: "คัดลอกลายนิ้วมือแล้ว", copyFailed: "คัดลอกลายนิ้วมือไม่ได้", fileFingerprints: "ลายนิ้วมือไฟล์",
+    invalidFile: "เลือกไฟล์ที่ถูกต้อง", invalidExpectedHash: "ลายนิ้วมือที่คาดไว้ไม่ถูกต้องสำหรับอัลกอริทึมที่เลือก", unsupportedHashAlgorithm: "ไม่รองรับอัลกอริทึมแฮชนี้",
+    integrityTaskFailed: "ตรวจสอบความสมบูรณ์ไม่สำเร็จ", fileReadFailed: "อ่านไฟล์ไม่ได้", fileChangedDuringCheck: "ไฟล์เปลี่ยนระหว่างตรวจสอบ โปรดลองอีกครั้ง",
+    folderReadFailed: "อ่านโฟลเดอร์ได้ไม่ครบ จึงไม่ได้สร้างลายนิ้วมือ", noFilteredFiles: "ผลลัพธ์ที่กรองไม่มีไฟล์", invalidIntegritySource: "เลือกแหล่งข้อมูลที่ถูกต้อง"
 };
 
 export default messages;

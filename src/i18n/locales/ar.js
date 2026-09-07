@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "اكتمل التنزيل. جار التثبيت...",
     restartingUpdate: "اكتمل التثبيت. جار إعادة التشغيل...",
     automaticUpdateFailed: "فشل التحديث التلقائي.",
-    updaterUnavailable: "لا تتوفر حزمة تحديث متوافقة مع هذا النظام."
+    updaterUnavailable: "لا تتوفر حزمة تحديث متوافقة مع هذا النظام.",
+    toolsLabel: "الأدوات", toolSearch: "البحث", toolIntegrity: "السلامة",
+    integritySourceLabel: "المصدر", integritySourceFile: "ملف واحد", integritySourceFolder: "مجلد كامل", integritySourceCurrent: "مجلد البحث الحالي", integritySourceFiltered: "النتائج المصفاة",
+    integrityTargetLabel: "ملف أو مجلد", integrityTargetPlaceholder: "اختر ملفا أو مجلدا", pickIntegrityTarget: "اختيار ملف أو مجلد", pickIntegrityFolder: "اختيار مجلد للتحقق", pickIntegrityFile: "اختيار ملف للتحقق",
+    integrityAlgorithmLabel: "الخوارزمية", expectedHashLabel: "البصمة المتوقعة (اختياري)", expectedHashPlaceholder: "الصق بصمة سابقة للمقارنة", verifyIntegrityButton: "تحقق",
+    integrityEyebrow: "السلامة", integrityReady: "جاهز للتحقق", integrityFiles: "الملفات", integrityBytes: "تمت القراءة",
+    integrityProgressIdle: "اختر مصدرا لحساب بصمته.", integrityEmptyTitle: "تحقق من الملفات محليا", integrityEmptyText: "احسب بصمة ملف أو مجلد أو النتائج المصفاة.",
+    integrityReading: "جار حساب البصمات", integrityComplete: "اكتمل التحقق", integrityCompleteDetail: "تمت قراءة جميع الملفات وأصبحت البصمة الإجمالية جاهزة.",
+    integrityCancelled: "ألغي التحقق", integrityCancelledDetail: "توقفت العملية قبل التحقق من جميع الملفات.", integrityFailed: "فشل التحقق",
+    integrityCompleteTitle: "تم حساب البصمة", integrityCompleteText: "احفظ البصمة الإجمالية للتحقق من هذه المجموعة لاحقا.",
+    integrityMatchTitle: "تم تأكيد السلامة", integrityMatchText: "تطابق البصمة المحسوبة القيمة المتوقعة.", integrityMismatchTitle: "عدم تطابق السلامة", integrityMismatchText: "يختلف المحتوى أو المسارات أو مجموعة الملفات عن البصمة المتوقعة.",
+    aggregateFingerprint: "البصمة الإجمالية", copyFingerprint: "نسخ البصمة", fingerprintCopied: "تم نسخ البصمة.", copyFailed: "تعذر نسخ البصمة.", fileFingerprints: "بصمات الملفات",
+    invalidFile: "اختر ملفا صالحا.", invalidExpectedHash: "البصمة المتوقعة غير صالحة للخوارزمية المختارة.", unsupportedHashAlgorithm: "خوارزمية التجزئة غير مدعومة.",
+    integrityTaskFailed: "تعذر إكمال فحص السلامة.", fileReadFailed: "تعذرت قراءة ملف.", fileChangedDuringCheck: "تغير ملف أثناء التحقق. أعد الفحص.",
+    folderReadFailed: "تعذرت قراءة المجلد بالكامل، لذلك لم تُنشأ بصمة.", noFilteredFiles: "لا تحتوي النتائج المصفاة على ملفات.", invalidIntegritySource: "اختر مصدر تحقق صالحا."
 };
 
 export default messages;

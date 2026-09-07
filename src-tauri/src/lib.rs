@@ -1,7 +1,7 @@
 use std::{
-    collections::HashMap,
-    collections::VecDeque,
-    fs,
+    collections::{HashMap, HashSet, VecDeque},
+    fs::{self, File},
+    io::{BufReader, Read},
     path::{Path, PathBuf},
     process::Command,
     sync::{
@@ -15,6 +15,7 @@ use chrono::{DateTime, Local};
 use regex::{Regex, RegexBuilder};
 use semver::Version;
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256, Sha512};
 use tauri::{Emitter, Manager};
 
 const UPDATER_MANIFEST_URLS: [&str; 3] = [
@@ -79,6 +80,94 @@ struct SearchProgress {
 #[derive(Default)]
 struct SearchSessions {
     cancel_tokens: Mutex<HashMap<String, Arc<AtomicBool>>>,
+}
+
+#[derive(Default)]
+struct IntegritySessions {
+    cancel_tokens: Mutex<HashMap<String, Arc<AtomicBool>>>,
+}
+
+#[derive(Debug, Deserialize)]
+struct IntegrityRequest {
+    operation_id: String,
+    source: String,
+    path: String,
+    #[serde(default)]
+    paths: Vec<String>,
+    root: Option<String>,
+    algorithm: String,
+    expected_hash: Option<String>,
+}
+
+#[derive(Debug, Serialize, Clone)]
+struct IntegrityProgress {
+    operation_id: String,
+    bytes_read: u64,
+    total_bytes: u64,
+    files_completed: usize,
+    total_files: usize,
+    current_path: String,
+    elapsed_ms: u128,
+}
+
+#[derive(Debug, Serialize)]
+struct IntegrityFileResult {
+    path: String,
+    relative_path: String,
+    hash: String,
+    size: u64,
+}
+
+#[derive(Debug, Serialize)]
+struct IntegrityResponse {
+    operation_id: String,
+    path: String,
+    algorithm: String,
+    aggregate_hash: String,
+    expected_hash: Option<String>,
+    matches: Option<bool>,
+    files: Vec<IntegrityFileResult>,
+    total_files: usize,
+    bytes_read: u64,
+    total_bytes: u64,
+    elapsed_ms: u128,
+    cancelled: bool,
+}
+
+enum IntegrityHasher {
+    Sha256(Sha256),
+    Sha512(Sha512),
+}
+
+impl IntegrityHasher {
+    fn new(algorithm: &str) -> Result<Self, String> {
+        match algorithm {
+            "sha256" => Ok(Self::Sha256(Sha256::new())),
+            "sha512" => Ok(Self::Sha512(Sha512::new())),
+            _ => Err("unsupportedHashAlgorithm".to_string()),
+        }
+    }
+
+    fn expected_hex_length(&self) -> usize {
+        match self {
+            Self::Sha256(_) => 64,
+            Self::Sha512(_) => 128,
+        }
+    }
+
+    fn update(&mut self, bytes: &[u8]) {
+        match self {
+            Self::Sha256(hasher) => hasher.update(bytes),
+            Self::Sha512(hasher) => hasher.update(bytes),
+        }
+    }
+
+    fn finalize(self) -> String {
+        match self {
+            Self::Sha256(hasher) => format!("{:x}", hasher.finalize()),
+            Self::Sha512(hasher) => format!("{:x}", hasher.finalize()),
+        }
+    }
 }
 
 struct UpdateChecker {
@@ -220,6 +309,51 @@ async fn search_files(
         .remove(&search_id);
 
     result
+}
+
+#[tauri::command]
+async fn verify_file_integrity(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, IntegritySessions>,
+    request: IntegrityRequest,
+) -> Result<IntegrityResponse, String> {
+    let operation_id = request.operation_id.clone();
+    let cancel_token = Arc::new(AtomicBool::new(false));
+    state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "integrityTaskFailed".to_string())?
+        .insert(operation_id.clone(), cancel_token.clone());
+
+    let result =
+        tokio::task::spawn_blocking(move || perform_integrity_check(app, request, cancel_token))
+            .await
+            .map_err(|_| "integrityTaskFailed".to_string())?;
+
+    state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "integrityTaskFailed".to_string())?
+        .remove(&operation_id);
+
+    result
+}
+
+#[tauri::command]
+fn cancel_integrity_check(
+    state: tauri::State<'_, IntegritySessions>,
+    operation_id: String,
+) -> Result<(), String> {
+    if let Some(cancel_token) = state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "integrityTaskFailed".to_string())?
+        .get(&operation_id)
+    {
+        cancel_token.store(true, Ordering::Relaxed);
+    }
+
+    Ok(())
 }
 
 #[tauri::command]
@@ -540,6 +674,369 @@ fn extract_lang_block(body: &str, language: &str) -> Option<String> {
     }
 }
 
+fn perform_integrity_check(
+    app: tauri::AppHandle,
+    request: IntegrityRequest,
+    cancel_token: Arc<AtomicBool>,
+) -> Result<IntegrityResponse, String> {
+    const BUFFER_SIZE: usize = 1024 * 1024;
+
+    let started = Instant::now();
+    let algorithm = request.algorithm.to_ascii_lowercase();
+    let expected_hex_length = IntegrityHasher::new(&algorithm)?.expected_hex_length();
+    let expected_hash =
+        normalize_expected_hash(request.expected_hash.as_deref(), expected_hex_length)?;
+    let (root, targets) = match collect_integrity_targets(&request, &cancel_token) {
+        Ok(targets) => targets,
+        Err(error) if error == "integrityCancelled" => {
+            return Ok(cancelled_integrity_response(
+                request,
+                algorithm,
+                expected_hash,
+                Vec::new(),
+                IntegrityProgress {
+                    operation_id: String::new(),
+                    bytes_read: 0,
+                    total_bytes: 0,
+                    files_completed: 0,
+                    total_files: 0,
+                    current_path: String::new(),
+                    elapsed_ms: started.elapsed().as_millis(),
+                },
+            ));
+        }
+        Err(error) => return Err(error),
+    };
+    let total_files = targets.len();
+    let total_bytes = targets.iter().try_fold(0_u64, |total, path| {
+        if cancel_token.load(Ordering::Relaxed) {
+            return Err("integrityCancelled".to_string());
+        }
+        let size = path
+            .metadata()
+            .map_err(|_| "fileReadFailed".to_string())?
+            .len();
+        Ok::<u64, String>(total.saturating_add(size))
+    });
+    let total_bytes = match total_bytes {
+        Ok(total) => total,
+        Err(error) if error == "integrityCancelled" => {
+            return Ok(cancelled_integrity_response(
+                request,
+                algorithm,
+                expected_hash,
+                Vec::new(),
+                IntegrityProgress {
+                    operation_id: String::new(),
+                    bytes_read: 0,
+                    total_bytes: 0,
+                    files_completed: 0,
+                    total_files,
+                    current_path: String::new(),
+                    elapsed_ms: started.elapsed().as_millis(),
+                },
+            ));
+        }
+        Err(error) => return Err(error),
+    };
+    let mut buffer = vec![0_u8; BUFFER_SIZE];
+    let mut bytes_read = 0_u64;
+    let mut last_emit = Instant::now();
+    let mut files = Vec::with_capacity(total_files);
+
+    for (index, path) in targets.iter().enumerate() {
+        let initial_metadata = path.metadata().map_err(|_| "fileReadFailed".to_string())?;
+        let mut reader = BufReader::with_capacity(
+            BUFFER_SIZE,
+            File::open(path).map_err(|_| "fileReadFailed".to_string())?,
+        );
+        let mut file_hasher = IntegrityHasher::new(&algorithm)?;
+
+        loop {
+            if cancel_token.load(Ordering::Relaxed) {
+                let progress = IntegrityProgress {
+                    operation_id: request.operation_id.clone(),
+                    bytes_read,
+                    total_bytes,
+                    files_completed: index,
+                    total_files,
+                    current_path: path.to_string_lossy().to_string(),
+                    elapsed_ms: started.elapsed().as_millis(),
+                };
+                let _ = app.emit("integrity-progress", progress.clone());
+                return Ok(cancelled_integrity_response(
+                    request,
+                    algorithm,
+                    expected_hash,
+                    files,
+                    progress,
+                ));
+            }
+
+            let count = reader
+                .read(&mut buffer)
+                .map_err(|_| "fileReadFailed".to_string())?;
+            if count == 0 {
+                break;
+            }
+
+            file_hasher.update(&buffer[..count]);
+            bytes_read += count as u64;
+            if last_emit.elapsed().as_millis() >= 100 {
+                let _ = app.emit(
+                    "integrity-progress",
+                    IntegrityProgress {
+                        operation_id: request.operation_id.clone(),
+                        bytes_read,
+                        total_bytes,
+                        files_completed: index,
+                        total_files,
+                        current_path: path.to_string_lossy().to_string(),
+                        elapsed_ms: started.elapsed().as_millis(),
+                    },
+                );
+                last_emit = Instant::now();
+            }
+        }
+
+        let final_metadata = path.metadata().map_err(|_| "fileReadFailed".to_string())?;
+        if initial_metadata.len() != final_metadata.len()
+            || initial_metadata.modified().ok() != final_metadata.modified().ok()
+        {
+            return Err("fileChangedDuringCheck".to_string());
+        }
+
+        files.push(IntegrityFileResult {
+            path: path.to_string_lossy().to_string(),
+            relative_path: relative_path(&root, path),
+            hash: file_hasher.finalize(),
+            size: final_metadata.len(),
+        });
+    }
+
+    if request.source == "folder" {
+        let (_, current_targets) = match collect_integrity_targets(&request, &cancel_token) {
+            Ok(targets) => targets,
+            Err(error) if error == "integrityCancelled" => {
+                return Ok(cancelled_integrity_response(
+                    request,
+                    algorithm,
+                    expected_hash,
+                    files,
+                    IntegrityProgress {
+                        operation_id: String::new(),
+                        bytes_read,
+                        total_bytes,
+                        files_completed: total_files,
+                        total_files,
+                        current_path: String::new(),
+                        elapsed_ms: started.elapsed().as_millis(),
+                    },
+                ));
+            }
+            Err(error) => return Err(error),
+        };
+        if current_targets != targets {
+            return Err("fileChangedDuringCheck".to_string());
+        }
+    }
+
+    let aggregate_hash = aggregate_integrity_hash(&algorithm, &files)?;
+    let matches = expected_hash
+        .as_ref()
+        .map(|expected| expected == &aggregate_hash);
+    let _ = app.emit(
+        "integrity-progress",
+        IntegrityProgress {
+            operation_id: request.operation_id.clone(),
+            bytes_read,
+            total_bytes,
+            files_completed: total_files,
+            total_files,
+            current_path: String::new(),
+            elapsed_ms: started.elapsed().as_millis(),
+        },
+    );
+
+    Ok(IntegrityResponse {
+        operation_id: request.operation_id,
+        path: request.path,
+        algorithm,
+        aggregate_hash,
+        expected_hash,
+        matches,
+        files,
+        total_files,
+        bytes_read,
+        total_bytes,
+        elapsed_ms: started.elapsed().as_millis(),
+        cancelled: false,
+    })
+}
+
+fn cancelled_integrity_response(
+    request: IntegrityRequest,
+    algorithm: String,
+    expected_hash: Option<String>,
+    files: Vec<IntegrityFileResult>,
+    progress: IntegrityProgress,
+) -> IntegrityResponse {
+    IntegrityResponse {
+        operation_id: request.operation_id,
+        path: request.path,
+        algorithm,
+        aggregate_hash: String::new(),
+        expected_hash,
+        matches: None,
+        files,
+        total_files: progress.total_files,
+        bytes_read: progress.bytes_read,
+        total_bytes: progress.total_bytes,
+        elapsed_ms: progress.elapsed_ms,
+        cancelled: true,
+    }
+}
+
+fn collect_integrity_targets(
+    request: &IntegrityRequest,
+    cancel_token: &AtomicBool,
+) -> Result<(PathBuf, Vec<PathBuf>), String> {
+    if cancel_token.load(Ordering::Relaxed) {
+        return Err("integrityCancelled".to_string());
+    }
+
+    let mut targets = match request.source.as_str() {
+        "file" => {
+            let path = PathBuf::from(request.path.trim());
+            if !path.is_file() {
+                return Err("invalidFile".to_string());
+            }
+            vec![path]
+        }
+        "folder" => {
+            let root = PathBuf::from(request.path.trim());
+            if !root.is_dir() {
+                return Err("invalidDirectory".to_string());
+            }
+            collect_folder_files(&root, cancel_token)?
+        }
+        "filtered" => {
+            if request.paths.is_empty() {
+                return Err("noFilteredFiles".to_string());
+            }
+            request
+                .paths
+                .iter()
+                .map(|path| PathBuf::from(path.trim()))
+                .collect()
+        }
+        _ => return Err("invalidIntegritySource".to_string()),
+    };
+
+    let mut unique = HashSet::new();
+    targets.retain(|path| unique.insert(path.clone()));
+    if targets.iter().any(|path| !path.is_file()) {
+        return Err("invalidFile".to_string());
+    }
+
+    let root = match request.source.as_str() {
+        "file" => targets[0]
+            .parent()
+            .unwrap_or_else(|| Path::new(""))
+            .to_path_buf(),
+        "folder" => PathBuf::from(request.path.trim()),
+        "filtered" => request
+            .root
+            .as_deref()
+            .map(str::trim)
+            .filter(|value| !value.is_empty())
+            .map(PathBuf::from)
+            .unwrap_or_default(),
+        _ => unreachable!(),
+    };
+
+    targets.sort_by(|left, right| {
+        relative_path(&root, left)
+            .to_lowercase()
+            .cmp(&relative_path(&root, right).to_lowercase())
+            .then_with(|| relative_path(&root, left).cmp(&relative_path(&root, right)))
+    });
+    Ok((root, targets))
+}
+
+fn collect_folder_files(root: &Path, cancel_token: &AtomicBool) -> Result<Vec<PathBuf>, String> {
+    let mut queue = VecDeque::from([root.to_path_buf()]);
+    let mut files = Vec::new();
+
+    while let Some(directory) = queue.pop_front() {
+        if cancel_token.load(Ordering::Relaxed) {
+            return Err("integrityCancelled".to_string());
+        }
+        let entries = fs::read_dir(directory).map_err(|_| "folderReadFailed".to_string())?;
+        for entry in entries {
+            if cancel_token.load(Ordering::Relaxed) {
+                return Err("integrityCancelled".to_string());
+            }
+            let entry = entry.map_err(|_| "folderReadFailed".to_string())?;
+            let file_type = entry
+                .file_type()
+                .map_err(|_| "folderReadFailed".to_string())?;
+            if file_type.is_dir() {
+                queue.push_back(entry.path());
+            } else if file_type.is_file() {
+                files.push(entry.path());
+            }
+        }
+    }
+
+    Ok(files)
+}
+
+fn aggregate_integrity_hash(
+    algorithm: &str,
+    files: &[IntegrityFileResult],
+) -> Result<String, String> {
+    if files.len() == 1 {
+        return Ok(files[0].hash.clone());
+    }
+
+    let mut hasher = IntegrityHasher::new(algorithm)?;
+    for file in files {
+        hasher.update(file.relative_path.as_bytes());
+        hasher.update(&[0]);
+        hasher.update(file.hash.as_bytes());
+        hasher.update(b"\n");
+    }
+    Ok(hasher.finalize())
+}
+
+fn normalize_expected_hash(
+    value: Option<&str>,
+    expected_length: usize,
+) -> Result<Option<String>, String> {
+    let Some(value) = value else {
+        return Ok(None);
+    };
+    let normalized = value
+        .chars()
+        .filter(|character| !character.is_whitespace())
+        .collect::<String>()
+        .to_ascii_lowercase();
+
+    if normalized.is_empty() {
+        return Ok(None);
+    }
+    if normalized.len() != expected_length
+        || !normalized
+            .chars()
+            .all(|character| character.is_ascii_hexdigit())
+    {
+        return Err("invalidExpectedHash".to_string());
+    }
+
+    Ok(Some(normalized))
+}
+
 fn perform_search(
     app: tauri::AppHandle,
     request: SearchRequest,
@@ -761,6 +1258,7 @@ fn open_path_native(path: &str) -> Result<(), String> {
 pub fn run() {
     tauri::Builder::default()
         .manage(SearchSessions::default())
+        .manage(IntegritySessions::default())
         .manage(UpdateChecker::default())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
@@ -768,6 +1266,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             search_files,
             cancel_search,
+            verify_file_integrity,
+            cancel_integrity_check,
             open_path,
             check_for_updates
         ])
@@ -780,9 +1280,10 @@ mod tests {
     use std::collections::HashMap;
 
     use super::{
-        NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
-        build_update_response, fetch_updater_manifest_once, localized_release_notes,
-        manifest_version, relative_path, release_info_from_manifest,
+        IntegrityFileResult, IntegrityHasher, NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker,
+        UpdaterManifest, UpdaterPlatform, aggregate_integrity_hash, build_update_response,
+        fetch_updater_manifest_once, localized_release_notes, manifest_version,
+        normalize_expected_hash, relative_path, release_info_from_manifest,
     };
 
     #[test]
@@ -916,6 +1417,65 @@ English notes.
         let nested = root.join("xx").join("123").join("abc").join("report.pdf");
 
         assert_eq!(relative_path(&root, &nested), "xx/123/abc/report.pdf");
+    }
+
+    #[test]
+    fn sha256_matches_known_test_vector() {
+        let mut hasher = IntegrityHasher::new("sha256").expect("supported algorithm");
+        hasher.update(b"abc");
+
+        assert_eq!(
+            hasher.finalize(),
+            "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+        );
+    }
+
+    #[test]
+    fn sha512_matches_known_test_vector() {
+        let mut hasher = IntegrityHasher::new("sha512").expect("supported algorithm");
+        hasher.update(b"abc");
+
+        assert_eq!(
+            hasher.finalize(),
+            concat!(
+                "ddaf35a193617abacc417349ae204131",
+                "12e6fa4e89a97ea20a9eeee64b55d39a",
+                "2192992a274fc1a836ba3c23a3feebbd",
+                "454d4423643ce80e2a9ac94fa54ca49f"
+            )
+        );
+    }
+
+    #[test]
+    fn expected_fingerprint_ignores_whitespace_and_validates_length() {
+        let value =
+            "BA78 16BF 8F01 CFEA 4141 40DE 5DAE 2223 B003 61A3 9617 7A9C B410 FF61 F200 15AD";
+
+        assert_eq!(
+            normalize_expected_hash(Some(value), 64).expect("valid fingerprint"),
+            Some("ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad".to_string())
+        );
+        assert_eq!(
+            normalize_expected_hash(Some("not-a-hash"), 64).expect_err("invalid fingerprint"),
+            "invalidExpectedHash"
+        );
+    }
+
+    #[test]
+    fn aggregate_fingerprint_changes_when_relative_paths_change() {
+        let file = |relative_path: &str| IntegrityFileResult {
+            path: relative_path.to_string(),
+            relative_path: relative_path.to_string(),
+            hash: "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad".to_string(),
+            size: 3,
+        };
+
+        let first =
+            aggregate_integrity_hash("sha256", &[file("one.txt"), file("two.txt")]).expect("hash");
+        let renamed = aggregate_integrity_hash("sha256", &[file("one.txt"), file("renamed.txt")])
+            .expect("hash");
+
+        assert_ne!(first, renamed);
     }
 
     #[tokio::test]

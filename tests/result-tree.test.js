@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import {
   buildResultTree,
   collectExpandableFolderPaths,
+  collectFilePaths,
   countResultTree,
   countVisibleResults,
   filterResultTree,
@@ -87,4 +88,11 @@ test("all expandable folders can be collapsed by default", () => {
 
   assert.deepEqual([...collapsed], ["123", "123/abc"]);
   assert.deepEqual(flattenResultTree(tree, collapsed).map((node) => node.name), ["123", "top.txt"]);
+});
+
+test("integrity paths include only files retained by the current filters", () => {
+  const tree = buildResultTree(results, "D:\\xx");
+  const filtered = filterResultTree(tree, "large", "file");
+
+  assert.deepEqual(collectFilePaths(filtered), ["D:\\xx\\123\\abc\\large.bin"]);
 });

@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "डाउनलोड पूरा हुआ। इंस्टॉल हो रहा है...",
     restartingUpdate: "इंस्टॉल पूरा हुआ। पुनः आरंभ हो रहा है...",
     automaticUpdateFailed: "स्वचालित अपडेट विफल हुआ।",
-    updaterUnavailable: "इस सिस्टम के लिए संगत अपडेट पैकेज उपलब्ध नहीं है।"
+    updaterUnavailable: "इस सिस्टम के लिए संगत अपडेट पैकेज उपलब्ध नहीं है।",
+    toolsLabel: "उपकरण", toolSearch: "खोज", toolIntegrity: "अखंडता",
+    integritySourceLabel: "स्रोत", integritySourceFile: "एक फ़ाइल", integritySourceFolder: "पूरा फ़ोल्डर", integritySourceCurrent: "वर्तमान खोज फ़ोल्डर", integritySourceFiltered: "फ़िल्टर किए परिणाम",
+    integrityTargetLabel: "फ़ाइल या फ़ोल्डर", integrityTargetPlaceholder: "फ़ाइल या फ़ोल्डर चुनें", pickIntegrityTarget: "फ़ाइल या फ़ोल्डर चुनें", pickIntegrityFolder: "जाँचने के लिए फ़ोल्डर चुनें", pickIntegrityFile: "जाँचने के लिए फ़ाइल चुनें",
+    integrityAlgorithmLabel: "एल्गोरिदम", expectedHashLabel: "अपेक्षित फ़िंगरप्रिंट (वैकल्पिक)", expectedHashPlaceholder: "तुलना के लिए पुराना फ़िंगरप्रिंट चिपकाएँ", verifyIntegrityButton: "जाँचें",
+    integrityEyebrow: "अखंडता", integrityReady: "जाँच के लिए तैयार", integrityFiles: "फ़ाइलें", integrityBytes: "पढ़ा गया",
+    integrityProgressIdle: "फ़िंगरप्रिंट की गणना के लिए स्रोत चुनें।", integrityEmptyTitle: "फ़ाइलों की स्थानीय जाँच", integrityEmptyText: "एक फ़ाइल, पूरे फ़ोल्डर या फ़िल्टर किए परिणामों का फ़िंगरप्रिंट निकालें।",
+    integrityReading: "फ़िंगरप्रिंट की गणना", integrityComplete: "जाँच पूरी", integrityCompleteDetail: "सभी फ़ाइलें पढ़ ली गईं और समग्र फ़िंगरप्रिंट तैयार है।",
+    integrityCancelled: "जाँच रद्द", integrityCancelledDetail: "सभी फ़ाइलों की जाँच से पहले कार्य रोक दिया गया।", integrityFailed: "जाँच विफल",
+    integrityCompleteTitle: "फ़िंगरप्रिंट तैयार", integrityCompleteText: "बाद में पुनः जाँच के लिए समग्र फ़िंगरप्रिंट सहेजें।",
+    integrityMatchTitle: "अखंडता सत्यापित", integrityMatchText: "गणना किया फ़िंगरप्रिंट अपेक्षित मान से मेल खाता है।", integrityMismatchTitle: "अखंडता मेल नहीं खाती", integrityMismatchText: "फ़ाइल सामग्री, पथ या फ़ाइल समूह अपेक्षित फ़िंगरप्रिंट से अलग है।",
+    aggregateFingerprint: "समग्र फ़िंगरप्रिंट", copyFingerprint: "फ़िंगरप्रिंट कॉपी करें", fingerprintCopied: "फ़िंगरप्रिंट कॉपी हुआ।", copyFailed: "फ़िंगरप्रिंट कॉपी नहीं हुआ।", fileFingerprints: "फ़ाइल फ़िंगरप्रिंट",
+    invalidFile: "मान्य फ़ाइल चुनें।", invalidExpectedHash: "अपेक्षित फ़िंगरप्रिंट चुने गए एल्गोरिदम के लिए मान्य नहीं है।", unsupportedHashAlgorithm: "चुना हैश एल्गोरिदम समर्थित नहीं है।",
+    integrityTaskFailed: "अखंडता जाँच पूरी नहीं हो सकी।", fileReadFailed: "एक फ़ाइल पढ़ी नहीं जा सकी।", fileChangedDuringCheck: "जाँच के दौरान फ़ाइल बदली। फिर से जाँचें।",
+    folderReadFailed: "फ़ोल्डर पूरा नहीं पढ़ा जा सका। फ़िंगरप्रिंट नहीं बनाया गया।", noFilteredFiles: "फ़िल्टर किए परिणामों में कोई फ़ाइल नहीं है।", invalidIntegritySource: "मान्य स्रोत चुनें।"
 };
 
 export default messages;

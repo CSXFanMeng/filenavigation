@@ -99,7 +99,22 @@ const messages = {
     installingUpdate: "Download abgeschlossen. Installation läuft...",
     restartingUpdate: "Installation abgeschlossen. Neustart...",
     automaticUpdateFailed: "Automatisches Update fehlgeschlagen.",
-    updaterUnavailable: "Für dieses System ist kein kompatibles Update-Paket verfügbar."
+    updaterUnavailable: "Für dieses System ist kein kompatibles Update-Paket verfügbar.",
+    toolsLabel: "Werkzeuge", toolSearch: "Suche", toolIntegrity: "Integrität",
+    integritySourceLabel: "Quelle", integritySourceFile: "Einzelne Datei", integritySourceFolder: "Ganzer Ordner", integritySourceCurrent: "Aktueller Suchordner", integritySourceFiltered: "Gefilterte Ergebnisse",
+    integrityTargetLabel: "Datei oder Ordner", integrityTargetPlaceholder: "Datei oder Ordner wählen", pickIntegrityTarget: "Datei oder Ordner wählen", pickIntegrityFolder: "Zu prüfenden Ordner wählen", pickIntegrityFile: "Zu prüfende Datei wählen",
+    integrityAlgorithmLabel: "Algorithmus", expectedHashLabel: "Erwarteter Fingerabdruck (optional)", expectedHashPlaceholder: "Früheren Fingerabdruck zum Vergleich einfügen", verifyIntegrityButton: "Prüfen",
+    integrityEyebrow: "Integrität", integrityReady: "Bereit zur Prüfung", integrityFiles: "Dateien", integrityBytes: "Gelesen",
+    integrityProgressIdle: "Quelle wählen, um ihren Fingerabdruck zu berechnen.", integrityEmptyTitle: "Dateien lokal prüfen", integrityEmptyText: "Fingerabdruck einer Datei, eines Ordners oder der gefilterten Ergebnisse berechnen.",
+    integrityReading: "Fingerabdrücke werden berechnet", integrityComplete: "Prüfung abgeschlossen", integrityCompleteDetail: "Alle Dateien wurden gelesen und der Gesamtfingerabdruck ist bereit.",
+    integrityCancelled: "Prüfung abgebrochen", integrityCancelledDetail: "Der Vorgang wurde vor Abschluss aller Dateien beendet.", integrityFailed: "Prüfung fehlgeschlagen",
+    integrityCompleteTitle: "Fingerabdruck berechnet", integrityCompleteText: "Gesamtfingerabdruck speichern, um diese Dateigruppe später erneut zu prüfen.",
+    integrityMatchTitle: "Integrität bestätigt", integrityMatchText: "Der berechnete Fingerabdruck entspricht dem erwarteten Wert.",
+    integrityMismatchTitle: "Integrität stimmt nicht überein", integrityMismatchText: "Inhalt, Pfade oder Dateigruppe unterscheiden sich vom erwarteten Fingerabdruck.",
+    aggregateFingerprint: "Gesamtfingerabdruck", copyFingerprint: "Fingerabdruck kopieren", fingerprintCopied: "Fingerabdruck kopiert.", copyFailed: "Fingerabdruck konnte nicht kopiert werden.", fileFingerprints: "Datei-Fingerabdrücke",
+    invalidFile: "Gültige Datei wählen.", invalidExpectedHash: "Der erwartete Fingerabdruck passt nicht zum gewählten Algorithmus.", unsupportedHashAlgorithm: "Der Hash-Algorithmus wird nicht unterstützt.",
+    integrityTaskFailed: "Die Integritätsprüfung konnte nicht abgeschlossen werden.", fileReadFailed: "Eine Datei konnte nicht gelesen werden.", fileChangedDuringCheck: "Eine Datei wurde während der Prüfung geändert. Erneut prüfen.",
+    folderReadFailed: "Der Ordner konnte nicht vollständig gelesen werden. Es wurde kein Fingerabdruck erstellt.", noFilteredFiles: "Die gefilterten Ergebnisse enthalten keine Dateien.", invalidIntegritySource: "Gültige Quelle wählen."
 };
 
 export default messages;

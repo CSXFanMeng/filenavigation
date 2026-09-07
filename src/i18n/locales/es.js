@@ -99,7 +99,22 @@ const messages = {
     installingUpdate: "Descarga completada. Instalando...",
     restartingUpdate: "Instalación completada. Reiniciando...",
     automaticUpdateFailed: "La actualización automática falló.",
-    updaterUnavailable: "No hay un paquete de actualización compatible con este sistema."
+    updaterUnavailable: "No hay un paquete de actualización compatible con este sistema.",
+    toolsLabel: "Herramientas", toolSearch: "Buscar", toolIntegrity: "Integridad",
+    integritySourceLabel: "Origen", integritySourceFile: "Un archivo", integritySourceFolder: "Carpeta completa", integritySourceCurrent: "Carpeta de búsqueda actual", integritySourceFiltered: "Resultados filtrados",
+    integrityTargetLabel: "Archivo o carpeta", integrityTargetPlaceholder: "Elige un archivo o carpeta", pickIntegrityTarget: "Elegir archivo o carpeta", pickIntegrityFolder: "Elegir carpeta para verificar", pickIntegrityFile: "Elegir archivo para verificar",
+    integrityAlgorithmLabel: "Algoritmo", expectedHashLabel: "Huella esperada (opcional)", expectedHashPlaceholder: "Pega una huella anterior para comparar", verifyIntegrityButton: "Verificar",
+    integrityEyebrow: "Integridad", integrityReady: "Listo para verificar", integrityFiles: "Archivos", integrityBytes: "Leído",
+    integrityProgressIdle: "Elige un origen para calcular su huella.", integrityEmptyTitle: "Verifica archivos localmente", integrityEmptyText: "Calcula la huella de un archivo, una carpeta o los resultados filtrados.",
+    integrityReading: "Calculando huellas", integrityComplete: "Verificación completada", integrityCompleteDetail: "Se leyeron todos los archivos y la huella global está lista.",
+    integrityCancelled: "Verificación cancelada", integrityCancelledDetail: "La operación se detuvo antes de verificar todos los archivos.", integrityFailed: "Error de verificación",
+    integrityCompleteTitle: "Huella calculada", integrityCompleteText: "Guarda la huella global para volver a verificar este conjunto.",
+    integrityMatchTitle: "Integridad verificada", integrityMatchText: "La huella calculada coincide con el valor esperado.",
+    integrityMismatchTitle: "Integridad no coincidente", integrityMismatchText: "El contenido, las rutas o el conjunto de archivos difieren de la huella esperada.",
+    aggregateFingerprint: "Huella global", copyFingerprint: "Copiar huella", fingerprintCopied: "Huella copiada.", copyFailed: "No se pudo copiar la huella.", fileFingerprints: "Huellas de archivos",
+    invalidFile: "Elige un archivo válido.", invalidExpectedHash: "La huella esperada no es válida para el algoritmo elegido.", unsupportedHashAlgorithm: "El algoritmo de hash no es compatible.",
+    integrityTaskFailed: "No se pudo completar la verificación.", fileReadFailed: "No se pudo leer un archivo.", fileChangedDuringCheck: "Un archivo cambió durante la verificación. Vuelve a intentarlo.",
+    folderReadFailed: "No se pudo leer toda la carpeta. No se generó ninguna huella.", noFilteredFiles: "Los resultados filtrados no contienen archivos.", invalidIntegritySource: "Elige un origen válido."
 };
 
 export default messages;

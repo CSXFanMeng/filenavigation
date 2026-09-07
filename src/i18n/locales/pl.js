@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "Pobieranie zakończone. Instalowanie...",
     restartingUpdate: "Instalacja zakończona. Ponowne uruchamianie...",
     automaticUpdateFailed: "Automatyczna aktualizacja nie powiodła się.",
-    updaterUnavailable: "Brak zgodnego pakietu aktualizacji dla tego systemu."
+    updaterUnavailable: "Brak zgodnego pakietu aktualizacji dla tego systemu.",
+    toolsLabel: "Narzędzia", toolSearch: "Wyszukiwanie", toolIntegrity: "Integralność",
+    integritySourceLabel: "Źródło", integritySourceFile: "Jeden plik", integritySourceFolder: "Cały folder", integritySourceCurrent: "Bieżący folder wyszukiwania", integritySourceFiltered: "Filtrowane wyniki",
+    integrityTargetLabel: "Plik lub folder", integrityTargetPlaceholder: "Wybierz plik lub folder", pickIntegrityTarget: "Wybierz plik lub folder", pickIntegrityFolder: "Wybierz folder do sprawdzenia", pickIntegrityFile: "Wybierz plik do sprawdzenia",
+    integrityAlgorithmLabel: "Algorytm", expectedHashLabel: "Oczekiwany odcisk (opcjonalnie)", expectedHashPlaceholder: "Wklej wcześniejszy odcisk do porównania", verifyIntegrityButton: "Sprawdź",
+    integrityEyebrow: "Integralność", integrityReady: "Gotowe do sprawdzenia", integrityFiles: "Pliki", integrityBytes: "Odczytano",
+    integrityProgressIdle: "Wybierz źródło, aby obliczyć jego odcisk.", integrityEmptyTitle: "Sprawdź pliki lokalnie", integrityEmptyText: "Oblicz odcisk pliku, folderu lub filtrowanych wyników.",
+    integrityReading: "Obliczanie odcisków", integrityComplete: "Sprawdzanie zakończone", integrityCompleteDetail: "Odczytano wszystkie pliki i utworzono odcisk zbiorczy.",
+    integrityCancelled: "Sprawdzanie anulowane", integrityCancelledDetail: "Operację zatrzymano przed sprawdzeniem wszystkich plików.", integrityFailed: "Sprawdzanie nie powiodło się",
+    integrityCompleteTitle: "Odcisk obliczony", integrityCompleteText: "Zapisz odcisk zbiorczy, aby później ponownie sprawdzić ten zestaw.",
+    integrityMatchTitle: "Integralność potwierdzona", integrityMatchText: "Obliczony odcisk jest zgodny z oczekiwaną wartością.", integrityMismatchTitle: "Niezgodność integralności", integrityMismatchText: "Zawartość, ścieżki lub zestaw plików różnią się od oczekiwanego odcisku.",
+    aggregateFingerprint: "Odcisk zbiorczy", copyFingerprint: "Kopiuj odcisk", fingerprintCopied: "Odcisk skopiowany.", copyFailed: "Nie udało się skopiować odcisku.", fileFingerprints: "Odciski plików",
+    invalidFile: "Wybierz prawidłowy plik.", invalidExpectedHash: "Oczekiwany odcisk jest nieprawidłowy dla wybranego algorytmu.", unsupportedHashAlgorithm: "Algorytm skrótu nie jest obsługiwany.",
+    integrityTaskFailed: "Nie udało się ukończyć sprawdzania integralności.", fileReadFailed: "Nie udało się odczytać pliku.", fileChangedDuringCheck: "Plik zmienił się podczas sprawdzania. Uruchom ponownie.",
+    folderReadFailed: "Nie udało się odczytać całego folderu. Odcisk nie został utworzony.", noFilteredFiles: "Filtrowane wyniki nie zawierają plików.", invalidIntegritySource: "Wybierz prawidłowe źródło."
 };
 
 export default messages;

@@ -99,7 +99,22 @@ const messages = {
     installingUpdate: "Download concluído. Instalando...",
     restartingUpdate: "Instalação concluída. Reiniciando...",
     automaticUpdateFailed: "A atualização automática falhou.",
-    updaterUnavailable: "Nenhum pacote de atualização compatível está disponível para este sistema."
+    updaterUnavailable: "Nenhum pacote de atualização compatível está disponível para este sistema.",
+    toolsLabel: "Ferramentas", toolSearch: "Busca", toolIntegrity: "Integridade",
+    integritySourceLabel: "Origem", integritySourceFile: "Arquivo único", integritySourceFolder: "Pasta inteira", integritySourceCurrent: "Pasta de pesquisa atual", integritySourceFiltered: "Resultados filtrados",
+    integrityTargetLabel: "Arquivo ou pasta", integrityTargetPlaceholder: "Escolha um arquivo ou pasta", pickIntegrityTarget: "Escolher arquivo ou pasta", pickIntegrityFolder: "Escolher pasta para verificar", pickIntegrityFile: "Escolher arquivo para verificar",
+    integrityAlgorithmLabel: "Algoritmo", expectedHashLabel: "Impressão esperada (opcional)", expectedHashPlaceholder: "Cole uma impressão anterior para comparar", verifyIntegrityButton: "Verificar",
+    integrityEyebrow: "Integridade", integrityReady: "Pronto para verificar", integrityFiles: "Arquivos", integrityBytes: "Lidos",
+    integrityProgressIdle: "Escolha uma origem para calcular a impressão.", integrityEmptyTitle: "Verifique arquivos localmente", integrityEmptyText: "Calcule a impressão de um arquivo, pasta ou dos resultados filtrados.",
+    integrityReading: "Calculando impressões", integrityComplete: "Verificação concluída", integrityCompleteDetail: "Todos os arquivos foram lidos e a impressão geral está pronta.",
+    integrityCancelled: "Verificação cancelada", integrityCancelledDetail: "A operação parou antes de verificar todos os arquivos.", integrityFailed: "Falha na verificação",
+    integrityCompleteTitle: "Impressão calculada", integrityCompleteText: "Salve a impressão geral para verificar este conjunto novamente.",
+    integrityMatchTitle: "Integridade verificada", integrityMatchText: "A impressão calculada corresponde ao valor esperado.",
+    integrityMismatchTitle: "Integridade divergente", integrityMismatchText: "O conteúdo, os caminhos ou o conjunto de arquivos diferem da impressão esperada.",
+    aggregateFingerprint: "Impressão geral", copyFingerprint: "Copiar impressão", fingerprintCopied: "Impressão copiada.", copyFailed: "Não foi possível copiar a impressão.", fileFingerprints: "Impressões dos arquivos",
+    invalidFile: "Escolha um arquivo válido.", invalidExpectedHash: "A impressão esperada não é válida para o algoritmo selecionado.", unsupportedHashAlgorithm: "O algoritmo de hash não é compatível.",
+    integrityTaskFailed: "Não foi possível concluir a verificação.", fileReadFailed: "Não foi possível ler um arquivo.", fileChangedDuringCheck: "Um arquivo mudou durante a verificação. Execute novamente.",
+    folderReadFailed: "A pasta não pôde ser lida por completo. Nenhuma impressão foi gerada.", noFilteredFiles: "Os resultados filtrados não contêm arquivos.", invalidIntegritySource: "Escolha uma origem válida."
 };
 
 export default messages;

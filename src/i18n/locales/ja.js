@@ -99,7 +99,21 @@ const messages = {
     installingUpdate: "ダウンロード完了。インストール中...",
     restartingUpdate: "インストール完了。再起動中...",
     automaticUpdateFailed: "自動更新に失敗しました。",
-    updaterUnavailable: "このシステムに対応する更新パッケージはありません。"
+    updaterUnavailable: "このシステムに対応する更新パッケージはありません。",
+    toolsLabel: "ツール", toolSearch: "ファイル検索", toolIntegrity: "整合性検証",
+    integritySourceLabel: "対象", integritySourceFile: "単一ファイル", integritySourceFolder: "フォルダー全体", integritySourceCurrent: "現在の検索フォルダー", integritySourceFiltered: "現在の絞り込み結果",
+    integrityTargetLabel: "ファイルまたはフォルダー", integrityTargetPlaceholder: "ファイルまたはフォルダーを選択", pickIntegrityTarget: "ファイルまたはフォルダーを選択", pickIntegrityFolder: "検証するフォルダーを選択", pickIntegrityFile: "検証するファイルを選択",
+    integrityAlgorithmLabel: "ハッシュアルゴリズム", expectedHashLabel: "期待するフィンガープリント（任意）", expectedHashPlaceholder: "以前のフィンガープリントを貼り付けて比較", verifyIntegrityButton: "検証",
+    integrityEyebrow: "整合性", integrityReady: "検証の準備完了", integrityFiles: "ファイル", integrityBytes: "読み取り済み",
+    integrityProgressIdle: "対象を選択してフィンガープリントを計算します。", integrityEmptyTitle: "ローカルでファイルを検証", integrityEmptyText: "単一ファイル、フォルダー全体、または現在の絞り込み結果を検証できます。",
+    integrityReading: "フィンガープリントを計算中", integrityComplete: "検証完了", integrityCompleteDetail: "すべてのファイルを読み取り、全体フィンガープリントを生成しました。",
+    integrityCancelled: "検証をキャンセルしました", integrityCancelledDetail: "すべてのファイルの検証前に処理を停止しました。", integrityFailed: "検証に失敗しました",
+    integrityCompleteTitle: "フィンガープリントを計算しました", integrityCompleteText: "全体フィンガープリントを保存すると、後で同じファイル群を再検証できます。",
+    integrityMatchTitle: "整合性を確認しました", integrityMatchText: "計算結果は期待値と一致します。", integrityMismatchTitle: "整合性が一致しません", integrityMismatchText: "ファイル内容、相対パス、またはファイル構成が期待値と異なります。",
+    aggregateFingerprint: "全体フィンガープリント", copyFingerprint: "フィンガープリントをコピー", fingerprintCopied: "フィンガープリントをコピーしました。", copyFailed: "フィンガープリントをコピーできませんでした。", fileFingerprints: "ファイル別フィンガープリント",
+    invalidFile: "有効なファイルを選択してください。", invalidExpectedHash: "期待値の形式が選択したアルゴリズムに適合しません。", unsupportedHashAlgorithm: "選択したハッシュアルゴリズムは未対応です。",
+    integrityTaskFailed: "整合性検証を完了できませんでした。", fileReadFailed: "ファイルを読み取れませんでした。", fileChangedDuringCheck: "検証中にファイルが変更されました。再実行してください。",
+    folderReadFailed: "フォルダーを完全に読み取れないため、フィンガープリントを生成しませんでした。", noFilteredFiles: "現在の絞り込み結果にファイルがありません。", invalidIntegritySource: "有効な検証対象を選択してください。"
 };
 
 export default messages;
