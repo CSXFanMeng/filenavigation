@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronRight,
   Copy,
+  CopyMinus,
   Database,
   Download,
   ExternalLink,
@@ -33,6 +34,7 @@ import {
   Hash,
   Languages,
   Layers3,
+  ListChecks,
   Maximize2,
   Minus,
   Moon,
@@ -49,11 +51,17 @@ import {
   ShieldCheck,
   Sun,
   Timer,
+  Trash2,
   X,
   createElement as createIconElement,
   createIcons
 } from "lucide";
 import { languageOptions, resolveLanguage as resolveLocaleLanguage, translateForLanguage } from "./i18n/index.js";
+import {
+  autoSelectDuplicatePaths,
+  buildDuplicateDeleteGroups,
+  getDuplicateSelectionStats
+} from "./duplicates.js";
 import {
   buildResultTree,
   collectExpandableFolderPaths,
@@ -70,6 +78,7 @@ const uiIcons = {
   Check,
   ChevronDown,
   Copy,
+  CopyMinus,
   Database,
   Download,
   ExternalLink,
@@ -89,6 +98,7 @@ const uiIcons = {
   Hash,
   Languages,
   Layers3,
+  ListChecks,
   Maximize2,
   Minus,
   Moon,
@@ -104,6 +114,7 @@ const uiIcons = {
   ShieldCheck,
   Sun,
   Timer,
+  Trash2,
   X
 };
 
@@ -161,6 +172,29 @@ const elements = {
   integrityCopyFeedback: document.querySelector("#integrity-copy-feedback"),
   integrityResultCount: document.querySelector("#integrity-result-count"),
   integrityFileList: document.querySelector("#integrity-file-list"),
+  duplicatesSource: document.querySelector("#duplicates-source"),
+  duplicatesPathField: document.querySelector("#duplicates-path-field"),
+  duplicatesPath: document.querySelector("#duplicates-path"),
+  pickDuplicatesFolder: document.querySelector("#pick-duplicates-folder"),
+  scanDuplicates: document.querySelector("#scan-duplicates"),
+  cancelDuplicates: document.querySelector("#cancel-duplicates"),
+  duplicatesTitle: document.querySelector("#duplicates-status-title"),
+  duplicatesStatGroups: document.querySelector("#duplicates-stat-groups"),
+  duplicatesStatFiles: document.querySelector("#duplicates-stat-files"),
+  duplicatesStatBytes: document.querySelector("#duplicates-stat-bytes"),
+  duplicatesProgressDetail: document.querySelector("#duplicates-progress-detail"),
+  duplicatesMeter: document.querySelector("#duplicates-meter"),
+  duplicatesMeterFill: document.querySelector("#duplicates-meter-fill"),
+  duplicatesEmptyState: document.querySelector("#duplicates-empty-state"),
+  duplicatesResult: document.querySelector("#duplicates-result"),
+  duplicatesSelectionCount: document.querySelector("#duplicates-selection-count"),
+  duplicatesSelectionSize: document.querySelector("#duplicates-selection-size"),
+  autoSelectDuplicates: document.querySelector("#auto-select-duplicates"),
+  trashSelectedDuplicates: document.querySelector("#trash-selected-duplicates"),
+  duplicatesGroupList: document.querySelector("#duplicates-group-list"),
+  duplicatesConfirmDialog: document.querySelector("#duplicates-confirm-dialog"),
+  duplicatesConfirmDetail: document.querySelector("#duplicates-confirm-detail"),
+  confirmTrashDuplicates: document.querySelector("#confirm-trash-duplicates"),
   emptyState: document.querySelector("#empty-state"),
   resultList: document.querySelector("#result-list"),
   updateStatus: document.querySelector("#update-status"),
@@ -197,6 +231,14 @@ let lastIntegrityStatus = "integrityReady";
 let lastIntegrityResult = null;
 let lastIntegrityError = "";
 let lastIntegrityProgress = { bytesRead: 0, totalBytes: 0, filesCompleted: 0, totalFiles: 0, elapsedMs: 0 };
+let activeDuplicateId = "";
+let isScanningDuplicates = false;
+let isDeletingDuplicates = false;
+let lastDuplicateStatus = "duplicatesReady";
+let lastDuplicateResult = null;
+let lastDuplicateError = "";
+let lastDuplicateProgress = { stage: "", filesProcessed: 0, totalFiles: 0, bytesRead: 0, totalBytes: 0, elapsedMs: 0, currentPath: "" };
+let selectedDuplicatePaths = new Set();
 let currentLanguage = resolveLanguage(localStorage.getItem("filenavigation.language") || "auto");
 let lastResults = [];
 let lastResultTree = [];
@@ -222,6 +264,8 @@ applyTranslations();
 initializeIcons();
 updateIntegritySource();
 renderIntegrity();
+updateDuplicateSource();
+renderDuplicates();
 if (appWindow) {
   initializeProgressListener();
 }
@@ -328,6 +372,18 @@ elements.pickIntegrityTarget.addEventListener("click", async () => {
   }
 });
 
+elements.pickDuplicatesFolder.addEventListener("click", async () => {
+  const selected = await open({
+    directory: true,
+    multiple: false,
+    title: translate("pickDuplicatesFolder")
+  });
+
+  if (typeof selected === "string") {
+    elements.duplicatesPath.value = selected;
+  }
+});
+
 elements.language.addEventListener("change", () => {
   localStorage.setItem("filenavigation.language", elements.language.value);
   currentLanguage = resolveLanguage(elements.language.value);
@@ -349,6 +405,7 @@ elements.language.addEventListener("change", () => {
     checkForUpdates();
   }
   renderIntegrity();
+  renderDuplicates();
 });
 
 elements.search.addEventListener("click", () => runSearch());
@@ -371,6 +428,15 @@ elements.integritySource.addEventListener("change", () => updateIntegritySource(
 elements.verifyIntegrity.addEventListener("click", () => runIntegrityCheck());
 elements.cancelIntegrity.addEventListener("click", () => cancelActiveIntegrityCheck());
 elements.copyIntegrityHash.addEventListener("click", () => copyIntegrityFingerprint());
+elements.duplicatesSource.addEventListener("change", () => updateDuplicateSource());
+elements.scanDuplicates.addEventListener("click", () => runDuplicateScan());
+elements.cancelDuplicates.addEventListener("click", () => cancelActiveDuplicateScan());
+elements.autoSelectDuplicates.addEventListener("click", () => {
+  selectedDuplicatePaths = autoSelectDuplicatePaths(lastDuplicateResult?.groups || []);
+  renderDuplicates();
+});
+elements.trashSelectedDuplicates.addEventListener("click", () => openDuplicateConfirmation());
+elements.confirmTrashDuplicates.addEventListener("click", () => deleteSelectedDuplicates());
 
 function initLanguageSelect() {
   const saved = localStorage.getItem("filenavigation.language") || "auto";
@@ -409,7 +475,7 @@ function applyTheme(value, persist = true) {
 }
 
 function setActiveTool(target) {
-  if (target !== "search" && target !== "integrity") {
+  if (!["search", "integrity", "duplicates"].includes(target)) {
     return;
   }
 
@@ -434,6 +500,12 @@ function setActiveTool(target) {
     }
     updateIntegritySource();
   }
+  if (target === "duplicates") {
+    if (elements.duplicatesSource.value === "folder" && !elements.duplicatesPath.value.trim()) {
+      elements.duplicatesPath.value = elements.rootPath.value.trim();
+    }
+    updateDuplicateSource();
+  }
 }
 
 function updateIntegritySource() {
@@ -441,6 +513,14 @@ function updateIntegritySource() {
   elements.integrityPathField.hidden = source === "filtered" || source === "current";
   if (source === "folder" && !elements.integrityPath.value.trim()) {
     elements.integrityPath.value = elements.rootPath.value.trim();
+  }
+}
+
+function updateDuplicateSource() {
+  const source = elements.duplicatesSource.value;
+  elements.duplicatesPathField.hidden = source !== "folder";
+  if (source === "folder" && !elements.duplicatesPath.value.trim()) {
+    elements.duplicatesPath.value = elements.rootPath.value.trim();
   }
 }
 
@@ -574,6 +654,25 @@ async function initializeProgressListener() {
     };
     lastIntegrityStatus = "integrityReading";
     renderIntegrity();
+  });
+
+  await listen("duplicate-progress", (event) => {
+    const progress = event.payload;
+    if (!progress || progress.operation_id !== activeDuplicateId || !isScanningDuplicates) {
+      return;
+    }
+
+    lastDuplicateProgress = {
+      stage: progress.stage || "hashing",
+      filesProcessed: Number(progress.files_processed || 0),
+      totalFiles: Number(progress.total_files || 0),
+      bytesRead: Number(progress.bytes_read || 0),
+      totalBytes: Number(progress.total_bytes || 0),
+      elapsedMs: Number(progress.elapsed_ms || 0),
+      currentPath: progress.current_path || ""
+    };
+    lastDuplicateStatus = "duplicatesScanning";
+    renderDuplicates();
   });
 }
 
@@ -911,6 +1010,322 @@ async function copyIntegrityFingerprint() {
     elements.integrityCopyFeedback.textContent = translate("fingerprintCopied");
   } catch {
     elements.integrityCopyFeedback.textContent = translate("copyFailed");
+  }
+}
+
+async function runDuplicateScan() {
+  if (isScanningDuplicates || isDeletingDuplicates) return;
+
+  const source = elements.duplicatesSource.value;
+  const path = source === "current" ? elements.rootPath.value.trim() : elements.duplicatesPath.value.trim();
+  const paths = source === "filtered" ? collectFilePaths(lastVisibleResults) : [];
+  if (source === "filtered" && paths.length === 0) {
+    lastDuplicateStatus = "duplicatesFailed";
+    lastDuplicateError = translate("noFilteredFiles");
+    lastDuplicateResult = null;
+    renderDuplicates();
+    return;
+  }
+  if (source !== "filtered" && !path) {
+    lastDuplicateStatus = "duplicatesFailed";
+    lastDuplicateError = translate("invalidDirectory");
+    lastDuplicateResult = null;
+    renderDuplicates();
+    return;
+  }
+
+  const operationId = createSearchId();
+  activeDuplicateId = operationId;
+  isScanningDuplicates = true;
+  lastDuplicateStatus = "duplicatesScanning";
+  lastDuplicateError = "";
+  lastDuplicateResult = null;
+  selectedDuplicatePaths = new Set();
+  lastDuplicateProgress = {
+    stage: "indexing",
+    filesProcessed: 0,
+    totalFiles: paths.length,
+    bytesRead: 0,
+    totalBytes: 0,
+    elapsedMs: 0,
+    currentPath: path
+  };
+  setDuplicateControlsDisabled(true);
+  renderDuplicates();
+
+  try {
+    const response = await invoke("find_duplicate_files", {
+      request: {
+        operation_id: operationId,
+        source: source === "current" ? "folder" : source,
+        path: source === "filtered" ? elements.rootPath.value.trim() : path,
+        paths,
+        root: elements.rootPath.value.trim() || null
+      }
+    });
+    if (operationId !== activeDuplicateId) return;
+
+    lastDuplicateResult = response;
+    lastDuplicateProgress = {
+      stage: "complete",
+      filesProcessed: Number(response.total_files || 0),
+      totalFiles: Number(response.total_files || 0),
+      bytesRead: Number(response.bytes_read || 0),
+      totalBytes: Number(response.bytes_read || 0),
+      elapsedMs: Number(response.elapsed_ms || 0),
+      currentPath: ""
+    };
+    lastDuplicateStatus = response.cancelled
+      ? "duplicatesCancelled"
+      : response.groups.length > 0 ? "duplicatesComplete" : "duplicatesNoMatches";
+  } catch (error) {
+    if (operationId === activeDuplicateId) {
+      lastDuplicateStatus = String(error) === "duplicateCancelled" ? "duplicatesCancelled" : "duplicatesFailed";
+      lastDuplicateError = mapError(error);
+      lastDuplicateResult = null;
+    }
+  } finally {
+    if (operationId === activeDuplicateId) {
+      isScanningDuplicates = false;
+      setDuplicateControlsDisabled(false);
+      renderDuplicates();
+    }
+  }
+}
+
+async function cancelActiveDuplicateScan() {
+  if (!activeDuplicateId || !isScanningDuplicates) return;
+  elements.cancelDuplicates.disabled = true;
+  await invoke("cancel_duplicate_scan", { operationId: activeDuplicateId });
+}
+
+function setDuplicateControlsDisabled(disabled) {
+  elements.duplicatesSource.disabled = disabled;
+  elements.duplicatesPath.disabled = disabled;
+  elements.pickDuplicatesFolder.disabled = disabled;
+  elements.scanDuplicates.disabled = disabled;
+  elements.cancelDuplicates.disabled = !disabled;
+}
+
+function renderDuplicates() {
+  const result = lastDuplicateResult;
+  const progress = lastDuplicateProgress;
+  elements.duplicatesTitle.textContent = translate(lastDuplicateStatus);
+  elements.duplicatesStatGroups.textContent = formatNumber(result?.groups?.length || 0);
+  elements.duplicatesStatFiles.textContent = formatNumber(result?.duplicate_files || 0);
+  elements.duplicatesStatBytes.textContent = formatBytes(result?.reclaimable_bytes || 0);
+
+  const percentage = progress.totalBytes > 0
+    ? Math.min(100, Math.round((progress.bytesRead / progress.totalBytes) * 100))
+    : ["duplicatesComplete", "duplicatesNoMatches", "duplicatesDeleteComplete", "duplicatesDeletePartial"].includes(lastDuplicateStatus) ? 100 : 0;
+  elements.duplicatesMeterFill.style.width = `${percentage}%`;
+  elements.duplicatesMeter.setAttribute("aria-valuenow", String(percentage));
+
+  if (lastDuplicateStatus === "duplicatesScanning") {
+    const count = progress.totalFiles
+      ? `${formatNumber(progress.filesProcessed)}/${formatNumber(progress.totalFiles)}`
+      : formatNumber(progress.filesProcessed);
+    const activity = translate(progress.stage === "indexing" ? "duplicatesScanning" : "duplicatesHashing");
+    elements.duplicatesProgressDetail.textContent = progress.stage === "indexing"
+      ? `${activity} · ${count}`
+      : `${activity} · ${count} · ${formatBytes(progress.bytesRead)} / ${formatBytes(progress.totalBytes)}`;
+  } else if (lastDuplicateStatus === "duplicatesFailed") {
+    elements.duplicatesProgressDetail.textContent = lastDuplicateError || translate("duplicateTaskFailed");
+  } else if (lastDuplicateStatus === "duplicatesCancelled") {
+    elements.duplicatesProgressDetail.textContent = translate("duplicatesCancelledDetail");
+  } else if (lastDuplicateStatus === "duplicatesDeleteComplete") {
+    elements.duplicatesProgressDetail.textContent = lastDuplicateError || translate("duplicatesDeleteCompleteDetail");
+  } else if (lastDuplicateStatus === "duplicatesDeletePartial") {
+    elements.duplicatesProgressDetail.textContent = lastDuplicateError;
+  } else if (lastDuplicateStatus === "duplicatesComplete") {
+    elements.duplicatesProgressDetail.textContent = translate(
+      "duplicatesCompleteDetail",
+      formatNumber(result?.groups?.length || 0),
+      formatBytes(result?.reclaimable_bytes || 0)
+    );
+  } else if (lastDuplicateStatus === "duplicatesNoMatches") {
+    elements.duplicatesProgressDetail.textContent = translate("duplicatesNoMatchesDetail");
+  } else {
+    elements.duplicatesProgressDetail.textContent = translate("duplicatesProgressIdle");
+  }
+
+  const showResult = Boolean(result?.groups?.length);
+  elements.duplicatesEmptyState.hidden = showResult;
+  elements.duplicatesResult.hidden = !showResult;
+  if (!showResult) {
+    const headingKey = lastDuplicateStatus === "duplicatesDeleteComplete"
+      ? "duplicatesDeleteComplete"
+      : lastDuplicateStatus === "duplicatesFailed"
+      ? "duplicatesFailed"
+      : lastDuplicateStatus === "duplicatesCancelled"
+        ? "duplicatesCancelled"
+        : lastDuplicateStatus === "duplicatesScanning"
+          ? "duplicatesScanning"
+          : lastDuplicateStatus === "duplicatesNoMatches"
+            ? "duplicatesNoMatches"
+            : "duplicatesEmptyTitle";
+    const detail = lastDuplicateStatus === "duplicatesDeleteComplete"
+      ? lastDuplicateError || translate("duplicatesDeleteCompleteDetail")
+      : lastDuplicateStatus === "duplicatesFailed"
+      ? lastDuplicateError
+      : lastDuplicateStatus === "duplicatesScanning"
+        ? progress.currentPath || translate("duplicatesHashing")
+        : lastDuplicateStatus === "duplicatesCancelled"
+          ? translate("duplicatesCancelledDetail")
+          : lastDuplicateStatus === "duplicatesNoMatches"
+            ? translate("duplicatesNoMatchesDetail")
+            : translate("duplicatesEmptyText");
+    elements.duplicatesEmptyState.querySelector("h3").textContent = translate(headingKey);
+    elements.duplicatesEmptyState.querySelector("p").textContent = detail;
+    return;
+  }
+
+  const selection = getDuplicateSelectionStats(result.groups, selectedDuplicatePaths);
+  elements.duplicatesSelectionCount.textContent = formatNumber(selection.count);
+  elements.duplicatesSelectionSize.textContent = formatBytes(selection.bytes);
+  elements.trashSelectedDuplicates.disabled = selection.count === 0 || isDeletingDuplicates;
+  elements.autoSelectDuplicates.disabled = isDeletingDuplicates;
+  renderDuplicateGroups(result.groups);
+}
+
+function renderDuplicateGroups(groups) {
+  const fragment = document.createDocumentFragment();
+  elements.duplicatesGroupList.replaceChildren();
+
+  groups.forEach((group, groupIndex) => {
+    const selectedInGroup = group.files.filter((file) => selectedDuplicatePaths.has(file.path));
+    const keepFile = group.files.find((file) => !selectedDuplicatePaths.has(file.path));
+    const article = document.createElement("article");
+    article.className = "duplicate-group";
+
+    const header = document.createElement("header");
+    header.className = "duplicate-group-header";
+    const heading = document.createElement("div");
+    const title = document.createElement("h3");
+    title.textContent = translate("duplicateGroupTitle", groupIndex + 1);
+    const hash = document.createElement("code");
+    hash.textContent = group.hash.slice(0, 16);
+    heading.append(title, hash);
+    const meta = document.createElement("span");
+    meta.textContent = `${formatNumber(group.files.length)} · ${formatBytes(group.size)}`;
+    header.append(heading, meta);
+    article.append(header);
+
+    group.files.forEach((file) => {
+      const row = document.createElement("div");
+      row.className = "duplicate-file-row";
+      const selector = document.createElement("label");
+      selector.className = "duplicate-file-select";
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = selectedDuplicatePaths.has(file.path);
+      checkbox.disabled = isDeletingDuplicates;
+      const control = document.createElement("span");
+      control.className = "check-control";
+      control.setAttribute("aria-hidden", "true");
+      control.append(createIconElement(Check, { width: 13, height: 13, "stroke-width": 2.2 }));
+      selector.append(checkbox, control);
+
+      const details = document.createElement("div");
+      details.className = "duplicate-file-details";
+      const path = document.createElement("strong");
+      path.textContent = file.relative_path || file.path;
+      path.title = file.path;
+      const info = document.createElement("span");
+      info.textContent = `${formatBytes(file.size)} · ${formatDateTime(file.modified_ms)}`;
+      details.append(path, info);
+
+      const actions = document.createElement("div");
+      actions.className = "duplicate-file-actions";
+      if (keepFile?.path === file.path) {
+        const badge = document.createElement("span");
+        badge.className = "keep-badge";
+        badge.textContent = translate("keptCopy");
+        actions.append(badge);
+      }
+      const openButton = document.createElement("button");
+      openButton.className = "row-action";
+      openButton.type = "button";
+      openButton.title = translate("openItem");
+      openButton.setAttribute("aria-label", translate("openItem"));
+      openButton.append(createIconElement(ExternalLink, { width: 15, height: 15, "stroke-width": 1.8 }));
+      openButton.addEventListener("click", () => openPath(file.path));
+      actions.append(openButton);
+
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked && selectedInGroup.length >= group.files.length - 1) {
+          checkbox.checked = false;
+          elements.duplicatesProgressDetail.textContent = translate("duplicateKeepRequired");
+          return;
+        }
+        if (checkbox.checked) selectedDuplicatePaths.add(file.path);
+        else selectedDuplicatePaths.delete(file.path);
+        renderDuplicates();
+      });
+
+      row.append(selector, details, actions);
+      article.append(row);
+    });
+    fragment.append(article);
+  });
+  elements.duplicatesGroupList.append(fragment);
+}
+
+function openDuplicateConfirmation() {
+  const selection = getDuplicateSelectionStats(lastDuplicateResult?.groups || [], selectedDuplicatePaths);
+  if (selection.count === 0) return;
+  elements.duplicatesConfirmDetail.textContent = translate(
+    "duplicatesConfirmDetail",
+    formatNumber(selection.count),
+    formatBytes(selection.bytes)
+  );
+  openDialog(elements.duplicatesConfirmDialog, elements.trashSelectedDuplicates);
+}
+
+async function deleteSelectedDuplicates() {
+  if (isDeletingDuplicates || !lastDuplicateResult) return;
+
+  let groups;
+  try {
+    groups = buildDuplicateDeleteGroups(lastDuplicateResult.groups, selectedDuplicatePaths);
+  } catch (error) {
+    lastDuplicateError = mapError(error.message);
+    closeDialog(elements.duplicatesConfirmDialog);
+    renderDuplicates();
+    return;
+  }
+  if (groups.length === 0) return;
+
+  isDeletingDuplicates = true;
+  elements.confirmTrashDuplicates.disabled = true;
+  closeDialog(elements.duplicatesConfirmDialog, false);
+  renderDuplicates();
+
+  try {
+    const response = await invoke("move_duplicate_files_to_trash", { request: { groups } });
+    const deleted = new Set(response.deleted_paths || []);
+    const failed = response.failed_paths || [];
+    selectedDuplicatePaths = new Set(failed);
+    lastDuplicateResult.groups = lastDuplicateResult.groups
+      .map((group) => ({ ...group, files: group.files.filter((file) => !deleted.has(file.path)) }))
+      .filter((group) => group.files.length > 1)
+      .map((group) => ({ ...group, reclaimable_bytes: group.size * (group.files.length - 1) }));
+    lastDuplicateResult.duplicate_files = lastDuplicateResult.groups
+      .reduce((total, group) => total + group.files.length - 1, 0);
+    lastDuplicateResult.reclaimable_bytes = lastDuplicateResult.groups
+      .reduce((total, group) => total + group.reclaimable_bytes, 0);
+    lastDuplicateResult.total_files = Math.max(0, Number(lastDuplicateResult.total_files || 0) - deleted.size);
+    lastDuplicateStatus = failed.length ? "duplicatesDeletePartial" : "duplicatesDeleteComplete";
+    lastDuplicateError = failed.length
+      ? translate("duplicatesDeletePartialDetail", formatNumber(deleted.size), formatNumber(failed.length))
+      : translate("duplicatesDeletedDetail", formatNumber(deleted.size), formatBytes(response.reclaimed_bytes || 0));
+  } catch (error) {
+    lastDuplicateStatus = "duplicatesFailed";
+    lastDuplicateError = mapError(error);
+  } finally {
+    isDeletingDuplicates = false;
+    elements.confirmTrashDuplicates.disabled = false;
+    renderDuplicates();
   }
 }
 

@@ -150,7 +150,23 @@ const messages = {
     fileChangedDuringCheck: "A file changed while it was being verified. Run the check again.",
     folderReadFailed: "The folder could not be fully read. No fingerprint was produced.",
     noFilteredFiles: "The current filtered results contain no files.",
-    invalidIntegritySource: "Choose a valid integrity source."
+    invalidIntegritySource: "Choose a valid integrity source.",
+    toolDuplicates: "Duplicates",
+    duplicatesSourceLabel: "Scan source", duplicatesSourceFolder: "Choose a folder", duplicatesSourceCurrent: "Current search folder", duplicatesSourceFiltered: "Filtered results",
+    duplicatesFolderLabel: "Folder", duplicatesFolderPlaceholder: "Choose a folder to scan", pickDuplicatesFolder: "Choose folder to scan",
+    duplicatesSafetyNote: "Files are compared by SHA-256. Removed copies go to the system trash.", scanDuplicatesButton: "Scan duplicates",
+    duplicatesEyebrow: "Duplicate files", duplicatesReady: "Ready to scan", duplicateGroups: "Groups", duplicateCopies: "Extra copies", reclaimableSpace: "Reclaimable",
+    duplicatesProgressIdle: "Choose a source to find identical files.", duplicatesEmptyTitle: "Find identical files safely", duplicatesEmptyText: "Only byte-for-byte matches are grouped. Nothing is selected or removed automatically.",
+    selectedCopies: "selected", autoSelectDuplicates: "Select extra copies", moveSelectedToTrash: "Move to trash",
+    duplicatesConfirmEyebrow: "Confirm cleanup", duplicatesConfirmTitle: "Move selected copies to trash?", duplicatesConfirmSafety: "One verified file is always kept in every duplicate group.",
+    cancelAction: "Cancel", confirmMoveToTrash: "Move to trash", duplicatesConfirmDetail: (count, size) => `Move ${count} selected files (${size}) to the system trash?`,
+    duplicatesScanning: "Scanning for duplicates", duplicatesHashing: "Comparing file contents", duplicatesComplete: "Duplicate scan complete", duplicatesCompleteDetail: (groups, size) => `${groups} duplicate groups found · ${size} reclaimable`,
+    duplicatesNoMatches: "No duplicates found", duplicatesNoMatchesDetail: "No byte-for-byte duplicate files were found in this source.", duplicatesCancelled: "Duplicate scan cancelled", duplicatesCancelledDetail: "The scan stopped before all candidate files were compared.", duplicatesFailed: "Duplicate scan failed",
+    duplicateGroupTitle: (index) => `Group ${index}`, keptCopy: "Keep", openItem: "Open file", duplicateKeepRequired: "At least one file must remain in every duplicate group.",
+    duplicateTaskFailed: "The duplicate scan could not be completed.", invalidDuplicateSource: "Choose a valid duplicate scan source.", duplicateCancelled: "The duplicate scan was cancelled.",
+    duplicateSelectionChanged: "The selected files changed or are no longer identical. Scan again before removing them.", noDuplicateSelection: "Select at least one duplicate copy.", duplicateDeleteFailed: "The selected files could not be moved to the system trash.",
+    duplicatesDeleteComplete: "Cleanup complete", duplicatesDeleteCompleteDetail: "The selected duplicate copies were moved to the system trash.", duplicatesDeletedDetail: (count, size) => `${count} files moved to trash · ${size} reclaimed`,
+    duplicatesDeletePartial: "Cleanup partly completed", duplicatesDeletePartialDetail: (deleted, failed) => `${deleted} files moved to trash; ${failed} could not be moved.`
 };
 
 export default messages;

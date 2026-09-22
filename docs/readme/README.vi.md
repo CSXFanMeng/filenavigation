@@ -8,6 +8,7 @@ FileNavigation là ứng dụng máy tính Rust + Tauri để tìm tệp và th�
 
 - Tìm kiếm tệp và thư mục cục bộ
 - Kiểm tra toàn vẹn SHA-256/SHA-512 cục bộ cho một tệp, toàn bộ thư mục và kết quả đã lọc, kèm dấu vân tay tổng thể để so sánh
+- Dọn tệp trùng trong thư mục, thư mục tìm kiếm hiện tại hoặc kết quả đã lọc, xác nhận bằng SHA-256, bảo vệ một bản sao mỗi nhóm và có thể khôi phục từ thùng rác
 - Khớp tên tệp theo chuỗi thường hoặc biểu thức chính quy với tùy chọn phân biệt hoa thường
 - Backend Rust/Tauri hoàn toàn bất đồng bộ, hỗ trợ hủy và tiến trình trực tiếp
 - Lọc, sắp xếp và hiển thị kết quả tăng dần

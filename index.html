@@ -110,6 +110,18 @@
                 <i data-lucide="file-check-2" aria-hidden="true"></i>
                 <span data-i18n="toolIntegrity">Integrity</span>
               </button>
+              <button
+                id="tool-duplicates"
+                class="tool-switch-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="duplicates-tool-panel"
+                data-tool-target="duplicates"
+              >
+                <i data-lucide="copy-minus" aria-hidden="true"></i>
+                <span data-i18n="toolDuplicates">Duplicates</span>
+              </button>
             </nav>
 
             <section id="search-tool-panel" class="sidebar-tool-panel" role="tabpanel" aria-labelledby="tool-search" data-tool-panel="search">
@@ -273,6 +285,69 @@
                   <span data-i18n="verifyIntegrityButton">Verify</span>
                 </button>
                 <button id="cancel-integrity" class="secondary icon-command" type="button" disabled>
+                  <i data-lucide="x" aria-hidden="true"></i>
+                  <span data-i18n="cancelSearchButton">Cancel</span>
+                </button>
+              </div>
+            </section>
+
+            <section id="duplicates-tool-panel" class="sidebar-tool-panel" role="tabpanel" aria-labelledby="tool-duplicates" data-tool-panel="duplicates" hidden>
+              <div class="field">
+                <label for="duplicates-source">
+                  <i data-lucide="layers-3" aria-hidden="true"></i>
+                  <span data-i18n="duplicatesSourceLabel">Scan source</span>
+                </label>
+                <div class="control-shell select-shell">
+                  <select id="duplicates-source">
+                    <option value="folder" data-i18n="duplicatesSourceFolder">Choose a folder</option>
+                    <option value="current" data-i18n="duplicatesSourceCurrent">Current search folder</option>
+                    <option value="filtered" data-i18n="duplicatesSourceFiltered">Filtered results</option>
+                  </select>
+                  <i data-lucide="chevron-down" aria-hidden="true"></i>
+                </div>
+              </div>
+
+              <div id="duplicates-path-field" class="field">
+                <label for="duplicates-path">
+                  <i data-lucide="folder-tree" aria-hidden="true"></i>
+                  <span data-i18n="duplicatesFolderLabel">Folder</span>
+                </label>
+                <div class="path-row">
+                  <div class="control-shell input-shell">
+                    <i data-lucide="hard-drive" aria-hidden="true"></i>
+                    <input
+                      id="duplicates-path"
+                      type="text"
+                      data-i18n-placeholder="duplicatesFolderPlaceholder"
+                      placeholder="Choose a folder to scan"
+                      spellcheck="false"
+                    />
+                  </div>
+                  <button
+                    id="pick-duplicates-folder"
+                    class="icon-button"
+                    type="button"
+                    data-i18n-title="pickDuplicatesFolder"
+                    data-i18n-aria-label="pickDuplicatesFolder"
+                    title="Choose folder"
+                    aria-label="Choose folder"
+                  >
+                    <i data-lucide="folder-open" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="duplicate-safety-note">
+                <i data-lucide="shield-check" aria-hidden="true"></i>
+                <p data-i18n="duplicatesSafetyNote">Files are compared by SHA-256. Removed copies go to the system trash.</p>
+              </div>
+
+              <div class="action-row">
+                <button id="scan-duplicates" class="primary" type="button">
+                  <i data-lucide="scan-search" aria-hidden="true"></i>
+                  <span data-i18n="scanDuplicatesButton">Scan duplicates</span>
+                </button>
+                <button id="cancel-duplicates" class="secondary icon-command" type="button" disabled>
                   <i data-lucide="x" aria-hidden="true"></i>
                   <span data-i18n="cancelSearchButton">Cancel</span>
                 </button>
@@ -468,7 +543,106 @@
               </section>
             </div>
           </section>
+
+          <section id="duplicates-tool-view" class="tool-view duplicates-tool-view" data-tool-view="duplicates" hidden>
+            <header class="topbar">
+              <div class="status-heading">
+                <div class="status-icon" aria-hidden="true"><i data-lucide="copy-minus"></i></div>
+                <div>
+                  <p class="eyebrow" data-i18n="duplicatesEyebrow">Duplicate files</p>
+                  <h2 id="duplicates-status-title" data-i18n="duplicatesReady">Ready to scan</h2>
+                </div>
+              </div>
+              <div class="stats duplicates-stats">
+                <div>
+                  <i data-lucide="layers-3" aria-hidden="true"></i>
+                  <span id="duplicates-stat-groups">0</span>
+                  <small data-i18n="duplicateGroups">Groups</small>
+                </div>
+                <div>
+                  <i data-lucide="copy-minus" aria-hidden="true"></i>
+                  <span id="duplicates-stat-files">0</span>
+                  <small data-i18n="duplicateCopies">Extra copies</small>
+                </div>
+                <div>
+                  <i data-lucide="database" aria-hidden="true"></i>
+                  <span id="duplicates-stat-bytes">0 B</span>
+                  <small data-i18n="reclaimableSpace">Reclaimable</small>
+                </div>
+              </div>
+            </header>
+
+            <div class="progress-bar duplicates-progress-summary">
+              <i data-lucide="scan-line" aria-hidden="true"></i>
+              <p id="duplicates-progress-detail" class="progress-detail" data-i18n="duplicatesProgressIdle">
+                Choose a source to find identical files.
+              </p>
+            </div>
+            <div class="integrity-meter" id="duplicates-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <span id="duplicates-meter-fill"></span>
+            </div>
+
+            <div class="duplicates-body">
+              <div id="duplicates-empty-state" class="empty-state">
+                <div class="empty-symbol" aria-hidden="true"><i data-lucide="files"></i></div>
+                <h3 data-i18n="duplicatesEmptyTitle">Find identical files safely</h3>
+                <p data-i18n="duplicatesEmptyText">Only byte-for-byte matches are grouped. Nothing is selected or removed automatically.</p>
+              </div>
+
+              <section id="duplicates-result" class="duplicates-result" aria-live="polite" hidden>
+                <div class="duplicates-selection-bar">
+                  <div>
+                    <strong id="duplicates-selection-count">0</strong>
+                    <span data-i18n="selectedCopies">selected</span>
+                    <small id="duplicates-selection-size">0 B</small>
+                  </div>
+                  <div class="duplicates-selection-actions">
+                    <button id="auto-select-duplicates" class="secondary icon-command compact" type="button">
+                      <i data-lucide="list-checks" aria-hidden="true"></i>
+                      <span data-i18n="autoSelectDuplicates">Select extra copies</span>
+                    </button>
+                    <button id="trash-selected-duplicates" class="danger-button icon-command compact" type="button" disabled>
+                      <i data-lucide="trash-2" aria-hidden="true"></i>
+                      <span data-i18n="moveSelectedToTrash">Move to trash</span>
+                    </button>
+                  </div>
+                </div>
+                <div id="duplicates-group-list" class="duplicates-group-list" tabindex="0"></div>
+              </section>
+            </div>
+          </section>
         </section>
+        </section>
+      </div>
+
+      <div id="duplicates-confirm-dialog" class="dialog-backdrop" hidden>
+        <section class="dialog-window confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="duplicates-confirm-title">
+          <header class="dialog-header">
+            <div class="section-heading">
+              <span class="section-icon danger-icon" aria-hidden="true"><i data-lucide="trash-2"></i></span>
+              <div>
+                <p class="eyebrow" data-i18n="duplicatesConfirmEyebrow">Confirm cleanup</p>
+                <h2 id="duplicates-confirm-title" data-i18n="duplicatesConfirmTitle">Move selected copies to trash?</h2>
+              </div>
+            </div>
+            <button class="dialog-close" type="button" data-dialog-close data-i18n-title="closeDialog" data-i18n-aria-label="closeDialog" title="Close" aria-label="Close">
+              <i data-lucide="x" aria-hidden="true"></i>
+            </button>
+          </header>
+          <div class="dialog-body confirm-dialog-body">
+            <p id="duplicates-confirm-detail"></p>
+            <div class="confirm-safety-row">
+              <i data-lucide="shield-check" aria-hidden="true"></i>
+              <span data-i18n="duplicatesConfirmSafety">One verified file is always kept in every duplicate group.</span>
+            </div>
+          </div>
+          <footer class="dialog-actions">
+            <button class="secondary" type="button" data-dialog-close data-i18n="cancelAction">Cancel</button>
+            <button id="confirm-trash-duplicates" class="danger-button icon-command" type="button">
+              <i data-lucide="trash-2" aria-hidden="true"></i>
+              <span data-i18n="confirmMoveToTrash">Move to trash</span>
+            </button>
+          </footer>
         </section>
       </div>
 

@@ -149,7 +149,23 @@ const messages = {
     fileChangedDuringCheck: "校验过程中有文件发生变化，请重新校验。",
     folderReadFailed: "无法完整读取文件夹，因此未生成指纹。",
     noFilteredFiles: "当前筛选结果中没有文件。",
-    invalidIntegritySource: "请选择有效的校验来源。"
+    invalidIntegritySource: "请选择有效的校验来源。",
+    toolDuplicates: "重复文件",
+    duplicatesSourceLabel: "扫描来源", duplicatesSourceFolder: "选择文件夹", duplicatesSourceCurrent: "当前搜索目录", duplicatesSourceFiltered: "当前筛选结果",
+    duplicatesFolderLabel: "文件夹", duplicatesFolderPlaceholder: "选择要扫描的文件夹", pickDuplicatesFolder: "选择要扫描的文件夹",
+    duplicatesSafetyNote: "使用 SHA-256 比较文件内容，移除的副本将进入系统回收站。", scanDuplicatesButton: "扫描重复文件",
+    duplicatesEyebrow: "重复文件", duplicatesReady: "等待扫描", duplicateGroups: "重复组", duplicateCopies: "多余副本", reclaimableSpace: "可回收空间",
+    duplicatesProgressIdle: "选择来源以查找内容完全相同的文件。", duplicatesEmptyTitle: "安全查找重复文件", duplicatesEmptyText: "仅将逐字节相同的文件归为一组，不会自动选择或移除任何文件。",
+    selectedCopies: "个已选择", autoSelectDuplicates: "选择多余副本", moveSelectedToTrash: "移入回收站",
+    duplicatesConfirmEyebrow: "确认清理", duplicatesConfirmTitle: "将所选副本移入回收站？", duplicatesConfirmSafety: "每个重复组始终至少保留一个已验证文件。",
+    cancelAction: "取消", confirmMoveToTrash: "移入回收站", duplicatesConfirmDetail: (count, size) => `将所选的 ${count} 个文件（${size}）移入系统回收站？`,
+    duplicatesScanning: "正在扫描重复文件", duplicatesHashing: "正在比较文件内容", duplicatesComplete: "重复文件扫描完成", duplicatesCompleteDetail: (groups, size) => `发现 ${groups} 个重复组，可回收 ${size}`,
+    duplicatesNoMatches: "未发现重复文件", duplicatesNoMatchesDetail: "此来源中没有逐字节完全相同的文件。", duplicatesCancelled: "重复文件扫描已取消", duplicatesCancelledDetail: "扫描已在全部候选文件比较完成前停止。", duplicatesFailed: "重复文件扫描失败",
+    duplicateGroupTitle: (index) => `重复组 ${index}`, keptCopy: "保留", openItem: "打开文件", duplicateKeepRequired: "每个重复组必须至少保留一个文件。",
+    duplicateTaskFailed: "无法完成重复文件扫描。", invalidDuplicateSource: "请选择有效的重复文件扫描来源。", duplicateCancelled: "重复文件扫描已取消。",
+    duplicateSelectionChanged: "所选文件已发生变化或不再相同，请重新扫描后再移除。", noDuplicateSelection: "请至少选择一个重复副本。", duplicateDeleteFailed: "无法将所选文件移入系统回收站。",
+    duplicatesDeleteComplete: "清理完成", duplicatesDeleteCompleteDetail: "所选重复副本已移入系统回收站。", duplicatesDeletedDetail: (count, size) => `已将 ${count} 个文件移入回收站，回收 ${size}`,
+    duplicatesDeletePartial: "部分清理完成", duplicatesDeletePartialDetail: (deleted, failed) => `已将 ${deleted} 个文件移入回收站，另有 ${failed} 个文件无法移动。`
 };
 
 export default messages;

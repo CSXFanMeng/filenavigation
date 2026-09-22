@@ -8,6 +8,7 @@ FileNavigation é um aplicativo desktop em Rust + Tauri para localizar arquivos 
 
 - Pesquisa local de arquivos e pastas
 - Verificação local SHA-256/SHA-512 de arquivos, pastas inteiras e resultados filtrados, com impressão geral comparável
+- Limpeza de duplicados em pastas, na pasta de busca atual ou em resultados filtrados, com confirmação SHA-256, uma cópia protegida por grupo e recuperação pela lixeira
 - Correspondência literal ou por expressão regular de nomes com controle de maiúsculas
 - Backend Rust/Tauri totalmente assíncrono com cancelamento e progresso ao vivo
 - Filtros, ordenação e renderização progressiva dos resultados

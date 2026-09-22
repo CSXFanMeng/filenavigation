@@ -149,7 +149,23 @@ const messages = {
     fileChangedDuringCheck: "驗證過程中有檔案發生變更，請重新驗證。",
     folderReadFailed: "無法完整讀取資料夾，因此未產生指紋。",
     noFilteredFiles: "目前篩選結果中沒有檔案。",
-    invalidIntegritySource: "請選擇有效的驗證來源。"
+    invalidIntegritySource: "請選擇有效的驗證來源。",
+    toolDuplicates: "重複檔案",
+    duplicatesSourceLabel: "掃描來源", duplicatesSourceFolder: "選擇資料夾", duplicatesSourceCurrent: "目前搜尋資料夾", duplicatesSourceFiltered: "目前篩選結果",
+    duplicatesFolderLabel: "資料夾", duplicatesFolderPlaceholder: "選擇要掃描的資料夾", pickDuplicatesFolder: "選擇要掃描的資料夾",
+    duplicatesSafetyNote: "使用 SHA-256 比較檔案內容，移除的副本將進入系統垃圾桶。", scanDuplicatesButton: "掃描重複檔案",
+    duplicatesEyebrow: "重複檔案", duplicatesReady: "等待掃描", duplicateGroups: "重複群組", duplicateCopies: "多餘副本", reclaimableSpace: "可回收空間",
+    duplicatesProgressIdle: "選擇來源以尋找內容完全相同的檔案。", duplicatesEmptyTitle: "安全尋找重複檔案", duplicatesEmptyText: "僅將逐位元組相同的檔案歸為一組，不會自動選取或移除任何檔案。",
+    selectedCopies: "個已選取", autoSelectDuplicates: "選取多餘副本", moveSelectedToTrash: "移至垃圾桶",
+    duplicatesConfirmEyebrow: "確認清理", duplicatesConfirmTitle: "將所選副本移至垃圾桶？", duplicatesConfirmSafety: "每個重複群組始終至少保留一個已驗證檔案。",
+    cancelAction: "取消", confirmMoveToTrash: "移至垃圾桶", duplicatesConfirmDetail: (count, size) => `將所選的 ${count} 個檔案（${size}）移至系統垃圾桶？`,
+    duplicatesScanning: "正在掃描重複檔案", duplicatesHashing: "正在比較檔案內容", duplicatesComplete: "重複檔案掃描完成", duplicatesCompleteDetail: (groups, size) => `發現 ${groups} 個重複群組，可回收 ${size}`,
+    duplicatesNoMatches: "未發現重複檔案", duplicatesNoMatchesDetail: "此來源中沒有逐位元組完全相同的檔案。", duplicatesCancelled: "重複檔案掃描已取消", duplicatesCancelledDetail: "掃描已在全部候選檔案比較完成前停止。", duplicatesFailed: "重複檔案掃描失敗",
+    duplicateGroupTitle: (index) => `重複群組 ${index}`, keptCopy: "保留", openItem: "開啟檔案", duplicateKeepRequired: "每個重複群組必須至少保留一個檔案。",
+    duplicateTaskFailed: "無法完成重複檔案掃描。", invalidDuplicateSource: "請選擇有效的重複檔案掃描來源。", duplicateCancelled: "重複檔案掃描已取消。",
+    duplicateSelectionChanged: "所選檔案已發生變化或不再相同，請重新掃描後再移除。", noDuplicateSelection: "請至少選擇一個重複副本。", duplicateDeleteFailed: "無法將所選檔案移至系統垃圾桶。",
+    duplicatesDeleteComplete: "清理完成", duplicatesDeleteCompleteDetail: "所選重複副本已移至系統垃圾桶。", duplicatesDeletedDetail: (count, size) => `已將 ${count} 個檔案移至垃圾桶，回收 ${size}`,
+    duplicatesDeletePartial: "部分清理完成", duplicatesDeletePartialDetail: (deleted, failed) => `已將 ${deleted} 個檔案移至垃圾桶，另有 ${failed} 個檔案無法移動。`
 };
 
 export default messages;

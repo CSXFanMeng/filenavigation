@@ -87,6 +87,11 @@ struct IntegritySessions {
     cancel_tokens: Mutex<HashMap<String, Arc<AtomicBool>>>,
 }
 
+#[derive(Default)]
+struct DuplicateSessions {
+    cancel_tokens: Mutex<HashMap<String, Arc<AtomicBool>>>,
+}
+
 #[derive(Debug, Deserialize)]
 struct IntegrityRequest {
     operation_id: String,
@@ -132,6 +137,76 @@ struct IntegrityResponse {
     total_bytes: u64,
     elapsed_ms: u128,
     cancelled: bool,
+}
+
+#[derive(Debug, Deserialize)]
+struct DuplicateScanRequest {
+    operation_id: String,
+    source: String,
+    path: String,
+    #[serde(default)]
+    paths: Vec<String>,
+    root: Option<String>,
+}
+
+#[derive(Debug, Serialize, Clone)]
+struct DuplicateProgress {
+    operation_id: String,
+    stage: String,
+    files_processed: usize,
+    total_files: usize,
+    bytes_read: u64,
+    total_bytes: u64,
+    current_path: String,
+    elapsed_ms: u128,
+}
+
+#[derive(Debug, Serialize, Clone)]
+struct DuplicateFileResult {
+    path: String,
+    relative_path: String,
+    size: u64,
+    modified_ms: u64,
+}
+
+#[derive(Debug, Serialize)]
+struct DuplicateGroup {
+    hash: String,
+    size: u64,
+    reclaimable_bytes: u64,
+    files: Vec<DuplicateFileResult>,
+}
+
+#[derive(Debug, Serialize)]
+struct DuplicateScanResponse {
+    operation_id: String,
+    groups: Vec<DuplicateGroup>,
+    total_files: usize,
+    duplicate_files: usize,
+    reclaimable_bytes: u64,
+    bytes_read: u64,
+    skipped_files: usize,
+    elapsed_ms: u128,
+    cancelled: bool,
+}
+
+#[derive(Debug, Deserialize)]
+struct DuplicateDeleteGroup {
+    hash: String,
+    keep_path: String,
+    delete_paths: Vec<String>,
+}
+
+#[derive(Debug, Deserialize)]
+struct DuplicateDeleteRequest {
+    groups: Vec<DuplicateDeleteGroup>,
+}
+
+#[derive(Debug, Serialize)]
+struct DuplicateDeleteResponse {
+    deleted_paths: Vec<String>,
+    failed_paths: Vec<String>,
+    reclaimed_bytes: u64,
 }
 
 enum IntegrityHasher {
@@ -354,6 +429,60 @@ fn cancel_integrity_check(
     }
 
     Ok(())
+}
+
+#[tauri::command]
+async fn find_duplicate_files(
+    app: tauri::AppHandle,
+    state: tauri::State<'_, DuplicateSessions>,
+    request: DuplicateScanRequest,
+) -> Result<DuplicateScanResponse, String> {
+    let operation_id = request.operation_id.clone();
+    let cancel_token = Arc::new(AtomicBool::new(false));
+    state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "duplicateTaskFailed".to_string())?
+        .insert(operation_id.clone(), cancel_token.clone());
+
+    let result =
+        tokio::task::spawn_blocking(move || perform_duplicate_scan(app, request, cancel_token))
+            .await
+            .map_err(|_| "duplicateTaskFailed".to_string())?;
+
+    state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "duplicateTaskFailed".to_string())?
+        .remove(&operation_id);
+
+    result
+}
+
+#[tauri::command]
+fn cancel_duplicate_scan(
+    state: tauri::State<'_, DuplicateSessions>,
+    operation_id: String,
+) -> Result<(), String> {
+    if let Some(cancel_token) = state
+        .cancel_tokens
+        .lock()
+        .map_err(|_| "duplicateTaskFailed".to_string())?
+        .get(&operation_id)
+    {
+        cancel_token.store(true, Ordering::Relaxed);
+    }
+
+    Ok(())
+}
+
+#[tauri::command]
+async fn move_duplicate_files_to_trash(
+    request: DuplicateDeleteRequest,
+) -> Result<DuplicateDeleteResponse, String> {
+    tokio::task::spawn_blocking(move || perform_duplicate_delete(request))
+        .await
+        .map_err(|_| "duplicateDeleteFailed".to_string())?
 }
 
 #[tauri::command]
@@ -992,6 +1121,408 @@ fn collect_folder_files(root: &Path, cancel_token: &AtomicBool) -> Result<Vec<Pa
     Ok(files)
 }
 
+#[derive(Clone)]
+struct DuplicateCandidate {
+    path: PathBuf,
+    relative_path: String,
+    size: u64,
+    modified_ms: u64,
+}
+
+fn perform_duplicate_scan(
+    app: tauri::AppHandle,
+    request: DuplicateScanRequest,
+    cancel_token: Arc<AtomicBool>,
+) -> Result<DuplicateScanResponse, String> {
+    let started = Instant::now();
+    let (root, targets) = match collect_duplicate_targets(&request, &cancel_token) {
+        Ok(targets) => targets,
+        Err(error) if error == "duplicateCancelled" => {
+            return Ok(cancelled_duplicate_response(
+                request.operation_id,
+                0,
+                0,
+                started,
+            ));
+        }
+        Err(error) => return Err(error),
+    };
+    let total_files = targets.len();
+    let mut skipped_files = 0_usize;
+    let mut files_by_size: HashMap<u64, Vec<DuplicateCandidate>> = HashMap::new();
+    let mut last_emit = Instant::now();
+
+    for (index, path) in targets.into_iter().enumerate() {
+        if cancel_token.load(Ordering::Relaxed) {
+            return Ok(cancelled_duplicate_response(
+                request.operation_id,
+                total_files,
+                skipped_files,
+                started,
+            ));
+        }
+
+        let Ok(metadata) = fs::symlink_metadata(&path) else {
+            skipped_files += 1;
+            continue;
+        };
+        if !metadata.file_type().is_file() {
+            skipped_files += 1;
+            continue;
+        }
+        let modified_ms = metadata
+            .modified()
+            .ok()
+            .and_then(|value| value.duration_since(UNIX_EPOCH).ok())
+            .map_or(0, |value| value.as_millis().min(u64::MAX as u128) as u64);
+        let current_path = path.to_string_lossy().to_string();
+        files_by_size
+            .entry(metadata.len())
+            .or_default()
+            .push(DuplicateCandidate {
+                relative_path: relative_path(&root, &path),
+                path,
+                size: metadata.len(),
+                modified_ms,
+            });
+        if last_emit.elapsed().as_millis() >= 100 {
+            let _ = app.emit(
+                "duplicate-progress",
+                DuplicateProgress {
+                    operation_id: request.operation_id.clone(),
+                    stage: "indexing".to_string(),
+                    files_processed: index + 1,
+                    total_files,
+                    bytes_read: 0,
+                    total_bytes: 0,
+                    current_path,
+                    elapsed_ms: started.elapsed().as_millis(),
+                },
+            );
+            last_emit = Instant::now();
+        }
+    }
+
+    let mut candidates = files_by_size
+        .into_values()
+        .filter(|files| files.len() > 1)
+        .flatten()
+        .collect::<Vec<_>>();
+    candidates.sort_by(|left, right| {
+        left.relative_path
+            .to_lowercase()
+            .cmp(&right.relative_path.to_lowercase())
+            .then_with(|| left.relative_path.cmp(&right.relative_path))
+    });
+    let total_bytes = candidates
+        .iter()
+        .fold(0_u64, |total, file| total.saturating_add(file.size));
+    let candidate_count = candidates.len();
+    let mut bytes_read = 0_u64;
+    let mut files_by_hash: HashMap<(u64, String), Vec<DuplicateCandidate>> = HashMap::new();
+    last_emit = Instant::now();
+
+    for (index, candidate) in candidates.into_iter().enumerate() {
+        if cancel_token.load(Ordering::Relaxed) {
+            return Ok(cancelled_duplicate_response(
+                request.operation_id,
+                total_files,
+                skipped_files,
+                started,
+            ));
+        }
+
+        let hash_result = hash_duplicate_file(&candidate.path, Some(&cancel_token), |count| {
+            bytes_read = bytes_read.saturating_add(count as u64);
+            if last_emit.elapsed().as_millis() >= 100 {
+                let _ = app.emit(
+                    "duplicate-progress",
+                    DuplicateProgress {
+                        operation_id: request.operation_id.clone(),
+                        stage: "hashing".to_string(),
+                        files_processed: index,
+                        total_files: candidate_count,
+                        bytes_read,
+                        total_bytes,
+                        current_path: candidate.path.to_string_lossy().to_string(),
+                        elapsed_ms: started.elapsed().as_millis(),
+                    },
+                );
+                last_emit = Instant::now();
+            }
+        });
+
+        match hash_result {
+            Ok(hash) => files_by_hash
+                .entry((candidate.size, hash))
+                .or_default()
+                .push(candidate),
+            Err(error) if error == "duplicateCancelled" => {
+                return Ok(cancelled_duplicate_response(
+                    request.operation_id,
+                    total_files,
+                    skipped_files,
+                    started,
+                ));
+            }
+            Err(_) => skipped_files += 1,
+        }
+    }
+
+    let mut groups = files_by_hash
+        .into_iter()
+        .filter_map(|((size, hash), mut files)| {
+            if files.len() < 2 {
+                return None;
+            }
+            files.sort_by(|left, right| {
+                left.relative_path
+                    .to_lowercase()
+                    .cmp(&right.relative_path.to_lowercase())
+                    .then_with(|| left.relative_path.cmp(&right.relative_path))
+            });
+            let reclaimable_bytes = size.saturating_mul((files.len() - 1) as u64);
+            Some(DuplicateGroup {
+                hash,
+                size,
+                reclaimable_bytes,
+                files: files
+                    .into_iter()
+                    .map(|file| DuplicateFileResult {
+                        path: file.path.to_string_lossy().to_string(),
+                        relative_path: file.relative_path,
+                        size: file.size,
+                        modified_ms: file.modified_ms,
+                    })
+                    .collect(),
+            })
+        })
+        .collect::<Vec<_>>();
+    groups.sort_by(|left, right| {
+        right
+            .reclaimable_bytes
+            .cmp(&left.reclaimable_bytes)
+            .then_with(|| {
+                left.files[0]
+                    .relative_path
+                    .cmp(&right.files[0].relative_path)
+            })
+    });
+
+    let duplicate_files = groups.iter().map(|group| group.files.len() - 1).sum();
+    let reclaimable_bytes = groups.iter().fold(0_u64, |total, group| {
+        total.saturating_add(group.reclaimable_bytes)
+    });
+    let _ = app.emit(
+        "duplicate-progress",
+        DuplicateProgress {
+            operation_id: request.operation_id.clone(),
+            stage: "complete".to_string(),
+            files_processed: candidate_count,
+            total_files: candidate_count,
+            bytes_read,
+            total_bytes,
+            current_path: String::new(),
+            elapsed_ms: started.elapsed().as_millis(),
+        },
+    );
+
+    Ok(DuplicateScanResponse {
+        operation_id: request.operation_id,
+        groups,
+        total_files,
+        duplicate_files,
+        reclaimable_bytes,
+        bytes_read,
+        skipped_files,
+        elapsed_ms: started.elapsed().as_millis(),
+        cancelled: false,
+    })
+}
+
+fn cancelled_duplicate_response(
+    operation_id: String,
+    total_files: usize,
+    skipped_files: usize,
+    started: Instant,
+) -> DuplicateScanResponse {
+    DuplicateScanResponse {
+        operation_id,
+        groups: Vec::new(),
+        total_files,
+        duplicate_files: 0,
+        reclaimable_bytes: 0,
+        bytes_read: 0,
+        skipped_files,
+        elapsed_ms: started.elapsed().as_millis(),
+        cancelled: true,
+    }
+}
+
+fn collect_duplicate_targets(
+    request: &DuplicateScanRequest,
+    cancel_token: &AtomicBool,
+) -> Result<(PathBuf, Vec<PathBuf>), String> {
+    let (root, mut targets) = match request.source.as_str() {
+        "folder" => {
+            let root = PathBuf::from(request.path.trim());
+            if !root.is_dir() {
+                return Err("invalidDirectory".to_string());
+            }
+            let targets = collect_folder_files(&root, cancel_token).map_err(|error| {
+                if error == "integrityCancelled" {
+                    "duplicateCancelled".to_string()
+                } else {
+                    error
+                }
+            })?;
+            (root, targets)
+        }
+        "filtered" => {
+            if request.paths.is_empty() {
+                return Err("noFilteredFiles".to_string());
+            }
+            let root = request
+                .root
+                .as_deref()
+                .map(str::trim)
+                .filter(|value| !value.is_empty())
+                .map(PathBuf::from)
+                .unwrap_or_default();
+            let targets = request
+                .paths
+                .iter()
+                .map(|path| PathBuf::from(path.trim()))
+                .collect();
+            (root, targets)
+        }
+        _ => return Err("invalidDuplicateSource".to_string()),
+    };
+
+    let mut unique = HashSet::new();
+    targets.retain(|path| unique.insert(path.clone()));
+    Ok((root, targets))
+}
+
+fn hash_duplicate_file<F>(
+    path: &Path,
+    cancel_token: Option<&AtomicBool>,
+    mut on_read: F,
+) -> Result<String, String>
+where
+    F: FnMut(usize),
+{
+    const BUFFER_SIZE: usize = 1024 * 1024;
+
+    let initial_metadata = fs::symlink_metadata(path).map_err(|_| "fileReadFailed".to_string())?;
+    if !initial_metadata.file_type().is_file() {
+        return Err("invalidFile".to_string());
+    }
+    let mut reader = BufReader::with_capacity(
+        BUFFER_SIZE,
+        File::open(path).map_err(|_| "fileReadFailed".to_string())?,
+    );
+    let mut hasher = Sha256::new();
+    let mut buffer = vec![0_u8; BUFFER_SIZE];
+
+    loop {
+        if cancel_token.is_some_and(|token| token.load(Ordering::Relaxed)) {
+            return Err("duplicateCancelled".to_string());
+        }
+        let count = reader
+            .read(&mut buffer)
+            .map_err(|_| "fileReadFailed".to_string())?;
+        if count == 0 {
+            break;
+        }
+        hasher.update(&buffer[..count]);
+        on_read(count);
+    }
+
+    let final_metadata = fs::symlink_metadata(path).map_err(|_| "fileReadFailed".to_string())?;
+    if initial_metadata.len() != final_metadata.len()
+        || initial_metadata.modified().ok() != final_metadata.modified().ok()
+    {
+        return Err("fileChangedDuringCheck".to_string());
+    }
+
+    Ok(format!("{:x}", hasher.finalize()))
+}
+
+fn perform_duplicate_delete(
+    request: DuplicateDeleteRequest,
+) -> Result<DuplicateDeleteResponse, String> {
+    if request.groups.is_empty() {
+        return Err("noDuplicateSelection".to_string());
+    }
+
+    let mut keep_paths = HashSet::new();
+    let mut delete_paths = HashSet::new();
+    let mut validated = Vec::new();
+
+    for group in request.groups {
+        let expected_hash = group.hash.trim().to_ascii_lowercase();
+        if expected_hash.len() != 64
+            || !expected_hash
+                .chars()
+                .all(|character| character.is_ascii_hexdigit())
+            || group.delete_paths.is_empty()
+        {
+            return Err("duplicateSelectionChanged".to_string());
+        }
+
+        let keep_path = PathBuf::from(group.keep_path.trim());
+        if !keep_paths.insert(keep_path.clone())
+            || hash_duplicate_file(&keep_path, None, |_| {})
+                .map_err(|_| "duplicateSelectionChanged".to_string())?
+                != expected_hash
+        {
+            return Err("duplicateSelectionChanged".to_string());
+        }
+
+        for value in group.delete_paths {
+            let path = PathBuf::from(value.trim());
+            if path == keep_path || !delete_paths.insert(path.clone()) {
+                return Err("duplicateSelectionChanged".to_string());
+            }
+            let metadata =
+                fs::symlink_metadata(&path).map_err(|_| "duplicateSelectionChanged".to_string())?;
+            if !metadata.file_type().is_file()
+                || hash_duplicate_file(&path, None, |_| {})
+                    .map_err(|_| "duplicateSelectionChanged".to_string())?
+                    != expected_hash
+            {
+                return Err("duplicateSelectionChanged".to_string());
+            }
+            validated.push((path, metadata.len()));
+        }
+    }
+
+    if keep_paths.iter().any(|path| delete_paths.contains(path)) {
+        return Err("duplicateSelectionChanged".to_string());
+    }
+
+    let mut deleted_paths = Vec::new();
+    let mut failed_paths = Vec::new();
+    let mut reclaimed_bytes = 0_u64;
+    for (path, size) in validated {
+        let display_path = path.to_string_lossy().to_string();
+        match trash::delete(&path) {
+            Ok(()) => {
+                reclaimed_bytes = reclaimed_bytes.saturating_add(size);
+                deleted_paths.push(display_path);
+            }
+            Err(_) => failed_paths.push(display_path),
+        }
+    }
+
+    Ok(DuplicateDeleteResponse {
+        deleted_paths,
+        failed_paths,
+        reclaimed_bytes,
+    })
+}
+
 fn aggregate_integrity_hash(
     algorithm: &str,
     files: &[IntegrityFileResult],
@@ -1259,6 +1790,7 @@ pub fn run() {
     tauri::Builder::default()
         .manage(SearchSessions::default())
         .manage(IntegritySessions::default())
+        .manage(DuplicateSessions::default())
         .manage(UpdateChecker::default())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_process::init())
@@ -1268,6 +1800,9 @@ pub fn run() {
             cancel_search,
             verify_file_integrity,
             cancel_integrity_check,
+            find_duplicate_files,
+            cancel_duplicate_scan,
+            move_duplicate_files_to_trash,
             open_path,
             check_for_updates
         ])
@@ -1277,13 +1812,13 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
+    use std::{collections::HashMap, fs};
 
     use super::{
         IntegrityFileResult, IntegrityHasher, NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker,
         UpdaterManifest, UpdaterPlatform, aggregate_integrity_hash, build_update_response,
-        fetch_updater_manifest_once, localized_release_notes, manifest_version,
-        normalize_expected_hash, relative_path, release_info_from_manifest,
+        fetch_updater_manifest_once, hash_duplicate_file, localized_release_notes,
+        manifest_version, normalize_expected_hash, relative_path, release_info_from_manifest,
     };
 
     #[test]
@@ -1444,6 +1979,29 @@ English notes.
                 "454d4423643ce80e2a9ac94fa54ca49f"
             )
         );
+    }
+
+    #[test]
+    fn duplicate_hashing_compares_file_contents() {
+        let directory = std::env::temp_dir().join(format!(
+            "filenavigation-duplicate-test-{}",
+            std::process::id()
+        ));
+        fs::create_dir_all(&directory).expect("create test directory");
+        let first = directory.join("first.bin");
+        let second = directory.join("second.bin");
+        fs::write(&first, b"same content").expect("write first file");
+        fs::write(&second, b"same content").expect("write second file");
+
+        let first_hash = hash_duplicate_file(&first, None, |_| {}).expect("hash first file");
+        let second_hash = hash_duplicate_file(&second, None, |_| {}).expect("hash second file");
+        assert_eq!(first_hash, second_hash);
+
+        fs::write(&second, b"different content").expect("replace second file");
+        let changed_hash = hash_duplicate_file(&second, None, |_| {}).expect("hash changed file");
+        assert_ne!(first_hash, changed_hash);
+
+        fs::remove_dir_all(directory).expect("remove test directory");
     }
 
     #[test]

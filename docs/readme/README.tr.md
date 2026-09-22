@@ -8,6 +8,7 @@ FileNavigation, seçilen yerel dizindeki dosya ve klasörleri bulmak için Rust 
 
 - Yerel dosya ve klasör arama
 - Tek dosyalar, tüm klasörler ve filtrelenmiş sonuçlar için karşılaştırılabilir genel parmak izli yerel SHA-256/SHA-512 bütünlük doğrulaması
+- Klasörlerde, geçerli arama klasöründe veya filtrelenmiş sonuçlarda SHA-256 doğrulamalı, grup başına bir korumalı kopyalı ve çöp kutusundan kurtarılabilir yinelenen dosya temizliği
 - Büyük/küçük harf denetimli düz metin veya düzenli ifade dosya adı eşleştirmesi
 - İptal ve canlı ilerleme destekli tamamen asenkron Rust/Tauri arka ucu
 - Sonuç filtreleme, tür filtresi, sıralama ve aşamalı işleme
