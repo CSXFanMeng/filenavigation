@@ -51,6 +51,8 @@ struct SearchResponse {
 struct SearchStats {
     files_scanned: u64,
     directories_scanned: u64,
+    files_matched: u64,
+    directories_matched: u64,
     skipped_entries: u64,
     elapsed_ms: u128,
 }
@@ -71,10 +73,27 @@ struct SearchProgress {
     search_id: String,
     files_scanned: u64,
     directories_scanned: u64,
+    files_matched: u64,
+    directories_matched: u64,
     skipped_entries: u64,
-    matches: usize,
     current_path: String,
     elapsed_ms: u128,
+}
+
+#[derive(Default)]
+struct SearchMatchCounts {
+    files: u64,
+    directories: u64,
+}
+
+impl SearchMatchCounts {
+    fn record(&mut self, is_dir: bool) {
+        if is_dir {
+            self.directories += 1;
+        } else {
+            self.files += 1;
+        }
+    }
 }
 
 #[derive(Default)]
@@ -1573,6 +1592,19 @@ fn perform_search(
     request: SearchRequest,
     cancel_token: Arc<AtomicBool>,
 ) -> Result<SearchResponse, String> {
+    scan_directory(request, cancel_token, |progress| {
+        emit_progress(&app, progress);
+    })
+}
+
+fn scan_directory<F>(
+    request: SearchRequest,
+    cancel_token: Arc<AtomicBool>,
+    mut report_progress: F,
+) -> Result<SearchResponse, String>
+where
+    F: FnMut(SearchProgress),
+{
     let root = PathBuf::from(request.root.trim());
     if !root.is_dir() {
         return Err("invalidDirectory".to_string());
@@ -1589,7 +1621,8 @@ fn perform_search(
     let mut queue = VecDeque::from([root]);
     let mut results = Vec::new();
     let mut files_scanned = 0;
-    let mut directories_scanned = 0;
+    let mut directories_scanned = 1;
+    let mut matched = SearchMatchCounts::default();
     let mut skipped_entries = 0;
     let mut cancelled = false;
     let mut last_emit = Instant::now();
@@ -1600,7 +1633,6 @@ fn perform_search(
             break;
         }
 
-        directories_scanned += 1;
         let entries = match fs::read_dir(&directory) {
             Ok(entries) => entries,
             Err(_) => {
@@ -1632,12 +1664,14 @@ fn perform_search(
 
             let is_dir = metadata.is_dir();
             if is_dir {
+                directories_scanned += 1;
                 queue.push_back(path.clone());
             } else {
                 files_scanned += 1;
             }
 
             if matcher.is_match(&file_name) {
+                matched.record(is_dir);
                 results.push(to_result(
                     &search_root,
                     path.clone(),
@@ -1648,18 +1682,16 @@ fn perform_search(
             }
 
             if last_emit.elapsed().as_millis() >= 120 {
-                emit_progress(
-                    &app,
-                    SearchProgress {
-                        search_id: search_id.clone(),
-                        files_scanned,
-                        directories_scanned,
-                        skipped_entries,
-                        matches: results.len(),
-                        current_path: path.to_string_lossy().to_string(),
-                        elapsed_ms: started.elapsed().as_millis(),
-                    },
-                );
+                report_progress(SearchProgress {
+                    search_id: search_id.clone(),
+                    files_scanned,
+                    directories_scanned,
+                    files_matched: matched.files,
+                    directories_matched: matched.directories,
+                    skipped_entries,
+                    current_path: path.to_string_lossy().to_string(),
+                    elapsed_ms: started.elapsed().as_millis(),
+                });
                 last_emit = Instant::now();
             }
         }
@@ -1669,18 +1701,16 @@ fn perform_search(
         }
     }
 
-    emit_progress(
-        &app,
-        SearchProgress {
-            search_id: search_id.clone(),
-            files_scanned,
-            directories_scanned,
-            skipped_entries,
-            matches: results.len(),
-            current_path: String::new(),
-            elapsed_ms: started.elapsed().as_millis(),
-        },
-    );
+    report_progress(SearchProgress {
+        search_id: search_id.clone(),
+        files_scanned,
+        directories_scanned,
+        files_matched: matched.files,
+        directories_matched: matched.directories,
+        skipped_entries,
+        current_path: String::new(),
+        elapsed_ms: started.elapsed().as_millis(),
+    });
 
     Ok(SearchResponse {
         search_id,
@@ -1688,6 +1718,8 @@ fn perform_search(
         stats: SearchStats {
             files_scanned,
             directories_scanned,
+            files_matched: matched.files,
+            directories_matched: matched.directories,
             skipped_entries,
             elapsed_ms: started.elapsed().as_millis(),
         },
@@ -1812,13 +1844,18 @@ pub fn run() {
 
 #[cfg(test)]
 mod tests {
-    use std::{collections::HashMap, fs};
+    use std::{
+        collections::HashMap,
+        fs,
+        sync::{Arc, atomic::AtomicBool},
+    };
 
     use super::{
-        IntegrityFileResult, IntegrityHasher, NameMatcher, UPDATER_MANIFEST_URLS, UpdateChecker,
-        UpdaterManifest, UpdaterPlatform, aggregate_integrity_hash, build_update_response,
-        fetch_updater_manifest_once, hash_duplicate_file, localized_release_notes,
-        manifest_version, normalize_expected_hash, relative_path, release_info_from_manifest,
+        IntegrityFileResult, IntegrityHasher, NameMatcher, SearchMatchCounts, SearchRequest,
+        UPDATER_MANIFEST_URLS, UpdateChecker, UpdaterManifest, UpdaterPlatform,
+        aggregate_integrity_hash, build_update_response, fetch_updater_manifest_once,
+        hash_duplicate_file, localized_release_notes, manifest_version, normalize_expected_hash,
+        relative_path, release_info_from_manifest, scan_directory,
     };
 
     #[test]
@@ -1944,6 +1981,56 @@ English notes.
 
         assert!(matcher.is_match("report.pdf"));
         assert!(matcher.is_match("nested-folder"));
+    }
+
+    #[test]
+    fn search_matches_keep_files_and_directories_separate() {
+        let mut matches = SearchMatchCounts::default();
+
+        matches.record(false);
+        matches.record(false);
+        matches.record(true);
+
+        assert_eq!(matches.files, 2);
+        assert_eq!(matches.directories, 1);
+    }
+
+    #[test]
+    fn empty_query_scan_reports_matching_files_separately_from_directories() {
+        let directory = std::env::temp_dir().join(format!(
+            "filenavigation-search-count-test-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .expect("system time")
+                .as_nanos()
+        ));
+        let nested = directory.join("nested");
+        fs::create_dir_all(&nested).expect("create test directory");
+        fs::write(directory.join("root.txt"), b"root").expect("write root file");
+        fs::write(nested.join("child.txt"), b"child").expect("write nested file");
+
+        let response = scan_directory(
+            SearchRequest {
+                search_id: "count-test".to_string(),
+                root: directory.to_string_lossy().to_string(),
+                query: String::new(),
+                case_sensitive: false,
+                use_regex: false,
+                include_hidden: true,
+            },
+            Arc::new(AtomicBool::new(false)),
+            |_| {},
+        )
+        .expect("scan test directory");
+
+        assert_eq!(response.stats.files_scanned, 2);
+        assert_eq!(response.stats.files_matched, 2);
+        assert_eq!(response.stats.directories_scanned, 2);
+        assert_eq!(response.stats.directories_matched, 1);
+        assert_eq!(response.results.len(), 3);
+
+        fs::remove_dir_all(directory).expect("remove test directory");
     }
 
     #[test]

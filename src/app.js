@@ -244,9 +244,8 @@ let lastResults = [];
 let lastResultTree = [];
 let lastVisibleResults = [];
 const collapsedPaths = new Set();
-let lastStats = { files: 0, dirs: 0, skipped: 0, elapsedMs: 0 };
+let lastStats = { files: 0, dirs: 0, filesMatched: 0, dirsMatched: 0, skipped: 0, elapsedMs: 0 };
 let lastStatusKey = "waiting";
-let lastStatusCount = 0;
 let lastUpdate = null;
 let lastUpdateStatus = "updateIdle";
 let lastUpdateError = "";
@@ -393,7 +392,8 @@ elements.language.addEventListener("change", () => {
     lastStats.files,
     lastStats.dirs,
     lastStats.elapsedMs,
-    lastStatusCount,
+    lastStats.filesMatched,
+    lastStats.dirsMatched,
     lastStats.skipped
   );
   applyResultView();
@@ -628,12 +628,14 @@ async function initializeProgressListener() {
       progress.files_scanned,
       progress.directories_scanned,
       progress.elapsed_ms,
-      progress.matches,
+      progress.files_matched,
+      progress.directories_matched,
       progress.skipped_entries
     );
     elements.progressDetail.textContent = translate(
       "scanningProgress",
-      formatNumber(progress.matches),
+      formatNumber(progress.files_matched),
+      formatNumber(progress.directories_matched),
       progress.current_path
     );
   });
@@ -711,7 +713,7 @@ async function runSearch() {
   elements.search.disabled = true;
   elements.cancelSearch.disabled = false;
   elements.title.textContent = translate("searching");
-  elements.progressDetail.textContent = translate("scanningProgress", formatNumber(0), root);
+  elements.progressDetail.textContent = translate("scanningProgress", formatNumber(0), formatNumber(0), root);
   elements.emptyState.hidden = true;
   elements.resultList.innerHTML = "";
 
@@ -740,7 +742,8 @@ async function runSearch() {
       response.stats.files_scanned,
       response.stats.directories_scanned,
       response.stats.elapsed_ms,
-      response.results.length,
+      response.stats.files_matched,
+      response.stats.directories_matched,
       response.stats.skipped_entries
     );
     elements.progressDetail.textContent = response.cancelled
@@ -1419,13 +1422,12 @@ function renderUpdateInstallStatus() {
   }
 }
 
-function setStatus(statusKey, files, dirs, elapsedMs, count = 0, skipped = 0) {
+function setStatus(statusKey, files, dirs, elapsedMs, filesMatched = 0, dirsMatched = 0, skipped = 0) {
   lastStatusKey = statusKey;
-  lastStatusCount = count;
-  lastStats = { files, dirs, skipped, elapsedMs };
+  lastStats = { files, dirs, filesMatched, dirsMatched, skipped, elapsedMs };
 
   if (statusKey === "found") {
-    elements.title.textContent = translate("found", count);
+    elements.title.textContent = translate("found", formatNumber(filesMatched), formatNumber(dirsMatched));
   } else {
     elements.title.textContent = translate(statusKey);
   }
